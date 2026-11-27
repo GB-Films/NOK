@@ -1,6 +1,8 @@
 import { applyWorldLight } from "../account/terrain.js";
+import { boardGroups, pendingByPriority, orderedSlots } from "../assistant/board.js";
 // One in-memory storage instance for this signed-in world (or this guest visit).
 (function (localStorage) {
+const assistantDialog=document.querySelector("#camp-assistant");
 const TASKS_KEY = "nok-desktop-tasks-v1";
 const PROFILE_KEY = "nok-desktop-profile-v1";
 const FINANCE_KEY = "nok-desktop-finance-v1";
@@ -3136,6 +3138,7 @@ function setPlayerPosition(x, y) {
 
 function canPlayerMove() {
   return (
+    !assistantDialog.open &&
     !worldBuildMode &&
     elements.characterSetup.classList.contains("hidden") &&
     elements.panelBackdrop.classList.contains("hidden") &&
@@ -5083,31 +5086,12 @@ function renderMission() {
 }
 
 function renderBoard() {
-  const open = tasks.filter((task) => task.status !== "done");
-  const ordered = [...open].sort((a, b) => {
-    const score = (task) => (task.priority === "high" ? 0 : 1);
-    return (
-      score(a) - score(b) ||
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-  });
+  const ordered = pendingByPriority(tasks);
   const dateKey = todayKey();
   const oneColumn = isMobileRuntime && singleBoardColumn.matches;
   const showImportant = boardMode === "today" && (!oneColumn || boardMobileSection === "today");
   const showBacklog = boardMode === "today" && (!oneColumn || boardMobileSection === "backlog");
-  const important = ordered
-    .filter((task) => task.isToday || task.scheduledDate === dateKey);
-  const importantIds = new Set(important.map((task) => task.id));
-  const loose = !showBacklog ? [] : ordered
-    .filter((task) => !task.isQuest && !importantIds.has(task.id))
-    .sort((a, b) => {
-      return (
-        (a.priority === "high" ? 0 : 1) -
-          (b.priority === "high" ? 0 : 1) ||
-        taskTrail(a).localeCompare(taskTrail(b), "es") ||
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-    });
+  const {today:important,backlog:loose}=boardGroups(ordered,dateKey,taskTrail,settings.boardOrder,showBacklog);
 
   const card = (task, showContext = false) => `
     <article class="board-task-row task-clickable board-task-draggable${task.priority === "high" ? " high-priority-task" : ""}"
@@ -9016,10 +9000,7 @@ elements.taskFormDelete.addEventListener("click", () => {
   deleteTask(id);
 });
 
-elements.boardQuickForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const title = elements.boardQuickTitle.value.trim();
-  if (!title) return;
+function addBackpackTask(title,isToday) {
   tasks.unshift({
     id: Date.now(),
     title,
@@ -9030,14 +9011,20 @@ elements.boardQuickForm.addEventListener("submit", (event) => {
     status: "todo",
     parentId: null,
     isQuest: false,
-    isToday: true,
-    scheduledDate: todayKey(),
+    isToday,
+    scheduledDate: isToday ? todayKey() : "",
     xpReward: 20,
     sortOrder: -Date.now(),
     createdAt: new Date().toISOString(),
     completedAt: null,
   });
   recordTaskCreated();
+}
+elements.boardQuickForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const title = elements.boardQuickTitle.value.trim();
+  if (!title) return;
+  addBackpackTask(title,true);
   elements.boardQuickTitle.value = "";
   save();
   renderBoard();
@@ -9219,6 +9206,10 @@ elements.birthdayForm.addEventListener("submit", (event) => {
   showToast("Cumpleaños guardado para siempre en el Archivo.");
 });
 
+function appendAgendaEvent(title,date,notes="",checklist=[]) {
+  importantEvents.push({id:Date.now(),title,date,notes,taskId:null,checklist,createdAt:new Date().toISOString()});
+}
+
 elements.eventForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const title = elements.eventTitle.value.trim();
@@ -9227,15 +9218,7 @@ elements.eventForm.addEventListener("submit", (event) => {
   const notes = elements.eventNotes.value.trim();
   const checklist = normalizeEventChecklist(eventChecklistDraft);
   if (editingEventId === null) {
-    importantEvents.push({
-      id: Date.now(),
-      title,
-      date,
-      notes,
-      taskId: null,
-      checklist,
-      createdAt: new Date().toISOString(),
-    });
+    appendAgendaEvent(title,date,notes,checklist);
   } else {
     importantEvents = importantEvents.map((item) =>
       item.id === editingEventId
@@ -9850,6 +9833,7 @@ elements.passwordList.addEventListener("click", async (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (assistantDialog.open) return; // The native dialog handles Escape and editing keys.
   if (!elements.characterSetup.classList.contains("hidden")) return;
   if (isMissionFocusLocked()) {
     event.preventDefault();
@@ -9932,6 +9916,7 @@ window.addEventListener("blur", () => {
 });
 
 window.addEventListener("nok-android-back", () => {
+  if (assistantDialog.open) { assistantDialog.close(); return; }
   pressedMovementKeys.clear();
   if (document.querySelector("#password-entry-dialog")?.open) {
     clearPasswordEntryForm();
@@ -10745,6 +10730,58 @@ function finishCharacterSetup() {
   renderProfile();
   showToast("Tu personaje ya es parte de este mundo.");
 }
+
+const assistantTrigger=document.querySelector("#open-assistant");
+let assistantLoaded=false;
+function assistantGroups() {
+  return boardGroups(pendingByPriority(tasks),todayKey(),taskTrail,settings.boardOrder);
+}
+function applyAssistantProposal(action) {
+  if (!assistantDialog.open || document.body.classList.contains("account-locked")) throw Error("Primero abrí tu campamento.");
+  if (action.kind==="event") {
+    const date=action.date+"T"+action.time, local=new Date(date);
+    if (!action.title || action.title.length>120 || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(date) || !Number.isFinite(local.getTime()) ||
+        todayKey(local)!==action.date || local.getHours()!==Number(action.time.slice(0,2)) || local.getMinutes()!==Number(action.time.slice(3)))
+      throw Error("Completá el nombre, una fecha válida y la hora local.");
+    if(importantEvents.some(e=>e.date===date && e.title.trim().toLocaleLowerCase("es")===action.title.toLocaleLowerCase("es")))
+      throw Error("Ese evento ya figura en tu Agenda a esa hora.");
+    appendAgendaEvent(action.title,date);save();checkEventAlerts();
+    return "Agendado: "+action.title+" · "+local.toLocaleString("es-AR",{dateStyle:"medium",timeStyle:"short"})+".";
+  }
+  if(action.kind==="task"){
+    if(!action.title || action.title.length>120 || typeof action.isToday!=="boolean")throw Error("Revisá el nombre y el destino de la tarea.");
+    addBackpackTask(action.title,action.isToday);save();return "Tarea creada en "+(action.isToday?"Misiones de hoy: ":"la Mochila: ")+action.title+".";
+  }
+  const groups=assistantGroups(),rows=action.section==="all"?[...groups.today,...groups.backlog]:groups[action.section];
+  if(!Array.isArray(rows) || !Array.isArray(action.ids) || !action.ids.length)throw Error("Elegí las tareas que querés cambiar.");
+  const ids=new Set(action.ids), selected=rows.filter(t=>ids.has(t.id));
+  if(selected.length!==action.ids.length)throw Error("El tablón cambió. Volvé a preparar el pedido.");
+  if(action.kind==="sort" && ["today","backlog"].includes(action.section)){
+    settings.boardOrder={...settings.boardOrder,[action.section]:orderedSlots(rows,action.ids).map(t=>t.id)};
+    localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));markCloudChange();
+    return "Orden guardado en "+(action.section==="today"?"Misiones de hoy.":"la Mochila.");
+  }
+  if(action.kind==="priority")for(const t of selected){t.priority=action.level==="low"?"low":"high";t.xpReward=t.priority==="high"?40:20;}
+  else if(action.kind==="today")for(const t of selected){t.isToday=true;t.scheduledDate=todayKey();}
+  else throw Error("Esta acción no está disponible.");
+  save();return (action.kind==="today"?"Pasaron a Hoy: ":"Con prioridad "+(action.level==="low"?"normal: ":"alta: "))+selected.map(t=>t.title).join(", ")+".";
+}
+assistantTrigger.addEventListener("click",async()=>{
+  if(!canPlayerMove())return;
+  assistantTrigger.disabled=true;
+  try{
+    if(!assistantLoaded){
+      const {mountAssistant}=await import(new URL("./assistant.js?v=guia1",document.baseURI).href);
+      mountAssistant(assistantDialog,{
+        rows:()=>Object.fromEntries(Object.entries(assistantGroups()).map(([k,list])=>[k,list.map(({id,title,project,priority,scheduledDate})=>({id,title,project,priority,scheduledDate}))])),
+        apply:applyAssistantProposal,open:openPanel
+      });
+      assistantLoaded=true;
+    }
+    if(canPlayerMove()){pressedMovementKeys.clear();assistantTrigger.disabled=false;assistantDialog.showModal();}
+  } catch { showToast("No se pudo abrir el asistente. Revisá la conexión y reintentá."); }
+  finally { assistantTrigger.disabled=false; }
+});
 
 document.addEventListener("nok:world-entered", () => {
   if (!profile.name.trim() || !profile.birthDate || !settings.characterSetupComplete) {

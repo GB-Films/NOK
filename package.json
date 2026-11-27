@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test tests/storage.test.mjs",
+    "test": "node --test tests/storage.test.mjs tests/assistant.test.mjs",
     "test:rules": "node --test tests/rules.test.mjs"
   },
   "dependencies": {
+    "chrono-node": "2.10.3",
     "firebase": "13.4.0"
   },
   "devDependencies": {

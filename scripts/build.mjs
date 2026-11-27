@@ -16,4 +16,5 @@ await build({
   }}]
 });
 await build({ entryPoints: ["game/app.js"], outfile: "dist/app.js", bundle: true, format: "iife", target: "es2022", minify: true, legalComments: "eof" });
+await build({ entryPoints: ["assistant/ui.js"], outfile: "dist/assistant.js", bundle: true, format: "esm", target: "es2022", minify: true, legalComments: "eof" });
 await build({ entryPoints: ["account/entry.js"], outfile: "dist/account.js", bundle: true, format: "esm", target: "es2022", minify: true, legalComments: "eof" });

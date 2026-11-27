@@ -13,7 +13,7 @@
     <title>NOK · Tu vida, en modo juego</title>
     <link rel="icon" type="image/webp" href="./art/previews/favicon.webp" />
     <link rel="preload" as="image" fetchpriority="high" href="./art/nok-logo-transparent.webp" />
-    <link rel="stylesheet" href="./screen.css?v=recordar-1" />
+    <link rel="stylesheet" href="./screen.css?v=guia1" />
   </head>
   <body class="account-locked">
     <main class="start-screen" id="account-gate" aria-labelledby="account-title">
@@ -53,6 +53,7 @@
 
         <div class="hud-stats">
           <div class="window-controls" aria-label="Controles de la ventana">
+            <button type="button" id="open-assistant" class="window-control-button" aria-haspopup="dialog" aria-controls="camp-assistant" title="Asistente del campamento"><span aria-hidden="true">✦</span> Asistente</button>
             <button
               class="settings-hud-button pixel-box"
               id="open-settings"
@@ -2068,10 +2069,11 @@
         </section>
       </div>
 
+      <dialog id="camp-assistant" aria-labelledby="guide-title"></dialog>
       <div class="toast pixel-box hidden" id="toast" role="status"></div>
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js?v=recordar-1"></script>
+    <script type="module" src="./account.js?v=guia1"></script>
   </body>
 </html>

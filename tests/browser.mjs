@@ -36,6 +36,8 @@ try {
     await page.locator("#character-setup").waitFor({state:"hidden"});
     assert.match(await page.locator("#player-name-label").innerText(),/visitante de prueba/i);
     if (!process.env.NOK_SMOKE_URL) {
+      const {verifyGuide}=await import("./assistant-browser.mjs");
+      await verifyGuide(page);
       // The removed prop must not leave either a hit target or an invisible construction cell.
       const house = page.locator("#world-house, [data-build-prop=house]");
       const cells = page.locator("#world-grid .world-build-plot");

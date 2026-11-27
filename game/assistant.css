@@ -1,0 +1,35 @@
+.hud-stats .window-controls, .mobile-runtime .hud-stats .window-controls {grid-template-columns:auto auto}
+.hud-stats .window-controls #open-assistant {width:auto;display:flex;align-items:center;gap:6px;padding:0 12px;color:#fff5d1;background:#255345;font:bold 15px var(--nok-font-ui);cursor:pointer}
+#open-assistant span {color:#ffd46b;font-size:21px}
+#camp-assistant {box-sizing:border-box;width:min(35rem,calc(100vw - 20px));max-height:min(84dvh,48rem);margin:auto;padding:0;color:#193e31;background:#fff2ce;border:3px solid #204334;box-shadow:5px 6px #4e3a26;font:1rem/1.45 var(--nok-font-body);overflow:auto;overscroll-behavior:contain}
+#camp-assistant::backdrop {background:rgb(5 24 19 / 76%)}
+#camp-assistant [hidden] {display:none!important}
+.guide-head {position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#204c40;color:#fff4cb;border-bottom:3px solid #c79541}
+.guide-head small {font:bold .72rem var(--nok-font-ui);letter-spacing:.08em;color:#ffdc83}
+.guide-head h2 {font:bold 1.6rem var(--nok-font-heading);margin:2px 0 0}
+.guide-page {padding:0 18px 18px}
+#camp-assistant :is(button,select,input,textarea) {box-sizing:border-box;color:inherit;font:inherit}
+#camp-assistant button {min-height:44px;padding:7px 12px;border:2px solid #315543;background:#f4dfaa;color:#193e31;cursor:pointer;font:bold .9rem var(--nok-font-ui)}
+#camp-assistant button:active {transform:translateY(1px)}
+#camp-assistant .guide-primary {background:#286b49;color:#fffbea}
+#camp-assistant [data-close] {width:44px;font-size:1.45rem}
+.guide-examples,.guide-actions {display:flex;gap:7px;flex-wrap:wrap}
+.guide-examples {margin:0 0 16px}
+.guide-actions {justify-content:flex-end;margin:8px 0}
+#camp-assistant label:not(.guide-tasks label) {display:block;margin:10px 0 3px;font-weight:bold}
+#camp-assistant :is(textarea,select,input:not([type=checkbox])) {display:block;width:100%;min-width:0;min-height:44px;padding:8px;margin-top:4px;border:2px solid #58705c;background:#fffbed;color:#173e31;font:1rem/1.3 var(--nok-font-body)}
+#camp-assistant textarea {resize:vertical}
+#camp-assistant [data-voice-note] {display:block;color:#495747;font-size:.83rem}
+.guide-reply:not(:empty) {padding:10px 12px;border-left:4px solid #c99134;background:#f9e7b7}
+.guide-utterance {margin:14px 0 3px;color:#43594d;font-size:.92rem;overflow-wrap:anywhere}
+#camp-assistant h3 {font:bold 1.15rem var(--nok-font-heading);margin:12px 0}
+.guide-tasks {max-height:15rem;overflow:auto;margin:12px 0;min-width:0;padding:4px 8px;border:1px solid #93825e}
+.guide-tasks label {display:grid;grid-template-columns:24px 1fr;gap:0 7px;align-items:center;padding:6px 0;min-height:44px;border-bottom:1px dotted #af986a;cursor:pointer}
+.guide-tasks input {width:20px;height:20px;grid-row:span 2;accent-color:#286b49}
+.guide-tasks label span,.guide-tasks label small {overflow-wrap:anywhere}
+.guide-tasks label small {color:#4d5946}
+@media (max-width:760px),(orientation:portrait){
+  .mobile-runtime .hud-stats .window-controls #open-assistant {min-width:44px;width:44px;padding:3px;display:grid;place-content:center;gap:0;font-size:8px}
+  #camp-assistant {max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)}
+  .guide-page {padding:0 12px 14px}
+}
