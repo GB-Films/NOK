@@ -1,9 +1,14 @@
 import { applyWorldLight } from "../account/terrain.js";
 import { boardGroups, pendingByPriority, orderedSlots } from "../assistant/board.js";
+import { mountPlanner } from "../planner/ui.js";
+import { validDay, validTime } from "../planner/dates.js";
+import { changeRoles } from "../planner/roles.js";
 // One in-memory storage instance for this signed-in world (or this guest visit).
 (function (localStorage) {
 const assistantDialog=document.querySelector("#camp-assistant");
+let planner;
 const TASKS_KEY = "nok-desktop-tasks-v1";
+const WORK_ROLES_KEY = "nok-work-roles-v1";
 const PROFILE_KEY = "nok-desktop-profile-v1";
 const FINANCE_KEY = "nok-desktop-finance-v1";
 const PASSWORD_VAULT_KEY = "nok-password-vault-v1";
@@ -52,6 +57,7 @@ const DAILY_CLEAR_KEY = "nok-daily-clear-v1";
 const MOBILE_CLOUD_RECOVERY_KEY = "nok-mobile-cloud-recovery-1.12.9";
 const COLLAPSED_WORLD_RECOVERY_KEY = "nok-collapsed-world-recovery-1.12.36";
 const CLOUD_SYNCED_KEYS = Object.freeze([
+  WORK_ROLES_KEY,
   TASKS_KEY,
   PROFILE_KEY,
   FINANCE_KEY,
@@ -1415,7 +1421,7 @@ function readStoredTasks() {
       status: task.status === "progress" ? "todo" : task.status,
       parentId: task.parentId ?? null,
       isQuest: Boolean(task.isQuest),
-      isToday: Boolean(task.isToday),
+      isToday: task.scheduledDate ? task.scheduledDate === todayKey() : Boolean(task.isToday),
       scheduledDate: task.scheduledDate || (task.isToday ? todayKey() : ""),
       sortOrder: Number.isFinite(Number(task.sortOrder))
         ? Number(task.sortOrder)
@@ -1841,6 +1847,7 @@ function save() {
   markCloudChange();
   renderHud();
   renderReminder();
+  planner?.refresh();
 }
 
 function characterAgeGroupFromAge(age) {
@@ -2033,6 +2040,7 @@ function applyCloudStateToRuntime(payload = {}) {
     renderBoard();
   }
   if (changedKeys.has(WRITING_KEY)) renderWriting();
+  planner?.refresh();
   if (changedKeys.has(HUB_ALARMS_KEY)) renderHub();
   if (changedKeys.has(QUICK_LISTS_KEY)) renderQuickLists();
   if (changedKeys.has(UNDERGROUND_ITEMS_KEY)) renderUnderground();
@@ -3138,6 +3146,7 @@ function setPlayerPosition(x, y) {
 
 function canPlayerMove() {
   return (
+    !planner?.modalOpen() &&
     !assistantDialog.open &&
     !worldBuildMode &&
     elements.characterSetup.classList.contains("hidden") &&
@@ -7590,7 +7599,7 @@ function openTaskEditor(id) {
   elements.taskDetailCreated.classList.remove("hidden");
   document.querySelector("#task-is-quest").checked = Boolean(task.isQuest);
   document.querySelector("#task-is-today").checked =
-    Boolean(task.isToday) || task.scheduledDate === todayKey();
+    task.scheduledDate ? task.scheduledDate === todayKey() : Boolean(task.isToday);
   elements.taskModalEyebrow.textContent = "EDITAR MISIÓN";
   elements.taskModalTitle.textContent = "Mover o ajustar tarea";
   elements.taskSubmitLabel.textContent = "GUARDAR CAMBIOS";
@@ -7641,11 +7650,11 @@ function updateTaskStatus(id, status) {
   if (!task) return;
   const justCompleted = status === "done" && task.status !== "done";
   const dateKey = todayKey();
-  const wasToday = task.isToday || task.scheduledDate === dateKey;
+  const wasToday = task.scheduledDate ? task.scheduledDate === dateKey : task.isToday;
   const pendingTodayBefore = tasks.filter(
     (item) =>
       item.status !== "done" &&
-      (item.isToday || item.scheduledDate === dateKey),
+      (item.scheduledDate ? item.scheduledDate === dateKey : item.isToday),
   );
   const clearsToday =
     justCompleted &&
@@ -7658,6 +7667,7 @@ function updateTaskStatus(id, status) {
   if (status === "done") {
     task.isToday = false;
     task.scheduledDate = "";
+    task.scheduledTime = "";
   }
 
   if (justCompleted) {
@@ -7685,7 +7695,7 @@ function setTaskTodayState(id, nextIsToday) {
   const task = tasks.find((item) => item.id === id);
   if (!task || task.status === "done") return;
   const dateKey = todayKey();
-  const currentlyToday = task.isToday || task.scheduledDate === dateKey;
+  const currentlyToday = task.scheduledDate ? task.scheduledDate === dateKey : task.isToday;
   if (currentlyToday === nextIsToday) return;
   task.isToday = nextIsToday;
   task.scheduledDate = nextIsToday
@@ -7693,6 +7703,7 @@ function setTaskTodayState(id, nextIsToday) {
     : task.scheduledDate === dateKey
       ? ""
       : task.scheduledDate;
+  if(!task.scheduledDate)task.scheduledTime="";
   save();
   if (!elements.missionView.classList.contains("hidden")) renderMission();
   if (!elements.tasksView.classList.contains("hidden")) renderTasks();
@@ -7708,7 +7719,7 @@ function toggleTodayTask(id) {
   const task = tasks.find((item) => item.id === id);
   if (!task || task.status === "done") return;
   const dateKey = todayKey();
-  const currentlyToday = task.isToday || task.scheduledDate === dateKey;
+  const currentlyToday = task.scheduledDate ? task.scheduledDate === dateKey : task.isToday;
   setTaskTodayState(id, !currentlyToday);
 }
 
@@ -7716,6 +7727,7 @@ function scheduleTaskDate(id, scheduledDate) {
   const task = tasks.find((item) => item.id === id);
   if (!task || task.status === "done") return;
   task.scheduledDate = scheduledDate;
+  if(!scheduledDate)task.scheduledTime="";
   task.isToday = scheduledDate === todayKey();
   save();
   renderBoard();
@@ -7839,6 +7851,7 @@ function isVisibleLayer(element) {
 }
 
 function closeTopmostLayer() {
+  if(planner?.closeModal())return true;
   if (document.querySelector("#password-entry-dialog")?.open) {
     clearPasswordEntryForm();
     document.querySelector("#add-password-entry")?.focus();
@@ -8947,6 +8960,7 @@ elements.form.addEventListener("submit", (event) => {
       task.scheduledDate = todayKey();
     } else if (task.scheduledDate === todayKey()) {
       task.scheduledDate = "";
+      task.scheduledTime = "";
     }
     task.xpReward = priority === "high" ? 40 : 20;
     save();
@@ -9833,6 +9847,7 @@ elements.passwordList.addEventListener("click", async (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if(planner?.modalOpen() || event.target.closest?.("#day-rail"))return;
   if (assistantDialog.open) return; // The native dialog handles Escape and editing keys.
   if (!elements.characterSetup.classList.contains("hidden")) return;
   if (isMissionFocusLocked()) {
@@ -10729,6 +10744,36 @@ function finishCharacterSetup() {
   applySettings();
   renderProfile();
   showToast("Tu personaje ya es parte de este mundo.");
+  startPlanner();
+}
+
+function startPlanner(){
+  if(planner || !settings.characterSetupComplete || !profile.name.trim() || !profile.birthDate)return;
+  const getRoles=()=>{const list=readJson(WORK_ROLES_KEY,[]);return Array.isArray(list)?list:[];};
+  const editable=()=>!document.body.classList.contains("account-locked") && !isMissionFocusLocked() &&
+    elements.characterSetup.classList.contains("hidden") && elements.modal.classList.contains("hidden") &&
+    elements.exitConfirm.classList.contains("hidden") && elements.birthdayAlert.classList.contains("hidden") &&
+    elements.completionCelebration.classList.contains("hidden");
+  planner=mountPlanner({
+    tasks:()=>pendingByPriority(tasks),events:()=>importantEvents,birthdays:allBirthdayRecords,roles:getRoles,
+    routines:n=>dailyPlan[DAILY_PLAN_DAYS[n][0]]||[],
+    calendar:window.nokCalendar,editable,
+    changeRole(action){
+      if(!editable())throw Error("Cerrá la ventana actual antes de hacer cambios.");
+      localStorage.setItem(WORK_ROLES_KEY,JSON.stringify(changeRoles(getRoles(),action)));markCloudChange();
+    },
+    schedule({id,title,day,time,roleId}){
+      if(!editable() || !validDay(day) || (time && !validTime(time)))throw Error("Revisá la fecha y la hora.");
+      if(roleId && !getRoles().some(r=>r.id===roleId))throw Error("Ese rol no existe.");
+      let task=tasks.find(t=>t.id===id && t.status!=="done");
+      if(!id && title?.trim() && title.trim().length<=120){addBackpackTask(title.trim(),false);task=tasks[0];}
+      if(!task)throw Error("Elegí una tarea pendiente.");
+      Object.assign(task,{scheduledDate:day,scheduledTime:time,isToday:day===todayKey(),workRoleId:roleId??task.workRoleId??""});
+      save();
+      if(!elements.boardView.classList.contains("hidden"))renderBoard();
+      if(!elements.tasksView.classList.contains("hidden"))renderTasks();
+    }
+  });
 }
 
 const assistantTrigger=document.querySelector("#open-assistant");
@@ -10784,6 +10829,7 @@ assistantTrigger.addEventListener("click",async()=>{
 });
 
 document.addEventListener("nok:world-entered", () => {
+  startPlanner();
   if (!profile.name.trim() || !profile.birthDate || !settings.characterSetupComplete) {
     openCharacterSetup();
   } else if (elements.birthdayAlert.classList.contains("hidden")) {

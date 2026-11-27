@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test tests/storage.test.mjs tests/assistant.test.mjs",
+    "test": "node --test tests/storage.test.mjs tests/assistant.test.mjs tests/planner.test.mjs",
     "test:rules": "node --test tests/rules.test.mjs"
   },
   "dependencies": {

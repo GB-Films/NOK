@@ -23,6 +23,7 @@ export async function verifyRememberedSession(target) {
         export const auth=createNokAuth(initializeApp({projectId:"demo-nok",apiKey:"demo-key"},"session-test"));
         connectAuthEmulator(auth,${JSON.stringify(appOrigin)},{disableWarnings:true});
         export const logout=()=>signOut(auth);
+        export const calendarFor=()=>({connected:false,disconnect(){}});
         export async function login(){
           window.interactiveLogins++;
           try {

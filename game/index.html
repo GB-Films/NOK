@@ -13,7 +13,7 @@
     <title>NOK · Tu vida, en modo juego</title>
     <link rel="icon" type="image/webp" href="./art/previews/favicon.webp" />
     <link rel="preload" as="image" fetchpriority="high" href="./art/nok-logo-transparent.webp" />
-    <link rel="stylesheet" href="./screen.css?v=guia1" />
+    <link rel="stylesheet" href="./screen.css?v=dia1" />
   </head>
   <body class="account-locked">
     <main class="start-screen" id="account-gate" aria-labelledby="account-title">
@@ -30,9 +30,13 @@
         <noscript>Activá JavaScript para abrir NOK.</noscript>
       </div>
     </main>
+    <aside id="day-rail" aria-label="Planificador personal" hidden></aside>
+    <dialog id="day-sheet" aria-label="Mi día"></dialog>
+    <dialog id="day-editor" aria-labelledby="day-editor-title"></dialog>
     <div class="app-shell">
 
       <header class="hud">
+        <button id="day-launch" type="button" aria-haspopup="dialog" aria-controls="day-sheet" hidden>Mi día</button>
         <button
           class="avatar-card pixel-box"
           id="open-profile"
@@ -2074,6 +2078,6 @@
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js?v=guia1"></script>
+    <script type="module" src="./account.js?v=dia1"></script>
   </body>
 </html>

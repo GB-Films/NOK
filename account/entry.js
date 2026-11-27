@@ -1,6 +1,6 @@
 import { worldStorage } from "./storage.js";
 import { preloadSavedTerrain } from "./terrain.js";
-import { auth, cloudWorld, login, logout } from "./firebase.js";
+import { auth, cloudWorld, login, logout, calendarFor } from "./firebase.js";
 const q = s => document.querySelector(s);
 const each = (s,fn) => document.querySelectorAll(s).forEach(fn);
 const gate = q("#account-gate"), message = q("#account-message");
@@ -20,6 +20,7 @@ function checkOwner(user) {
   if (leaving || (user && auth.currentUser?.uid !== user.uid)) throw Error("La sesión cambió.");
 }
 function reloadLocked() {
+  window.nokCalendar?.disconnect();
   leaving=true; clearTimeout(timer); remote=null;
   document.body.classList.add("account-locked"); gate.hidden=false;
   showGate("busy","Comprobando tu sesión…"); location.reload();
@@ -61,6 +62,7 @@ async function enter(user) {
   checkOwner(user);
   world = worldStorage(initial, changed); remote = store;
   window.nokGameStorage = world.storage;
+  window.nokCalendar = user ? calendarFor(user.uid) : null;
   preloadSavedTerrain(world.storage);
   document.documentElement.classList.toggle("mobile-runtime",matchMedia("(max-width:760px),(pointer:coarse) and (max-width:1024px)").matches);
   each("[data-account-name]", el => el.textContent = user?.email || "Exploración sin cuenta");

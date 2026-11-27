@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { browserPopupRedirectResolver, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { browserPopupRedirectResolver, GoogleAuthProvider, reauthenticateWithPopup, signInWithPopup, signOut } from "firebase/auth";
+import { fetchGoogleDay } from "../planner/google.js";
 import { createNokAuth } from "./auth.js";
 import { getFirestore, doc, getDoc, runTransaction, Bytes } from "firebase/firestore/lite";
 import { encode, decode, maxParts } from "./storage.js";
@@ -17,6 +18,33 @@ export async function login() {
   await signInWithPopup(auth, provider, browserPopupRedirectResolver);
 }
 export const logout = () => signOut(auth);
+export function calendarFor(uid) {
+  let token="", generation=0;
+  const owner=()=>uid && auth.currentUser?.uid===uid;
+  return {
+    get connected(){return !!token && owner();},
+    async connect(){
+      if(!owner())throw Error("Iniciá sesión en NOK para vincular Calendar.");
+      const ticket=++generation,provider=new GoogleAuthProvider();
+      provider.addScope("https://www.googleapis.com/auth/calendar.events.readonly");
+      provider.setCustomParameters({login_hint:auth.currentUser.email});
+      const result=await reauthenticateWithPopup(auth.currentUser,provider,browserPopupRedirectResolver);
+      if(!owner() || result.user.uid!==uid || ticket!==generation)throw Error("La sesión cambió.");
+      token=GoogleAuthProvider.credentialFromResult(result)?.accessToken || "";
+      if(!token)throw Error("Google no devolvió permiso para leer Calendar.");
+    },
+    async list(day,signal){
+      if(!owner() || !token)throw Error("Volvé a conectar Calendar.");
+      const ticket=generation;
+      try{
+        const events=await fetchGoogleDay(token,day,signal);
+        if(!owner() || ticket!==generation)throw Error("La sesión cambió.");
+        return events;
+      }catch(e){if(ticket===generation && e.status===401)token="";throw e;}
+    },
+    disconnect(){generation++;token="";}
+  };
+}
 export function cloudWorld(uid, db = getFirestore(app), currentUid = () => auth.currentUser?.uid) {
   const ref = id => doc(db, "nokPlayers", uid, "world", id);
   const owner = () => { if (currentUid() !== uid) throw Error("La sesión cambió."); };

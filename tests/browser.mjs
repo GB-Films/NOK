@@ -38,6 +38,8 @@ try {
     if (!process.env.NOK_SMOKE_URL) {
       const {verifyGuide}=await import("./assistant-browser.mjs");
       await verifyGuide(page);
+      const {verifyPlanner}=await import("./planner-browser.mjs");
+      await verifyPlanner(page,mobile);
       // The removed prop must not leave either a hit target or an invisible construction cell.
       const house = page.locator("#world-house, [data-build-prop=house]");
       const cells = page.locator("#world-grid .world-build-plot");
@@ -58,7 +60,8 @@ try {
       if (viewport.width < 760) {
         await page.locator("[data-board-mobile-section=backlog]").click();
         assert.equal(await page.locator("#board-loose-list").isVisible(),true);
-        assert.notEqual(await page.locator("#board-loose-list").innerText(),"");
+        await page.locator("#board-loose-list > :first-child").waitFor({state:"visible"});
+        assert.notEqual((await page.locator("#board-loose-list").textContent()).trim(),"");
       }
       await page.locator("#close-board").click();
       if (mobile) {
@@ -93,6 +96,7 @@ try {
         esbuild.onLoad({filter:/.*/,namespace:"test"},()=>({contents:`
           let observe;
           export const auth={currentUser:null,onAuthStateChanged(fn){observe=fn;queueMicrotask(()=>fn(this.currentUser));}};
+          export const calendarFor=()=>({connected:false,async connect(){this.connected=true;},async list(day){return [{title:"Evento simulado "+day,time:"09:30",source:"Google"}];},disconnect(){this.connected=false;}});
           export async function logout(){auth.currentUser=null;observe(null);}
           export async function login(){auth.currentUser={uid:"test",email:"test@example.invalid",emailVerified:!window.unverified};observe(auth.currentUser);}
           export const cloudWorld=()=>({
@@ -133,6 +137,11 @@ try {
           assert.equal(await page.locator("#character-setup").isVisible(),false);
           assert.equal(await page.locator("#world").isVisible(),true);
           assert.match(await page.locator("#player-name-label").innerText(),/sol/i);
+          const rail=page.locator("#day-rail");
+          await rail.getByRole("button",{name:"Vincular Google Calendar"}).click();
+          await rail.locator(".day-events li").filter({hasText:"Evento simulado"}).waitFor();
+          await rail.getByRole("button",{name:"Desconectar Calendar de esta sesión"}).click();
+          assert.equal(await rail.getByText(/Evento simulado/).count(),0);
           assert.deepEqual(await page.evaluate(()=>JSON.parse(window.nokGameStorage.getItem("nok-settings-v1")).worldPropPositions.house),{x:13.5,y:29});
           const map=await page.locator(".world-art").evaluate(el=>getComputedStyle(el).backgroundImage.match(/url\("([^"]+)"\)/)[1]);
           assert.match(map,/world-earth-(day|night)\.webp$/);

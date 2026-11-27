@@ -19,7 +19,7 @@ export function orderedSlots(rows, ids) {
 }
 
 export function boardGroups(ordered, day, trail, preferences={}, includeBacklog=true) {
-  const today = task => task.isToday || task.scheduledDate === day;
+  const today = task => task.scheduledDate ? task.scheduledDate === day : task.isToday;
   const backlog = includeBacklog ? ordered.filter(t=>!today(t) && !t.isQuest).sort((a,b)=>
     Number(b.priority==="high")-Number(a.priority==="high") ||
     trail(a).localeCompare(trail(b),"es") || new Date(a.createdAt)-new Date(b.createdAt)) : [];
