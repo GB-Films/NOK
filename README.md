@@ -2,7 +2,7 @@
 
 **[Entrar al campamento](https://gb-films.github.io/NOK/)** desde una computadora o un celular. No requiere instalación.
 
-- **Continuar con Google** crea o recupera la partida de esa cuenta. En una computadora compartida elegí **Ajustes → Mi cuenta y guardado → Guardar y cerrar sesión** antes de irte.
+- **Continuar con Google** abre directamente tu campamento. Si todavía no configuraste el personaje, te lleva al paso que te falta. Después podés volver a configurarlo desde **Ajustes → Mundo y personaje**. En una computadora compartida elegí **Ajustes → Mi cuenta y guardado → Guardar y cerrar sesión** antes de irte.
 - **Explorar sin guardar** abre una partida temporal. No se sube a Firebase ni se guarda en el navegador; se pierde al recargar. Las partidas de ediciones anteriores no se importan automáticamente.
 - Si dos dispositivos editan a la vez, la versión antigua no pisa a la nueva. Ante una falla de conexión, dejá abierta la pestaña y reintentá desde Ajustes.
 

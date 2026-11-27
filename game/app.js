@@ -722,9 +722,6 @@ let characterSetupGender = "male";
 let characterSetupHair = "brown";
 
 const elements = {
-  startScreen: document.querySelector("#start-screen"),
-  startAdventure: document.querySelector("#start-adventure"),
-  createWorld: document.querySelector("#create-world"),
   characterSetup: document.querySelector("#character-setup"),
   closeCharacterSetup: document.querySelector("#close-character-setup"),
   characterSetupKicker: document.querySelector("#character-setup-kicker"),
@@ -811,7 +808,6 @@ const elements = {
   worldModuleTitle: document.querySelector("#world-module-title"),
   worldModuleRemove: document.querySelector("#world-module-remove"),
   worldModuleCount: document.querySelector("#world-module-count"),
-  startWorldName: document.querySelector("#start-world-name"),
   panelBackdrop: document.querySelector("#panel-backdrop"),
   sidePanel: document.querySelector("#side-panel"),
   panelHeader: document.querySelector("#panel-header"),
@@ -3149,7 +3145,7 @@ function setPlayerPosition(x, y) {
 function canPlayerMove() {
   return (
     !worldBuildMode &&
-    document.querySelector("#start-screen").classList.contains("hidden") &&
+    elements.characterSetup.classList.contains("hidden") &&
     elements.panelBackdrop.classList.contains("hidden") &&
     elements.modal.classList.contains("hidden") &&
     elements.activityPanel.classList.contains("hidden") &&
@@ -3714,7 +3710,6 @@ function applyTimeOfDay() {
   elements.world.dataset.hemisphere = usesSouthernHemisphereSeasons() ? "south" : "north";
   elements.world.classList.toggle("night-mode", isNight);
   elements.world.classList.toggle("day-mode", hour >= 7 && hour < 19);
-  elements.startScreen.classList.toggle("night-mode", isNight);
 }
 
 function setMusicPlayingState(playing) {
@@ -3846,14 +3841,9 @@ function applySettings() {
     settings.avatarStyle === "adventurer-female",
   );
   elements.world.classList.toggle("earth-mode", settings.worldTheme === "earth");
-  elements.startScreen.classList.toggle(
-    "earth-mode",
-    settings.worldTheme === "earth",
-  );
   elements.playerSpriteImage.style.backgroundImage = `url(${characterAtlasPath()})`;
   elements.playerSpriteImage.style.backgroundSize = "800% 800%";
   document.querySelectorAll(".generated-avatar").forEach((avatar) => applyCharacterPreview(avatar));
-  elements.startWorldName.textContent = settings.worldName.toUpperCase();
   musicEngine?.setVolume(settings.volume / 100);
   soundEngine?.setVolume(settings.volume / 100);
   if (!settings.musicEnabled) void musicEngine?.pause();
@@ -9891,6 +9881,7 @@ elements.passwordList.addEventListener("click", async (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (!elements.characterSetup.classList.contains("hidden")) return;
   if (isMissionFocusLocked()) {
     event.preventDefault();
     event.stopPropagation();
@@ -9910,17 +9901,6 @@ document.addEventListener("keydown", (event) => {
   }
   const tag = event.target.tagName;
   const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
-  if (
-    event.key === "Enter" &&
-    !document.querySelector("#start-screen").classList.contains("hidden")
-  ) {
-    if (!elements.birthdayAlert.classList.contains("hidden")) {
-      closeBirthdayAlert();
-      return;
-    }
-    document.querySelector("#start-adventure").click();
-    return;
-  }
   if (event.key === "Escape") {
     if (closeTopmostLayer()) {
       event.preventDefault();
@@ -9935,7 +9915,6 @@ document.addEventListener("keydown", (event) => {
     return;
   }
   const canMove =
-    document.querySelector("#start-screen").classList.contains("hidden") &&
     elements.panelBackdrop.classList.contains("hidden") &&
     elements.modal.classList.contains("hidden") &&
     elements.activityPanel.classList.contains("hidden") &&
@@ -10555,9 +10534,6 @@ elements.settingsVolume.addEventListener("input", () => {
 
 elements.settingsWorldName.addEventListener("input", () => {
   settings.worldName = elements.settingsWorldName.value.slice(0, 40);
-  elements.startWorldName.textContent = (
-    settings.worldName.trim() || "Mi mundo NOK"
-  ).toUpperCase();
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   markCloudChange();
 });
@@ -10771,7 +10747,8 @@ function openCharacterSetup() {
   characterSetupStep = profile.name.trim() ? (profile.birthDate ? 3 : 2) : 1;
   renderCharacterSetup();
   elements.characterSetup.classList.remove("hidden");
-  window.setTimeout(() => (characterSetupStep === 1 ? elements.characterSetupName : elements.characterSetupBirth).focus(), 30);
+  const firstControl = characterSetupStep === 1 ? elements.characterSetupName : characterSetupStep === 2 ? elements.characterSetupBirth : elements.characterSetup.querySelector("[data-character-gender].active");
+  firstControl?.focus({ preventScroll: true });
 }
 
 function finishCharacterSetup() {
@@ -10794,13 +10771,14 @@ function finishCharacterSetup() {
   showToast("Tu personaje ya es parte de este mundo.");
 }
 
-function enterAdventure(openWorldSetup = false) {
-  elements.startScreen.classList.add("hidden");
-  if (openWorldSetup || !profile.name.trim() || !profile.birthDate || !settings.characterSetupComplete) openCharacterSetup();
-}
-
-elements.startAdventure.addEventListener("click", () => enterAdventure());
-elements.createWorld.addEventListener("click", () => enterAdventure(true));
+document.addEventListener("nok:world-entered", () => {
+  if (!profile.name.trim() || !profile.birthDate || !settings.characterSetupComplete) {
+    openCharacterSetup();
+  } else if (elements.birthdayAlert.classList.contains("hidden")) {
+    elements.world.focus({ preventScroll: true });
+  }
+}, { once: true });
+document.querySelector("#edit-character").addEventListener("click", openCharacterSetup);
 elements.closeCharacterSetup.addEventListener("click", () => elements.characterSetup.classList.add("hidden"));
 elements.characterNameNext.addEventListener("click", () => {
   if (!elements.characterSetupName.value.trim()) return;

@@ -48,11 +48,12 @@ async function enter(user) {
   each("[data-account-retry]", el => el.hidden = !user);
   status(user ? "Tu partida es privada." : "Modo de prueba: esta partida no se guarda.");
   await new Promise((resolve,reject) => {
-    const script=document.createElement("script"); script.src="./app.js";
+    const script=document.createElement("script");
+    script.src="./app.js" + new URL(import.meta.url).search;
     script.onload=resolve; script.onerror=()=>reject(Error("No se pudo cargar NOK.")); document.body.append(script);
   });
   active=true; gate.hidden=true; document.body.classList.remove("account-locked");
-  q("#start-adventure").focus();
+  document.dispatchEvent(new Event("nok:world-entered"));
 }
 function readable(error) {
   if (error.code === "auth/popup-closed-by-user" || error.code === "auth/cancelled-popup-request") return "Se canceló el acceso. Podés intentarlo otra vez.";

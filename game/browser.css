@@ -1,16 +1,16 @@
 #minimize-game, #close-game { display: none !important; }
 .settings-cloud-card[hidden], #account-gate[hidden], body.account-locked .app-shell { display:none !important; }
-#account-gate { position:fixed; inset:0; z-index:10000; overflow:auto; display:grid; place-items:safe center; padding:16px; background: linear-gradient(#0c261dcc,#0c261dee),url('./art/nok-logo-transparent.webp') center/cover; }
-.account-paper { width:min(100%,29rem); box-sizing:border-box; margin:auto; padding:clamp(20px,5vw,40px); background:#fff0c7; color:#203f31; border:3px solid #483821; box-shadow:5px 6px 0 #171c15; text-align:center; }
-.account-paper img { width:min(64%,200px); height:auto; }
-.account-paper h1 { font:bold clamp(1.5rem,4vw,2rem)/1.15 'Courier New',monospace; margin:.5rem 0; }
-.account-paper p,.nok-account-settings p { font:1rem/1.45 system-ui,sans-serif; }
-.account-paper .account-kicker { font:bold .75rem/1.4 monospace; letter-spacing:.1em; }
-.account-paper button,.nok-account-settings button { min-height:44px; padding:.65rem 1rem; color:#16372b; background:#f7dfa4; border:2px solid #264b3a; font:600 1rem/1.3 system-ui,sans-serif; cursor:pointer; }
-.account-paper button { width:100%; margin-top:.6rem; }
-.account-paper button:first-of-type { color:white; background:#276348; }
-.account-paper button:focus-visible,.nok-account-settings button:focus-visible { outline:3px solid #bd6817; outline-offset:2px; }
-.account-paper #account-message { margin-bottom:0; font-size:.88rem; }
+#account-gate { padding: max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left)); }
+#account-gate .start-content { width:min(100%, 46rem); max-height:100%; min-height:0; overflow-y:auto; padding:clamp(16px,4vh,38px) clamp(14px,4vw,52px); }
+#account-title { margin:0; max-width:100%; }
+#account-gate .start-logo-image { width:min(100%,610px,88dvh); }
+#account-gate button { width:min(100%,19rem); min-width:0; min-height:46px; font-size:1rem; }
+#account-gate button:disabled { opacity:.72; cursor:wait; }
+#account-gate .start-world-emblem { margin-top:20px; }
+#account-message { margin:.6rem 0 0; max-width:42ch; font:normal .9rem/1.4 var(--nok-font-body); text-transform:none; letter-spacing:normal; }
+.nok-account-settings p { font:1rem/1.45 system-ui,sans-serif; }
+.nok-account-settings button { min-height:44px; padding:.65rem 1rem; color:#16372b; background:#f7dfa4; border:2px solid #264b3a; font:600 1rem/1.3 system-ui,sans-serif; cursor:pointer; }
+.nok-account-settings button:focus-visible { outline:3px solid #bd6817; outline-offset:2px; }
 .nok-account-settings { background:#ffefc7; padding:12px; color:#16372b; }
 #nok-save-alert { position:fixed; z-index:10001; bottom:0; left:0; right:0; padding:.65rem 1rem; background:#703820; color:white; text-align:center; font:600 .95rem/1.4 system-ui,sans-serif; }
 #link-world { text-transform: uppercase; }

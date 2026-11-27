@@ -20,49 +20,23 @@
     <link rel="stylesheet" href="./mobile-polish.css" />
     <link rel="stylesheet" href="./mobile-refresh.css" />
     <link rel="stylesheet" href="./typography.css" />
-  <link rel="stylesheet" href="./browser.css" /></head>
+    <link rel="stylesheet" href="./browser.css?v=portada2" />
+  </head>
   <body class="account-locked">
-    <main id="account-gate" aria-labelledby="account-title">
-      <section class="account-paper">
-        <img src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego" />
-        <p class="account-kicker">LA ENTRADA AL CAMPAMENTO</p>
-        <h1 id="account-title">Tu mundo te espera.</h1>
-        <p>Entrá con Google para crear tu partida o retomar la misma desde otra compu o celular.</p>
-        <button type="button" id="account-google">Continuar con Google</button>
-        <button type="button" id="account-guest">Explorar sin guardar</button>
-        <p id="account-message" role="status" aria-live="polite">La exploración sin cuenta se pierde al salir.</p>
+    <main class="start-screen" id="account-gate" aria-labelledby="account-title">
+      <div class="start-art" aria-hidden="true"></div>
+      <div class="start-shade" aria-hidden="true"></div>
+      <div class="start-content">
+        <span class="start-kicker">UNA AVENTURA PERSONAL</span>
+        <h1 id="account-title"><img class="start-logo-image" src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego." /></h1>
+        <button type="button" class="start-button" id="account-google">Continuar con Google</button>
+        <button type="button" class="start-world-button" id="account-guest">Explorar sin guardar</button>
+        <img class="start-world-emblem" src="./art/ui/nok-world-pencil-logo.webp" alt="" />
+        <p class="start-world-note" id="account-message" role="status">Sin cuenta, la partida se pierde al salir.</p>
         <noscript>Activá JavaScript para abrir NOK.</noscript>
-      </section>
+      </div>
     </main>
     <div class="app-shell">
-      <section class="start-screen" id="start-screen">
-        <div class="start-art" aria-hidden="true"></div>
-        <div class="start-shade" aria-hidden="true"></div>
-        <div class="start-content">
-          <span class="start-kicker">UNA AVENTURA PERSONAL</span>
-          <img
-            class="start-logo-image"
-            src="./art/nok-logo-transparent.webp"
-            alt="NOK — Tu vida, en modo juego."
-          />
-          <button class="start-button" id="start-adventure">
-            <span>▶</span> EMPEZAR AVENTURA
-          </button>
-          <button type="button" class="start-world-button" data-account-exit>Volver al acceso</button>
-          <button class="start-world-button" id="create-world">
-            <span>✦</span> CREAR / CONFIGURAR TU MUNDO
-          </button>
-          <small class="start-world-identity">
-            MUNDO · <strong id="start-world-name">MI MUNDO NOK</strong>
-          </small>
-          <img
-            class="start-world-emblem"
-            src="./art/ui/nok-world-pencil-logo.webp"
-            alt="Emblema de NOK: un mundo dibujado con un lápiz"
-          />
-          <small class="start-world-note" data-account-status role="status"></small>
-        </div>
-      </section>
 
       <header class="hud">
         <button
@@ -160,7 +134,7 @@
         </button>
       </aside>
 
-      <main class="world" id="world" aria-label="Campamento NOK">
+      <main class="world" id="world" aria-label="Campamento NOK" tabindex="-1">
         <div class="world-art"></div>
         <div class="world-vignette"></div>
         <div class="collision-layer" id="collision-layer" aria-hidden="true"></div>
@@ -812,6 +786,7 @@
                   <fieldset class="avatar-style-picker character-settings-picker">
                     <legend>PERSONAJE</legend>
                     <div id="character-settings-content"></div>
+                    <button class="world-profile-action" type="button" id="edit-character">Configurar mi personaje</button>
                   </fieldset>
                 </div>
 
@@ -2101,6 +2076,6 @@
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js"></script>
+    <script type="module" src="./account.js?v=portada2"></script>
   </body>
 </html>
