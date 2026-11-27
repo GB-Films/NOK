@@ -13,7 +13,7 @@
     <title>NOK · Tu vida, en modo juego</title>
     <link rel="icon" type="image/webp" href="./art/previews/favicon.webp" />
     <link rel="preload" as="image" fetchpriority="high" href="./art/nok-logo-transparent.webp" />
-    <link rel="stylesheet" href="./screen.css?v=dia1" />
+    <link rel="stylesheet" href="./screen.css?v=taller1" />
   </head>
   <body class="account-locked">
     <main class="start-screen" id="account-gate" aria-labelledby="account-title">
@@ -58,7 +58,7 @@
         <div class="hud-stats">
           <div class="window-controls" aria-label="Controles de la ventana">
             <button type="button" id="open-assistant" class="window-control-button" aria-haspopup="dialog" aria-controls="camp-assistant" title="Asistente del campamento"><span aria-hidden="true">✦</span> Asistente</button>
-            <button
+            <button data-ui-action="settings" data-ui-glyph
               class="settings-hud-button pixel-box"
               id="open-settings"
               data-open="settings"
@@ -73,7 +73,7 @@
               aria-label="Minimizar NOK"
               title="Minimizar"
             >−</button>
-            <button
+            <button data-ui-action="close" data-ui-glyph
               class="window-control-button close-game-button"
               id="close-game"
               aria-label="Cerrar NOK"
@@ -212,7 +212,7 @@
 
       <div class="world-module-detail-backdrop hidden" id="world-module-detail-backdrop">
         <section class="world-module-detail-card" role="dialog" aria-modal="true" aria-labelledby="selected-world-module-name">
-          <button class="world-module-detail-close" id="world-module-detail-close" type="button" aria-label="Cerrar detalles">×</button>
+          <button data-ui-action="close" data-ui-glyph class="world-module-detail-close" id="world-module-detail-close" type="button" aria-label="Cerrar detalles">×</button>
           <span class="world-module-detail-icon" id="world-module-detail-icon" aria-hidden="true"></span>
           <div class="world-module-detail-copy">
             <small>FICHA DEL PORTAL</small>
@@ -249,7 +249,7 @@
               <span class="eyebrow" id="panel-eyebrow">MISIONES DEL PROYECTO</span>
               <h1 id="panel-title">Tareas</h1>
             </div>
-            <button class="close-button" id="close-panel" aria-label="Cerrar">×</button>
+            <button data-ui-action="close" data-ui-glyph class="close-button" id="close-panel" aria-label="Cerrar">×</button>
           </div>
 
           <div id="profile-view" class="panel-view hidden">
@@ -307,7 +307,7 @@
             </div>
           </div>
           <div id="board-view" class="panel-view hidden">
-            <button class="board-close-button" id="close-board" aria-label="Cerrar tablón">×</button>
+            <button data-ui-action="close" data-ui-glyph class="board-close-button" id="close-board" aria-label="Cerrar tablón">×</button>
             <div class="notice-board-surface">
               <div class="board-top-grid">
                 <div class="board-top-main">
@@ -555,7 +555,7 @@
                 <div class="drawing-canvas-shell"><canvas id="drawing-canvas" width="1200" height="800"></canvas></div>
                 <footer class="drawing-footer">
                   <span>Guardá distintas ideas o exportalas como imagen.</span>
-                  <button type="button" class="drawing-delete hidden" id="drawing-delete">ELIMINAR DIBUJO</button>
+                  <button data-ui-action="delete" type="button" class="drawing-delete hidden" id="drawing-delete">ELIMINAR DIBUJO</button>
                 </footer>
               </section>
             </div>
@@ -724,7 +724,7 @@
             </svg>
             <div class="settings-content">
               <section class="settings-hero">
-                <span class="settings-hero-icon" aria-hidden="true">⚙</span>
+                <span class="settings-hero-icon" data-ui-emblem="settings" aria-hidden="true"></span>
                 <div>
                   <span>CONFIGURACIÓN DEL MUNDO</span>
                   <h2>Tu aventura, a tu manera</h2>
@@ -848,7 +848,7 @@
                   <div class="cloud-actions">
                     <button class="cloud-primary-button" id="cloud-sync-now" type="button">↻ SINCRONIZAR AHORA</button>
                     <button class="cloud-secondary-button" id="cloud-disconnect" type="button">DESCONECTAR ESTE DISPOSITIVO</button>
-                    <button class="cloud-danger-button" id="cloud-delete-copy" type="button">BORRAR COPIA ONLINE</button>
+                    <button data-ui-action="delete" class="cloud-danger-button" id="cloud-delete-copy" type="button">BORRAR COPIA ONLINE</button>
                   </div>
                   <div class="cloud-recovery-actions">
                     <button class="cloud-download-button" id="cloud-download-world" type="button">↓ DESCARGAR PARTIDA DE LA NUBE</button>
@@ -1156,7 +1156,7 @@
                     <img loading="lazy" decoding="async" src="./art/learning/fact.webp" alt="" />
                     <span>DATO RANDOM · 1 POR DÍA</span>
                     <h2 id="daily-random-fact"></h2>
-                    <button type="button" class="learning-complete-button" id="learning-fact-complete">✓ GUARDAR COMO LEÍDO</button>
+                    <button data-ui-action="complete" type="button" class="learning-complete-button" id="learning-fact-complete">Guardar como leído</button>
                   </section>
 
                   <section class="learning-daily-card hidden" id="learning-culture-session">
@@ -1195,7 +1195,12 @@
 
           <div id="creativity-view" class="panel-view hidden">
             <div class="creativity-content">
-              <button
+              <header class="creativity-book-heading">
+                <span>PORTAL DE CREATIVIDAD</span>
+                <h1>Cuaderno de autor</h1>
+                <p>Ideas, escenas y mundos en un solo lugar.</p>
+              </header>
+              <button data-ui-action="close" data-ui-glyph
                 type="button"
                 class="creativity-close-button"
                 id="close-creativity"
@@ -1203,11 +1208,6 @@
               >×</button>
 
               <section class="book-left-page">
-                <header class="creativity-book-heading">
-                  <span>ARCHIVO CREATIVO</span>
-                  <h1>Cuaderno de autor</h1>
-                  <p>Ideas largas, escenas y mundos en un solo lugar.</p>
-                </header>
 
                 <section class="focus-timer" id="focus-timer" aria-label="Temporizador de escritura">
                   <div class="focus-timer-heading">
@@ -1245,7 +1245,7 @@
                         placeholder="Título del proyecto…"
                         required
                       />
-                      <button>+</button>
+                      <button type="submit" aria-label="Crear proyecto de escritura">+</button>
                     </div>
                   </form>
                   <div class="writing-project-list" id="writing-project-list"></div>
@@ -1286,8 +1286,11 @@
                       type="button"
                       class="copy-writing-button"
                       id="copy-writing-document"
+                      data-ui-action="copy"
+                      data-ui-glyph
+                      title="Copiar todo el texto"
                       aria-label="Copiar todo el texto del guion"
-                    ><span aria-hidden="true">▣</span>COPIAR TODO</button>
+                    ></button>
                   </div>
                   <div class="a4-page-shell">
                     <label class="writing-page screenplay-page a4-paper" aria-label="Hoja actual del documento">
@@ -1559,7 +1562,7 @@
                       <span class="vault-count" id="password-count">0 GUARDADAS</span>
                       <button type="button" class="password-add-button" id="add-password-entry" aria-label="Agregar contraseña">+</button>
                       <button type="button" id="lock-password-vault">▣ BLOQUEAR</button>
-                      <button type="button" class="delete-vault" id="delete-password-vault">
+                      <button data-ui-action="delete" type="button" class="delete-vault" id="delete-password-vault">
                         BORRAR BÓVEDA
                       </button>
                     </div>
@@ -1568,13 +1571,13 @@
                     <strong>¿BORRAR TODA LA BÓVEDA?</strong>
                     <span>Las contraseñas guardadas se eliminarán definitivamente.</span>
                     <button type="button" id="cancel-delete-password-vault">CANCELAR</button>
-                    <button type="button" class="danger-action" id="confirm-delete-password-vault">
+                    <button data-ui-action="delete" type="button" class="danger-action" id="confirm-delete-password-vault">
                       SÍ, BORRAR TODO
                     </button>
                   </div>
 
                   <dialog class="password-entry-dialog" id="password-entry-dialog" aria-labelledby="password-form-title">
-                  <button type="button" class="ui-delete-action password-dialog-close" id="close-password-dialog" aria-label="Cerrar nueva contraseña">×</button>
+                  <button data-ui-action="close" data-ui-glyph type="button" class="ui-delete-action password-dialog-close" id="close-password-dialog" aria-label="Cerrar nueva contraseña">×</button>
                   <form class="password-entry-form" id="password-entry-form">
                     <input type="hidden" id="password-edit-id" />
                     <div class="password-form-heading">
@@ -1721,7 +1724,7 @@
               <strong id="progress-coin-balance">0</strong>
               <small>MONEDAS NOK</small>
             </div>
-            <button
+            <button data-ui-action="close" data-ui-glyph
               class="close-button"
               id="close-activity"
               aria-label="Cerrar historial"
@@ -1740,7 +1743,7 @@
 
       <div class="achievement-celebration-backdrop hidden" id="achievement-celebration">
         <section class="achievement-celebration-card pixel-box" role="dialog" aria-modal="true" aria-labelledby="achievement-celebration-title">
-          <button class="close-button" id="close-achievement-celebration" type="button" aria-label="Cerrar logro">×</button>
+          <button data-ui-action="close" data-ui-glyph class="close-button" id="close-achievement-celebration" type="button" aria-label="Cerrar logro">×</button>
           <div class="achievement-orbit" aria-hidden="true"><span>✦</span><span>◆</span><span>✦</span></div>
           <span class="eyebrow" id="achievement-celebration-eyebrow">NUEVO LOGRO DESBLOQUEADO</span>
           <div class="achievement-medal" aria-hidden="true"><img loading="lazy" decoding="async" id="achievement-medal" src="./art/ui/achievements/completed-10.webp" alt="" /></div>
@@ -1759,7 +1762,7 @@
               <span class="eyebrow" id="task-modal-eyebrow">NUEVA MISIÓN</span>
               <h1 id="task-modal-title">Sacala de tu cabeza</h1>
             </div>
-            <button type="button" class="close-button" id="close-modal">×</button>
+            <button data-ui-action="close" data-ui-glyph aria-label="Cerrar" type="button" class="close-button" id="close-modal">×</button>
           </div>
 
           <label>
@@ -1825,7 +1828,7 @@
             </span>
           </label>
           <div class="task-form-footer">
-            <button
+            <button data-ui-action="delete"
               type="button"
               class="delete-task task-form-delete hidden"
               id="task-form-delete"
@@ -1844,11 +1847,11 @@
               <span class="eyebrow">EDITAR</span>
               <h2 id="rename-title">Cambiar nombre</h2>
             </div>
-            <button type="button" class="close-button" id="close-rename">×</button>
+            <button data-ui-action="close" data-ui-glyph aria-label="Cerrar" type="button" class="close-button" id="close-rename">×</button>
           </div>
           <input id="rename-input" maxlength="120" required aria-label="Nuevo nombre" />
           <div class="rename-actions">
-            <button type="button" class="danger-action hidden" id="delete-project-from-rename">ELIMINAR PROYECTO</button>
+            <button data-ui-action="delete" type="button" class="danger-action hidden" id="delete-project-from-rename">ELIMINAR PROYECTO</button>
             <button type="button" id="cancel-rename">CANCELAR</button>
             <button class="primary-action">GUARDAR NOMBRE</button>
           </div>
@@ -1868,7 +1871,7 @@
           <p>El proyecto desaparecerá del mapa. Sus misiones no se borrarán: quedarán guardadas como tareas sin proyecto.</p>
           <div class="rename-actions">
             <button type="button" id="cancel-project-delete">CONSERVAR PROYECTO</button>
-            <button type="button" class="danger-action" id="confirm-project-delete">ELIMINAR DEFINITIVAMENTE</button>
+            <button data-ui-action="delete" type="button" class="danger-action" id="confirm-project-delete">ELIMINAR DEFINITIVAMENTE</button>
           </div>
         </section>
       </div>
@@ -1880,21 +1883,21 @@
           aria-modal="true"
           aria-labelledby="writing-delete-title"
         >
-          <span class="writing-delete-icon" aria-hidden="true"><i></i></span>
+          <span class="action-emblem" data-ui-emblem="delete" aria-hidden="true"></span>
           <span class="eyebrow">BIBLIOTECA CREATIVA</span>
           <h2 id="writing-delete-title">¿Eliminar este proyecto?</h2>
           <strong id="writing-delete-project-title"></strong>
           <p>El libro y todas sus hojas desaparecerán de esta partida.</p>
           <div class="writing-delete-actions">
             <button id="cancel-writing-delete" type="button">VOLVER A LA BIBLIOTECA</button>
-            <button id="confirm-writing-delete" type="button">ELIMINAR DEFINITIVAMENTE</button>
+            <button data-ui-action="delete" id="confirm-writing-delete" type="button">ELIMINAR DEFINITIVAMENTE</button>
           </div>
         </section>
       </div>
 
       <div class="profile-wizard-backdrop hidden" id="partner-wizard">
         <section class="profile-wizard partner-wizard pixel-box" role="dialog" aria-modal="true" aria-labelledby="partner-wizard-title">
-          <button class="profile-wizard-close" id="close-partner-wizard" type="button" aria-label="Cerrar">×</button>
+          <button data-ui-action="close" data-ui-glyph class="profile-wizard-close" id="close-partner-wizard" type="button" aria-label="Cerrar">×</button>
           <span class="profile-wizard-kicker">UNA NUEVA HISTORIA COMPARTIDA</span>
           <h2 id="partner-wizard-title">¡Felicitaciones por esta aventura de a dos!</h2>
           <p>Completá el recuerdo y elegí cómo querés que tu pareja aparezca en el pasaporte.</p>
@@ -1922,7 +1925,7 @@
 
       <div class="profile-wizard-backdrop hidden" id="pet-wizard">
         <section class="profile-wizard pet-wizard pixel-box" role="dialog" aria-modal="true" aria-labelledby="pet-wizard-title">
-          <button class="profile-wizard-close" id="close-pet-wizard" type="button" aria-label="Cerrar">×</button>
+          <button data-ui-action="close" data-ui-glyph class="profile-wizard-close" id="close-pet-wizard" type="button" aria-label="Cerrar">×</button>
           <span class="profile-wizard-kicker">NUEVO COMPAÑERO DE CAMPAMENTO</span>
           <h2 id="pet-wizard-title">¡Una nueva huella llega a tu mundo!</h2>
           <p>Elegí a tu mascota, su color y guardá su fecha para celebrar cada año.</p>
@@ -1965,7 +1968,7 @@
         <section class="character-setup-card pixel-box" role="dialog" aria-modal="true" aria-labelledby="character-setup-title">
           <header>
             <div><small id="character-setup-kicker">CREACIÓN DEL MUNDO · PASO 1 DE 3</small><h1 id="character-setup-title">¿Cómo te llamás?</h1></div>
-            <button class="close-button hidden" id="close-character-setup" type="button" aria-label="Cerrar">×</button>
+            <button data-ui-action="close" data-ui-glyph class="close-button hidden" id="close-character-setup" type="button" aria-label="Cerrar">×</button>
           </header>
           <div class="character-setup-progress" aria-hidden="true"><i class="active"></i><i></i><i></i></div>
           <div class="character-setup-step name-step" data-character-step="1">
@@ -2002,7 +2005,7 @@
           aria-modal="true"
           aria-labelledby="birthday-alert-title"
         >
-          <button
+          <button data-ui-action="close" data-ui-glyph
             class="birthday-alert-close"
             id="close-birthday-alert"
             type="button"
@@ -2078,6 +2081,6 @@
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js?v=dia1"></script>
+    <script type="module" src="./account.js?v=taller1"></script>
   </body>
 </html>

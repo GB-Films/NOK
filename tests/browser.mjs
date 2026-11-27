@@ -18,7 +18,9 @@ await new Promise(done=>server.listen(0,"127.0.0.1",done));
 const browser=await chromium.launch({channel:process.env.NOK_BROWSER || "chrome",headless:true});
 const target=process.env.NOK_SMOKE_URL || "http://127.0.0.1:"+server.address().port+"/NOK/";
 try {
-  for (const viewport of [{width:1366,height:768},{width:390,height:844}]) {
+  const viewports=[{width:1366,height:768},{width:390,height:844}];
+  if(process.env.NOK_WIDE_QA)viewports.push({width:1894,height:895});
+  for (const viewport of viewports) {
     const mobile=viewport.width<760;
     const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile}); const page=await context.newPage(), errors=[];
     page.on("pageerror",e=>errors.push(e.message));
@@ -40,6 +42,8 @@ try {
       await verifyGuide(page);
       const {verifyPlanner}=await import("./planner-browser.mjs");
       await verifyPlanner(page,mobile);
+      const {verifyPortals}=await import("./portals-browser.mjs");
+      await verifyPortals(page,mobile);
       // The removed prop must not leave either a hit target or an invisible construction cell.
       const house = page.locator("#world-house, [data-build-prop=house]");
       const cells = page.locator("#world-grid .world-build-plot");

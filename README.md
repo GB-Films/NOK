@@ -6,6 +6,12 @@
 - **Explorar sin guardar** abre una partida temporal. No se sube a Firebase ni se guarda en el navegador; se pierde al recargar. Las partidas de ediciones anteriores no se importan automáticamente.
 - Si dos dispositivos editan a la vez, la versión antigua no pisa a la nueva. Ante una falla de conexión, dejá abierta la pestaña y reintentá desde Ajustes.
 
+## Controles de los portales
+
+La cruz roja elimina; la cruz clara solo cierra. El tick verde completa, la flecha reabre, los dos papeles duplican y la tuerca abre Ajustes. Las acciones destructivas con texto conservan su etiqueta y sus confirmaciones. En Creatividad la biblioteca y el editor son pantallas distintas; los dos botones de cada proyecto tienen su propio espacio. Finanzas ocupa el área de juego y vuelve a bloquearse al salir.
+
+Para sumar controles usá un botón nativo con `data-ui-action="delete|complete|close|settings|duplicate|copy|edit|reopen"` (un solo valor). Si solo lleva ícono, agregá `data-ui-glyph` y un `aria-label` que diga qué hace. Usá las familias de `typography.css` para títulos, controles y texto; no dibujes los símbolos con una fuente. Los pictogramas compartidos están en `game/art/controls/`.
+
 ## Asistente del campamento
 
 Desde el mapa, tocá **✦ Asistente**, al lado de Ajustes. Escribí un pedido o tocá **Dictar** si el navegador lo permite. El dictado solo transcribe: revisá el texto, tocá **Preparar** y confirmá la propuesta. Podés corregirla o descartarla sin guardar nada.

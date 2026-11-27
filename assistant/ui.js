@@ -3,7 +3,7 @@ import {suggestedOrder} from "./board.js";
 
 export function mountAssistant(dialog,api) {
   dialog.innerHTML=`
-    <header class="guide-head"><div><small>CAMPAMENTO NOK</small><h2 id="guide-title">Asistente</h2></div><button type="button" data-close aria-label="Cerrar asistente">×</button></header>
+    <header class="guide-head"><div><small>CAMPAMENTO NOK</small><h2 id="guide-title">Asistente</h2></div><button data-ui-action="close" data-ui-glyph type="button" data-close aria-label="Cerrar asistente">×</button></header>
     <div class="guide-page">
       <p>¿Qué necesitás hacer? Escribime o dictá tu pedido. Vos confirmás los cambios.</p>
       <div class="guide-examples" aria-label="Ejemplos de pedidos">

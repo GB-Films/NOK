@@ -376,28 +376,6 @@
     min-width: 0;
     overflow: hidden;
   }
-  .mobile-runtime .creativity-content:has(.book-right-page .empty-writing) .book-left-page {
-    grid-column: 1;
-  }
-  .mobile-runtime .creativity-content:has(.book-right-page .empty-writing) .book-right-page {
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    pointer-events: none;
-    background: transparent;
-  }
-  .mobile-runtime .creativity-content:has(.book-right-page .empty-writing) .book-right-page > :not(.creativity-close-button) {
-    display: none;
-  }
-  .mobile-runtime .creativity-content:has(.book-right-page .empty-writing) .creativity-close-button {
-    pointer-events: auto;
-  }
-  .mobile-runtime .creativity-content:not(:has(.book-right-page .empty-writing)) .book-left-page {
-    display: none;
-  }
-  .mobile-runtime .creativity-content:not(:has(.book-right-page .empty-writing)) .book-right-page {
-    grid-column: 1;
-  }
   .mobile-runtime .creativity-panel .book-title h1 { font-size: clamp(18px, 5.7vw, 24px); }
   .mobile-runtime .creativity-panel .book-title p { font-size: 9px; }
   .mobile-runtime .focus-timer { padding: 7px; }

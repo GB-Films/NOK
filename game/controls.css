@@ -1,0 +1,69 @@
+/* Explicit semantics in the templates: color and shape never depend on button text.
+   A named layer only for the properties that must beat legacy portal overrides. */
+:root {
+  --control-size:34px; --control-art:18px;
+  --control-cross:url("./art/controls/cross.svg"); --control-tick:url("./art/controls/tick.svg");
+  --control-gear:url("./art/controls/gear.svg"); --control-copy:url("./art/controls/duplicate.svg");
+  --control-pencil:url("./art/controls/edit.svg"); --control-undo:url("./art/controls/reopen.svg");
+}
+@media (pointer:coarse),(max-width:760px){:root{--control-size:44px;--control-art:20px}}
+[data-ui-action=delete],[data-ui-emblem=delete] {--face:#a53831;--edge:#672522;--ink-icon:#fff9e9;--shape:var(--control-cross)}
+[data-ui-action=complete] {--face:#23704c;--edge:#174834;--ink-icon:#fff9e9;--shape:var(--control-tick)}
+[data-ui-action=settings],[data-ui-emblem=settings] {--face:#59476d;--edge:#382b45;--ink-icon:#fff9e9;--shape:var(--control-gear)}
+[data-ui-action=close] {--face:#f3e6c5;--edge:#72644b;--ink-icon:#3f392b;--shape:var(--control-cross)}
+[data-ui-action=duplicate],[data-ui-action=copy] {--face:#d6e8df;--edge:#4f7363;--ink-icon:#284f43;--shape:var(--control-copy)}
+[data-ui-action=edit] {--face:#f7e7bc;--edge:#8c7244;--ink-icon:#544529;--shape:var(--control-pencil)}
+[data-ui-action=reopen] {--face:#e1e9ea;--edge:#5d7379;--ink-icon:#324e55;--shape:var(--control-undo)}
+@layer nok-controls {
+  :is(.primary-action,.profile-wizard-confirm,.birthday-alert-primary,.guide-primary):not([data-ui-action]) {
+    border:2px solid #204c39!important;border-radius:3px!important;background:#2f674c!important;
+    color:#fff9e2!important;box-shadow:0 2px 0 #204c39!important;text-shadow:none!important;
+    font:700 14px/1.3 var(--nok-font-ui)!important;letter-spacing:normal!important;
+    min-height:40px!important;white-space:normal!important;
+  }
+  :is(#side-panel,.modal-backdrop,.activity-backdrop) :is(.eyebrow,.panel-header small) {
+    font:700 11px/1.3 var(--nok-font-ui)!important;letter-spacing:.06em!important;
+  }
+  :is(#side-panel,.modal-backdrop) label>input:not([type=checkbox]):not([type=range]):not([type=color]),
+  :is(#side-panel,.modal-backdrop) label>select {font-family:var(--nok-font-body)!important}
+  button[data-ui-action] {
+    box-sizing:border-box!important; gap:6px!important; border:2px solid var(--edge)!important;
+    border-radius:3px!important; background:var(--face)!important; color:var(--ink-icon)!important;
+    box-shadow:0 2px 0 var(--edge)!important; text-shadow:none!important;
+    font:700 14px/1.2 var(--nok-font-ui)!important; letter-spacing:normal!important;
+    cursor:pointer; text-align:center!important; vertical-align:middle;
+  }
+  button[data-ui-action]::before,[data-ui-emblem]::before {
+    content:""!important; display:inline-block!important; position:static!important; inset:auto!important;
+    width:var(--control-art)!important; height:var(--control-art)!important; flex:none;
+    border:0!important; background:var(--ink-icon)!important;
+    mask:var(--shape) center / contain no-repeat!important;
+    transform:none!important; box-shadow:none!important; vertical-align:middle;
+  }
+  button[data-ui-action]::after {content:none!important}
+  button[data-ui-action][data-ui-glyph] {
+    width:var(--control-size)!important;min-width:var(--control-size)!important;max-width:var(--control-size)!important;
+    height:var(--control-size)!important;min-height:var(--control-size)!important;max-height:var(--control-size)!important;
+    padding:0!important; margin:0!important; font-size:0!important;line-height:0!important;
+    grid-template:minmax(0,1fr)/minmax(0,1fr)!important;grid-auto-rows:0!important;gap:0!important;
+    align-items:center!important;justify-items:center!important;justify-content:center!important;place-content:center!important;
+  }
+  button[data-ui-glyph]>* {display:none!important}
+  button[data-ui-action]:not([data-ui-glyph]) {padding:.48em .72em!important;min-height:var(--control-size)!important}
+  button[data-ui-action]:not([data-ui-glyph])::before {margin-right:4px}
+  button[data-ui-action]:focus-visible {outline:3px solid #156e9b!important;outline-offset:2px!important}
+  button[data-ui-action]:disabled {cursor:not-allowed!important;opacity:.57!important}
+  button[data-ui-action]:active:not(:disabled) {translate:0 1px;box-shadow:none!important}
+  @media (hover:hover){button[data-ui-action]:hover:not(:disabled){filter:brightness(1.09)}}
+  .quick-list-check[aria-pressed=true] {background:#23704c!important;color:transparent!important;font-size:0!important}
+  .quick-list-check[aria-pressed=true]::before {content:"";display:inline-block;width:var(--control-art);height:var(--control-art);background:#fff9e9;mask:var(--control-tick) center/contain no-repeat}
+  .action-emblem,[data-ui-emblem=settings] {display:inline-grid;place-items:center;background:var(--face)!important;border:2px solid var(--edge)!important;width:44px;height:44px}
+  .board-task-row {grid-template-columns:minmax(0,1fr) repeat(2,var(--control-size))!important;gap:5px!important}
+  .board-task-row:has(.board-today) {grid-template-columns:minmax(0,1fr) repeat(3,var(--control-size))!important}
+  .board-task-row .board-today {width:var(--control-size)!important;min-width:0!important}
+}
+@media(prefers-reduced-motion:no-preference){
+  :where(#side-panel,dialog,#day-rail) button:not(:disabled){transition:background-color .12s,filter .12s,box-shadow .12s}
+}
+:where(#side-panel,dialog,#day-rail) button:focus-visible {outline:3px solid #247aa1;outline-offset:2px}
+.delete-notice {margin:4px 0;padding:6px 10px;background:#fae1d4;border-left:3px solid #a53831;color:#6d2821;font:14px/1.4 var(--nok-font-body)}

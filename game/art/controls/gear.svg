@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M20.5 12a8.5 8.5 0 1 1-17 0 8.5 8.5 0 0 1 17 0ZM16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/><path id="teeth" d="M10 1h4v5h-4zM10 18h4v5h-4z"/><use href="#teeth" transform="rotate(45 12 12)"/><use href="#teeth" transform="rotate(90 12 12)"/><use href="#teeth" transform="rotate(135 12 12)"/></svg>

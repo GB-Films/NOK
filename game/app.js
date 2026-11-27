@@ -4337,7 +4337,7 @@ function renderPets() {
                 <span>${pet.birthDate ? `NACIÓ EL ${formatShortDate(pet.birthDate)}` : "SIN FECHA DE NACIMIENTO"}</span>
                 <em>TOCÁ PARA ABRIR SU FICHA</em>
               </button>
-              <button
+              <button data-ui-action="delete" data-ui-glyph
                 type="button"
                 class="pet-summary-remove"
                 data-pet-delete="${escapeHtml(pet.id)}"
@@ -5063,7 +5063,7 @@ function renderMission() {
         <h2>¿Completaste la misión?</h2>
         <p>${escapeHtml(task.title)}</p>
         <div class="mission-focus-review-actions">
-          <button type="button" class="mission-focus-review-complete" data-focus-result="complete">✓ SÍ, MISIÓN CUMPLIDA</button>
+          <button data-ui-action="complete" type="button" class="mission-focus-review-complete" data-focus-result="complete">Sí, misión cumplida</button>
           <button type="button" data-focus-result="later">CONTINÚA MÁS ADELANTE</button>
         </div>
       </div>
@@ -5081,13 +5081,13 @@ function renderMission() {
     <h2>${escapeHtml(task.title)}</h2>
     ${details}
     <div class="mission-actions">
-      <button class="mission-complete-action" data-task-action="done"
-        data-task-id="${task.id}">✓ MARCAR CUMPLIDA</button>
+      <button data-ui-action="complete" class="mission-complete-action" data-task-action="done"
+        data-task-id="${task.id}">Marcar cumplida</button>
       <div class="mission-secondary-actions">
         <button class="${task.isToday ? "today-active" : ""}" data-task-action="today"
           data-task-id="${task.id}">${task.isToday ? "✓ EN HOY" : "+ SUMAR A HOY"}</button>
         <button data-task-action="edit" data-task-id="${task.id}">✎ EDITAR / MOVER</button>
-        <button class="delete-task" data-task-action="delete"
+        <button data-ui-action="delete" class="delete-task" data-task-action="delete"
           data-task-id="${task.id}">ELIMINAR</button>
       </div>
     </div>
@@ -5121,9 +5121,9 @@ function renderBoard() {
       </div>
       ${showContext ? `<button class="board-today" data-task-action="today"
         data-task-id="${task.id}" aria-label="Sumar ${escapeHtml(task.title)} a hoy">HOY</button>` : ""}
-      <button class="board-complete" data-task-action="done"
+      <button data-ui-action="complete" data-ui-glyph class="board-complete" data-task-action="done"
         data-task-id="${task.id}" aria-label="Completar ${escapeHtml(task.title)}">✓</button>
-      <button class="board-delete ui-delete-action" data-task-action="delete"
+      <button data-ui-action="delete" data-ui-glyph class="board-delete ui-delete-action" data-task-action="delete"
         data-task-id="${task.id}" aria-label="Eliminar ${escapeHtml(task.title)}">×</button>
     </article>
   `;
@@ -5245,7 +5245,7 @@ function weekTaskCard(task) {
         <strong>${escapeHtml(task.title)}</strong>
         <small>${escapeHtml(task.project || "TAREA SUELTA")}</small>
       </span>
-      <button class="week-task-delete" data-task-action="delete"
+      <button data-ui-action="delete" data-ui-glyph class="week-task-delete" data-task-action="delete"
         data-task-id="${task.id}" aria-label="Eliminar ${escapeHtml(task.title)}">×</button>
     </article>
   `;
@@ -5298,7 +5298,7 @@ function renderWeekBoard(openTasks) {
                 <article class="week-routine-item">
                   <span aria-hidden="true">↻</span>
                   <strong>${escapeHtml(item.text)}</strong>
-                  <button type="button" data-daily-plan-delete="${escapeHtml(item.id)}" data-daily-plan-key="${planKey}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
+                  <button data-ui-action="delete" data-ui-glyph type="button" data-daily-plan-delete="${escapeHtml(item.id)}" data-daily-plan-key="${planKey}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
                 </article>
               `).join("") : '<small class="week-routine-empty">SIN RUTINAS</small>'}
             </div>
@@ -5336,8 +5336,8 @@ function renderAgenda() {
                 ${event.checklist?.length ? `<small class="event-entry-checklist-count">${event.checklist.filter((item) => !item.done).length} POR RECORDAR</small>` : ""}
               </div>
               <div class="agenda-entry-actions">
-                <button class="ui-edit-action" data-event-edit="${event.id}" aria-label="Editar evento">✎</button>
-                <button class="ui-delete-action" data-event-delete="${event.id}" aria-label="Eliminar evento">×</button>
+                <button data-ui-action="edit" data-ui-glyph class="ui-edit-action" data-event-edit="${event.id}" aria-label="Editar evento">✎</button>
+                <button data-ui-action="delete" data-ui-glyph class="ui-delete-action" data-event-delete="${event.id}" aria-label="Eliminar evento">×</button>
               </div>
             </article>
           `,
@@ -5364,8 +5364,8 @@ function renderAgenda() {
           <span>${event.timing.label}</span>
           <strong>${escapeHtml(event.title)}</strong>
           <div class="agenda-entry-actions">
-            <button class="ui-edit-action" data-event-edit="${event.id}" aria-label="Editar evento">✎</button>
-            <button class="ui-delete-action" data-event-delete="${event.id}" aria-label="Eliminar evento">×</button>
+            <button data-ui-action="edit" data-ui-glyph class="ui-edit-action" data-event-edit="${event.id}" aria-label="Editar evento">✎</button>
+            <button data-ui-action="delete" data-ui-glyph class="ui-delete-action" data-event-delete="${event.id}" aria-label="Eliminar evento">×</button>
           </div>
         </article>
       `,
@@ -5389,8 +5389,8 @@ function renderAgenda() {
                 birthday.profileSource
                   ? '<small class="profile-birthday-source">DESDE PERFIL</small>'
                   : `<div class="agenda-entry-actions">
-                      <button class="ui-edit-action" data-birthday-edit="${birthday.id}" aria-label="Editar cumpleaños">✎</button>
-                      <button class="ui-delete-action" data-birthday-delete="${birthday.id}" aria-label="Eliminar cumpleaños">×</button>
+                      <button data-ui-action="edit" data-ui-glyph class="ui-edit-action" data-birthday-edit="${birthday.id}" aria-label="Editar cumpleaños">✎</button>
+                      <button data-ui-action="delete" data-ui-glyph class="ui-delete-action" data-birthday-delete="${birthday.id}" aria-label="Eliminar cumpleaños">×</button>
                     </div>`
               }
             </article>
@@ -5415,7 +5415,7 @@ function renderEventChecklistDraft() {
             <label class="${item.done ? "done" : ""}">
               <input type="checkbox" data-event-check-toggle="${item.id}" ${item.done ? "checked" : ""} />
               <span>${escapeHtml(item.text)}</span>
-              <button type="button" data-event-check-delete="${item.id}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
+              <button data-ui-action="delete" data-ui-glyph type="button" data-event-check-delete="${item.id}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
             </label>
           `,
         )
@@ -5651,12 +5651,12 @@ function renderTasks() {
               <div class="task-card-top-actions">
                 ${questAction}
                 ${todayAction}
-                <button class="task-edit-icon ui-edit-action" data-task-action="rename"
+                <button data-ui-action="edit" data-ui-glyph class="task-edit-icon ui-edit-action" data-task-action="rename"
                   data-task-id="${task.id}" aria-label="Editar nombre de ${escapeHtml(task.title)}"
                   title="Editar nombre aquí">✎</button>
-                <button class="task-complete-icon" data-task-action="${task.status === "done" ? "todo" : "done"}"
+                <button data-ui-action="${task.status === "done" ? "reopen" : "complete"}" data-ui-glyph class="task-complete-icon" data-task-action="${task.status === "done" ? "todo" : "done"}"
                   data-task-id="${task.id}" aria-label="${task.status === "done" ? "Reabrir" : "Completar"}">✓</button>
-                <button class="task-delete-icon ui-delete-action" data-task-action="delete" data-task-id="${task.id}"
+                <button data-ui-action="delete" data-ui-glyph class="task-delete-icon ui-delete-action" data-task-action="delete" data-task-id="${task.id}"
                   aria-label="Eliminar">×</button>
               </div>
             </div>
@@ -5966,7 +5966,7 @@ function renderHubAlarms() {
         <strong>${escapeHtml(alarm.time)}</strong>
         <span>${escapeHtml(alarm.label || "Alarma personal")}</span>
         <button type="button" class="alarm-toggle" data-alarm-toggle="${escapeHtml(alarm.id)}" aria-pressed="${Boolean(alarm.enabled)}">${alarm.enabled ? "ON" : "OFF"}</button>
-        <button type="button" class="alarm-delete" data-alarm-delete="${escapeHtml(alarm.id)}" aria-label="Eliminar alarma">×</button>
+        <button data-ui-action="delete" data-ui-glyph type="button" class="alarm-delete" data-alarm-delete="${escapeHtml(alarm.id)}" aria-label="Eliminar alarma">×</button>
       </article>
     `)
     .join("");
@@ -6254,8 +6254,8 @@ function renderQuickLists() {
       ? String(selected.items.length)
       : "NOTA";
   const actions = `${selected.type === "checklist" ? '<button type="button" title="Reiniciar checklist" aria-label="Reiniciar checklist" data-quick-list-action="reset">↺</button>' : ""}
-      <button type="button" title="Duplicar lista" aria-label="Duplicar lista" data-quick-list-action="duplicate">▣</button>
-      <button type="button" title="${quickListDeleteArmedId === selected.id ? "Confirmar eliminacion" : "Eliminar lista"}" aria-label="${quickListDeleteArmedId === selected.id ? "Confirmar eliminacion" : "Eliminar lista"}" class="quick-list-delete${quickListDeleteArmedId === selected.id ? " armed" : ""}" data-quick-list-action="delete">${quickListDeleteArmedId === selected.id ? "!" : "×"}</button>`;
+      <button data-ui-action="duplicate" data-ui-glyph type="button" title="Duplicar lista" aria-label="Duplicar lista" data-quick-list-action="duplicate">▣</button>
+      <button data-ui-action="delete" data-ui-glyph type="button" title="${quickListDeleteArmedId === selected.id ? "Confirmar eliminacion" : "Eliminar lista"}" aria-label="${quickListDeleteArmedId === selected.id ? "Confirmar eliminacion" : "Eliminar lista"}" class="quick-list-delete${quickListDeleteArmedId === selected.id ? " armed" : ""}" data-quick-list-action="delete">${quickListDeleteArmedId === selected.id ? "!" : "×"}</button>`;
   const editor = selected.type === "notes"
     ? `<textarea class="quick-list-notes-editor" id="quick-list-notes-editor" maxlength="20000" placeholder="Escribí cualquier cosa que quieras guardar…" aria-label="Contenido de la nota">${escapeHtml(selected.note || "")}</textarea>`
     : `<form class="quick-list-item-form" id="quick-list-item-form">
@@ -6269,12 +6269,12 @@ function renderQuickLists() {
                 <strong class="ranking-order-number" data-ranking-drag-handle="${escapeHtml(item.id)}" role="button" tabindex="0" aria-label="Mover puesto ${index + 1}" title="Arrastrá para reordenar">${index + 1}°</strong>
                 ${editingQuickListItemId === item.id ? `<input class="quick-list-inline-editor ranking-item-text" data-quick-list-inline-edit="${escapeHtml(item.id)}" maxlength="160" value="${escapeHtml(item.text)}" />` : `<span class="ranking-item-text">${escapeHtml(item.text)}</span>`}
                 <span class="ranking-step-actions"><button type="button" data-ranking-step="up" data-ranking-item="${escapeHtml(item.id)}" ${index === 0 ? "disabled" : ""}>↑</button><button type="button" data-ranking-step="down" data-ranking-item="${escapeHtml(item.id)}" ${index === selected.items.length - 1 ? "disabled" : ""}>↓</button></span>
-                <button type="button" class="quick-list-item-delete" data-quick-list-item-delete="${escapeHtml(item.id)}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
+                <button data-ui-action="delete" data-ui-glyph type="button" class="quick-list-item-delete" data-quick-list-item-delete="${escapeHtml(item.id)}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
               </article>`
             : `<article class="${item.checked ? "checked" : ""}" data-quick-list-edit-row="${escapeHtml(item.id)}">
                 <button type="button" class="quick-list-check" data-quick-list-toggle="${escapeHtml(item.id)}" aria-pressed="${Boolean(item.checked)}" aria-label="${item.checked ? "Destachar" : "Tachar"} ${escapeHtml(item.text)}">${item.checked ? "✓" : ""}</button>
                 ${editingQuickListItemId === item.id ? `<input class="quick-list-inline-editor" data-quick-list-inline-edit="${escapeHtml(item.id)}" maxlength="160" value="${escapeHtml(item.text)}" />` : `<button type="button" class="quick-list-item-text" data-quick-list-edit="${escapeHtml(item.id)}"><small>${String(index + 1).padStart(2, "0")}</small><span>${escapeHtml(item.text)}</span></button>`}
-                <button type="button" class="quick-list-item-delete" data-quick-list-item-delete="${escapeHtml(item.id)}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
+                <button data-ui-action="delete" data-ui-glyph type="button" class="quick-list-item-delete" data-quick-list-item-delete="${escapeHtml(item.id)}" aria-label="Eliminar ${escapeHtml(item.text)}">×</button>
               </article>`).join("")
           : `<div class="quick-list-empty-sheet"><img src="${meta.icon}" alt="" /><strong>${selected.type === "ranking" ? "El podio está esperando." : "Esta hoja está lista."}</strong><p>${selected.type === "ranking" ? "Agregá candidatos y ordenalos arrastrando." : "Sumá todo lo que no querés olvidar."}</p></div>`}
       </div>`;
@@ -6287,6 +6287,7 @@ function renderQuickLists() {
       <div class="quick-list-actions" aria-label="Acciones de la lista">${actions}</div>
       <div class="quick-list-progress-seal"><img src="${meta.icon}" alt="" /><small>${progress}</small></div>
     </header>
+    ${quickListDeleteArmedId===selected.id?'<p class="delete-notice" role="status">Volvé a pulsar la cruz roja para confirmar que querés eliminar esta lista.</p>':""}
     ${editor}`;
 }
 
@@ -6318,7 +6319,7 @@ function renderUnderground() {
         </div>
         <div class="underground-item-actions">
           <button type="button" data-underground-edit="${escapeHtml(item.id)}">EDITAR</button>
-          <button type="button" class="danger" data-underground-delete="${escapeHtml(item.id)}">ELIMINAR</button>
+          <button data-ui-action="delete" type="button" class="danger" data-underground-delete="${escapeHtml(item.id)}">ELIMINAR</button>
         </div>
       </article>`).join("")
     : `<div class="underground-empty-state"><span aria-hidden="true">✦</span><strong>${undergroundItems.length ? "No encontramos ese archivo." : "Los archiveros están vacíos."}</strong><p>${undergroundItems.length ? "Probá con otra búsqueda." : "Guardá la primera cosa que no querés tener dando vueltas."}</p></div>`;
@@ -6517,8 +6518,8 @@ function openLearningBlock(block) {
     elements.learningFactSession.classList.remove("hidden");
     elements.dailyRandomFact.textContent = dailyLearningFact();
     elements.learningFactComplete.textContent = learningProgress[learningProgressKey("fact")]
-      ? "✓ LEÍDO HOY"
-      : "✓ GUARDAR COMO LEÍDO";
+      ? "Leído hoy"
+      : "Guardar como leído";
   } else if (block === "culture") {
     elements.learningCultureSession.classList.remove("hidden");
     elements.dailyCultureAnswer.classList.add("hidden");
@@ -7164,8 +7165,8 @@ function renderWritingProjectList() {
             </span>
           </button>
           <span class="writing-project-actions">
-            <button type="button" class="duplicate-writing-project" data-writing-duplicate="${project.id}" title="Duplicar como nueva version" aria-label="Duplicar ${escapeHtml(project.title)} como nueva version"><span class="writing-action-glyph duplicate-glyph" aria-hidden="true"></span></button>
-            <button type="button" class="delete-writing-project" data-writing-delete="${project.id}" title="Eliminar proyecto" aria-label="Eliminar ${escapeHtml(project.title)}"><span class="writing-action-glyph delete-glyph" aria-hidden="true"></span></button>
+            <button data-ui-action="duplicate" data-ui-glyph type="button" class="duplicate-writing-project" data-writing-duplicate="${project.id}" title="Duplicar como nueva version" aria-label="Duplicar ${escapeHtml(project.title)} como nueva version"><span class="writing-action-glyph duplicate-glyph" aria-hidden="true"></span></button>
+            <button data-ui-action="delete" data-ui-glyph type="button" class="delete-writing-project" data-writing-delete="${project.id}" title="Eliminar proyecto" aria-label="Eliminar ${escapeHtml(project.title)}"><span class="writing-action-glyph delete-glyph" aria-hidden="true"></span></button>
           </span>
         </article>
       `,
@@ -7324,7 +7325,7 @@ function renderFinance() {
             <small>${typeLabel[entry.type]}${entry.notes ? ` · ${escapeHtml(entry.notes)}` : ""}</small>
           </div>
           <b>${money(Number(entry.amount))}</b>
-          <button data-finance-delete="${entry.id}" aria-label="Eliminar registro">×</button>
+          <button data-ui-action="delete" data-ui-glyph data-finance-delete="${entry.id}" aria-label="Eliminar registro">×</button>
         </article>
       `,
     )
@@ -7369,7 +7370,7 @@ function renderCofferNotes() {
             <strong>${escapeHtml(note.title)}</strong>
             <small>${escapeHtml(note.content)}</small>
           </button>
-          <button type="button" class="coffer-note-delete" data-coffer-note-delete="${note.id}" aria-label="Eliminar ${escapeHtml(note.title)}">×</button>
+          <button data-ui-action="delete" data-ui-glyph type="button" class="coffer-note-delete" data-coffer-note-delete="${note.id}" aria-label="Eliminar ${escapeHtml(note.title)}">×</button>
         </article>
       `,
     )
@@ -7476,8 +7477,8 @@ function renderPasswordVault() {
             }
             <button type="button" data-password-copy-secret="${entry.id}">COPIAR CLAVE</button>
             <button type="button" data-password-toggle="${entry.id}">${visible ? "OCULTAR" : "VER"}</button>
-            <button type="button" class="ui-edit-action" data-password-edit="${entry.id}" aria-label="Editar ${escapeHtml(entry.service)}">✎</button>
-            <button type="button" class="danger-action ui-delete-action" data-password-delete="${entry.id}" aria-label="Eliminar ${escapeHtml(entry.service)}">×</button>
+            <button data-ui-action="edit" data-ui-glyph type="button" class="ui-edit-action" data-password-edit="${entry.id}" aria-label="Editar ${escapeHtml(entry.service)}">✎</button>
+            <button data-ui-action="delete" data-ui-glyph type="button" class="danger-action ui-delete-action" data-password-delete="${entry.id}" aria-label="Eliminar ${escapeHtml(entry.service)}">×</button>
           </div>
         </article>
       `;
@@ -10816,7 +10817,7 @@ assistantTrigger.addEventListener("click",async()=>{
   assistantTrigger.disabled=true;
   try{
     if(!assistantLoaded){
-      const {mountAssistant}=await import(new URL("./assistant.js?v=guia1",document.baseURI).href);
+      const {mountAssistant}=await import(new URL("./assistant.js?v=taller1",document.baseURI).href);
       mountAssistant(assistantDialog,{
         rows:()=>Object.fromEntries(Object.entries(assistantGroups()).map(([k,list])=>[k,list.map(({id,title,project,priority,scheduledDate})=>({id,title,project,priority,scheduledDate}))])),
         apply:applyAssistantProposal,open:openPanel

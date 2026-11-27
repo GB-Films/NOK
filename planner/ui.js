@@ -11,7 +11,7 @@ export function mountPlanner(api){
     editor=document.querySelector("#day-editor"),launch=document.querySelector("#day-launch"),
     compact=matchMedia("(max-width:1023px), (orientation:portrait)");
   let day=dayKey(new Date()),lastToday=day,view="day",googleRows=[],feedback="",request,stamp=0,busy=false;
-  rail.innerHTML='<header><small>CUADERNO DEL CAMPAMENTO</small><div><h1>Mi día</h1><button type="button" data-do="close" aria-label="Cerrar Mi día">×</button></div></header>'+
+  rail.innerHTML='<header><small>CUADERNO DEL CAMPAMENTO</small><div><h1>Mi día</h1><button data-ui-action="close" data-ui-glyph type="button" data-do="close" aria-label="Cerrar Mi día">×</button></div></header>'+
     '<nav aria-label="Vistas del planificador"><button data-do="day">Día</button><button data-do="week">Semana y roles</button></nav>'+
     '<div class="day-date"><button data-do="prev" aria-label="Fecha anterior">‹</button><input type="date" aria-label="Fecha del planificador"><button data-do="next" aria-label="Fecha siguiente">›</button><button data-do="today">Hoy</button></div>'+
     '<div class="day-content"></div><footer><button data-do="google"></button><button data-do="unlink" aria-label="Desconectar Calendar de esta sesión">Desconectar</button><small data-google-note></small></footer>'+
@@ -55,7 +55,7 @@ export function mountPlanner(api){
   function dutyRow(r,d,weekly){
     const checked=d.completed.includes(weekKey(day));
     return '<div class="day-duty"><label><input type="checkbox" data-check="'+esc(d.id)+'" data-role="'+esc(r.id)+'" '+(checked?"checked":"")+'><span><b>'+esc(d.title)+'</b><small>'+esc(weekly?weekdays[d.weekday]:r.title)+'</small></span></label>'+
-      (weekly?'<button data-edit-duty="'+esc(d.id)+'" data-role="'+esc(r.id)+'" aria-label="Editar responsabilidad: '+esc(d.title)+'">Editar</button>':'')+'</div>';
+      (weekly?'<button data-ui-action="edit" data-ui-glyph data-edit-duty="'+esc(d.id)+'" data-role="'+esc(r.id)+'" aria-label="Editar responsabilidad: '+esc(d.title)+'">Editar</button>':'')+'</div>';
   }
   function paintDay(){
     const roles=api.roles(),tasks=api.tasks().filter(t=>dueOn(t,day,dayKey(new Date()))),
@@ -84,7 +84,7 @@ export function mountPlanner(api){
     const roleCards=roles.map(r=>{
       const duties=[...r.duties].sort((a,b)=>a.weekday-b.weekday);
       const mine=tasks.filter(t=>t.workRoleId===r.id && t.scheduledDate>=start && t.scheduledDate<=end);
-      return '<section class="day-role"><div class="day-heading"><h3>'+esc(r.title)+'</h3><button data-edit-role="'+esc(r.id)+'" aria-label="Renombrar '+esc(r.title)+'">Editar</button></div>'+
+      return '<section class="day-role"><div class="day-heading"><h3>'+esc(r.title)+'</h3><button data-ui-action="edit" data-ui-glyph data-edit-role="'+esc(r.id)+'" aria-label="Renombrar '+esc(r.title)+'">Editar</button></div>'+
         (duties.length?duties.map(d=>dutyRow(r,d,true)).join(""):note("Todavía no hay responsabilidades."))+
         '<button data-add-duty="'+esc(r.id)+'">+ Responsabilidad</button>'+
         (mine.length?'<h4>Tareas de esta semana</h4>'+mine.map(t=>'<div><small>'+esc(weekdays[weekday(t.scheduledDate)])+'</small>'+taskChip(t,roles)+'</div>').join(""):'')+'</section>';
@@ -109,7 +109,7 @@ export function mountPlanner(api){
     const hours=content.querySelector(".day-hours");
     if(hours&&!compact.matches){
       const first=hours.querySelector(".day-slot:not(.day-empty)") || hours.querySelector('[data-hour="08:00"]');
-      hours.scrollTop=reset||previous==null?first.offsetTop-hours.offsetTop:previous;
+      hours.scrollTop=reset||previous==null?first.offsetTop:previous;
     }
   }
   function layout(){
@@ -129,8 +129,8 @@ export function mountPlanner(api){
       field("Rol (opcional)",'<select name="role">'+option("","Sin rol")+roles.map(r=>option(r.id,r.title)).join("")+'</select>');
     else fields=field(kind==="role"?"Nombre del rol":"Qué te toca hacer",'<input name="title" required maxlength="100" value="'+esc(duty?.title || (kind==="role"?role?.title:"") || "")+'">')+
       (kind==="duty"?field("Se repite cada",'<select name="weekday">'+weekdays.map((w,i)=>option(i,w)).join("")+'</select>'):"");
-    editor.innerHTML='<form><header><h2 id="day-editor-title">'+formTitle+'</h2><button type="button" data-cancel aria-label="Cerrar editor">×</button></header>'+fields+
-      '<p role="alert"></p><footer>'+(duty?'<button type="button" data-remove>Eliminar</button>':'')+'<button type="button" data-cancel>Cancelar</button><button type="submit">Guardar</button></footer></form>';
+    editor.innerHTML='<form><header><h2 id="day-editor-title">'+formTitle+'</h2><button data-ui-action="close" data-ui-glyph type="button" data-cancel aria-label="Cerrar editor">×</button></header>'+fields+
+      '<p role="alert"></p><footer>'+(duty?'<button data-ui-action="delete" type="button" data-remove>Eliminar</button>':'')+'<button type="button" data-cancel>Cancelar</button><button type="submit">Guardar</button></footer></form>';
     const form=editor.querySelector("form"),f=form.elements;
     if(kind==="task"){
       const selectTask=(selected,initial)=>{
