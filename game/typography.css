@@ -1,0 +1,236 @@
+/*
+ * NOK typography contract
+ *
+ * Keep this stylesheet loaded last. Legacy screens may still declare a local
+ * font for sizing, but these semantic rules decide which family is rendered.
+ * The hierarchy deliberately uses only two offline-safe families:
+ *   - Courier New: game identity, titles, controls and compact UI labels.
+ *   - Arial: readable descriptions, form values and longer explanatory copy.
+ */
+:root {
+  --nok-font-display: "Courier New", Courier, monospace;
+  --nok-font-heading: "Courier New", Courier, monospace;
+  --nok-font-ui: "Courier New", Courier, monospace;
+  --nok-font-body: Arial, Helvetica, sans-serif;
+  --nok-font-editor: "Courier New", Courier, monospace;
+
+  /* Shared rhythm. Individual screens may scale these values responsively. */
+  --nok-leading-display: 1.08;
+  --nok-leading-heading: 1.18;
+  --nok-leading-ui: 1.15;
+  --nok-leading-body: 1.42;
+
+  /* Backwards-compatible aliases used throughout the existing application. */
+  --font-pixel: var(--nok-font-ui);
+  --pixel-font: var(--nok-font-ui);
+  --display-font: var(--nok-font-display);
+  --heading-font: var(--nok-font-heading);
+  --body-font: var(--nok-font-body);
+}
+
+html,
+body {
+  font-family: var(--nok-font-body) !important;
+  line-height: var(--nok-leading-body);
+}
+
+/* 1. Display titles and section headings. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.panel-title,
+.screen-title,
+.section-title,
+.modal-title,
+.card-title,
+.board-title,
+.board-column h2,
+.settings-card h2,
+.settings-card h3,
+.profile-content h2,
+.profile-content h3,
+.progress-panel h1,
+.progress-panel h2,
+.progress-panel h3,
+.learning-panel h1,
+.learning-panel h2,
+.learning-panel h3,
+.hub-panel h1,
+.hub-panel h2,
+.hub-panel h3,
+.lists-panel h1,
+.lists-panel h2,
+.lists-panel h3,
+.agenda-panel h1,
+.agenda-panel h2,
+.agenda-panel h3,
+.creativity-panel h1,
+.creativity-panel h2,
+.creativity-panel h3,
+.project-panel h1,
+.project-panel h2,
+.project-panel h3,
+[class$="-title"],
+[class*="-title "],
+[class$="-heading"],
+[class*="-heading "] {
+  font-family: var(--nok-font-heading) !important;
+  font-style: normal;
+  line-height: var(--nok-leading-heading);
+}
+
+/* The largest title keeps a firm, recognizable rhythm throughout the game. */
+h1,
+.screen-title,
+.panel-title {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: var(--nok-leading-display);
+}
+
+h2,
+h3,
+h4,
+.section-title,
+.card-title {
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+/* 2. Compact game UI: labels, buttons, tabs, counters and portal signs. */
+button,
+[role="button"],
+nav,
+legend,
+label,
+th,
+dt,
+.eyebrow,
+.kicker,
+.overline,
+.badge,
+.tag,
+.chip,
+.tab,
+.tabs,
+.counter,
+.stat-label,
+.panel-header small,
+.card-header small,
+.world-module-title,
+.portal-title,
+.portal-label,
+.quick-access-label,
+.hud,
+.hud-stats,
+.close-button,
+.primary-action,
+.secondary-action,
+.danger-action,
+.agenda-add-shortcut,
+.quick-list-type-picker,
+.quick-list-actions,
+.writing-project-actions,
+.progress-tabs,
+.settings-tabs,
+.profile-page-tabs,
+[class$="-eyebrow"],
+[class*="-eyebrow "],
+[class$="-kicker"],
+[class*="-kicker "],
+[class$="-label"],
+[class*="-label "] {
+  font-family: var(--nok-font-ui) !important;
+  font-style: normal;
+  line-height: var(--nok-leading-ui);
+}
+
+/* 3. Descriptions, values and readable long-form interface copy. */
+p,
+input,
+select,
+textarea,
+.description,
+.subtitle,
+.helper-text,
+.supporting-text,
+.empty-state,
+.panel-description,
+.card-description,
+.settings-description,
+.mission-description,
+.event-description,
+.reward-card p,
+.achievement-card p,
+.board-column > p,
+.profile-content p,
+.agenda-card p,
+.learning-panel p,
+.hub-panel p,
+.lists-panel p,
+.project-panel p {
+  font-family: var(--nok-font-body) !important;
+  font-style: normal;
+  line-height: var(--nok-leading-body);
+}
+
+input,
+select,
+textarea {
+  font-weight: 400;
+}
+
+/* 4. Authored content is intentionally monospaced, like a script page. */
+.writing-editor,
+.writing-editor textarea,
+.writing-page,
+.screenplay-editor,
+.screenplay-page,
+.quick-list-notes-editor,
+.note-editor,
+.creative-document,
+[data-editor="screenplay"] {
+  font-family: var(--nok-font-editor) !important;
+}
+
+/* Keep microcopy legible without introducing a third visual language. */
+small,
+.meta,
+.date,
+.status,
+.progress-caption,
+[class$="-meta"],
+[class*="-meta "] {
+  font-family: var(--nok-font-ui) !important;
+  line-height: var(--nok-leading-ui);
+}
+
+/* Mobile uses exactly the same hierarchy, only with a safer minimum size. */
+@media (max-width: 760px), (orientation: portrait) {
+  body {
+    font-size: 14px;
+  }
+
+  p,
+  input,
+  select,
+  textarea,
+  .description,
+  .subtitle,
+  .helper-text,
+  .supporting-text {
+    font-size: max(13px, 0.8125rem);
+    line-height: 1.4;
+  }
+
+  button,
+  [role="button"],
+  .tab,
+  .badge,
+  .chip {
+    letter-spacing: 0;
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "nok-world-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/storage.test.mjs",
+    "test:rules": "node --test tests/rules.test.mjs"
+  },
+  "dependencies": {
+    "firebase": "13.4.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.65.1"
+  }
+}

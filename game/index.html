@@ -1,0 +1,2106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'none'; object-src 'none'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com https://gb-studio-260bc.firebaseapp.com; frame-src https://gb-studio-260bc.firebaseapp.com; img-src 'self' data: blob:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://apis.google.com"
+    />
+    <title>NOK · Tu vida, en modo juego</title>
+    <link rel="icon" type="image/webp" href="./art/ui/nok-app-icon.webp" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./mobile-overrides.css" />
+    <link rel="stylesheet" href="./quick-access.css" />
+    <link rel="stylesheet" href="./passport-v4.css" />
+    <link rel="stylesheet" href="./art/world-builder.css" />
+    <link rel="stylesheet" href="./mobile-polish.css" />
+    <link rel="stylesheet" href="./mobile-refresh.css" />
+    <link rel="stylesheet" href="./typography.css" />
+  <link rel="stylesheet" href="./browser.css" /></head>
+  <body class="account-locked">
+    <main id="account-gate" aria-labelledby="account-title">
+      <section class="account-paper">
+        <img src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego" />
+        <p class="account-kicker">LA ENTRADA AL CAMPAMENTO</p>
+        <h1 id="account-title">Tu mundo te espera.</h1>
+        <p>Entrá con Google para crear tu partida o retomar la misma desde otra compu o celular.</p>
+        <button type="button" id="account-google">Continuar con Google</button>
+        <button type="button" id="account-guest">Explorar sin guardar</button>
+        <p id="account-message" role="status" aria-live="polite">La exploración sin cuenta se pierde al salir.</p>
+        <noscript>Activá JavaScript para abrir NOK.</noscript>
+      </section>
+    </main>
+    <div class="app-shell">
+      <section class="start-screen" id="start-screen">
+        <div class="start-art" aria-hidden="true"></div>
+        <div class="start-shade" aria-hidden="true"></div>
+        <div class="start-content">
+          <span class="start-kicker">UNA AVENTURA PERSONAL</span>
+          <img
+            class="start-logo-image"
+            src="./art/nok-logo-transparent.webp"
+            alt="NOK — Tu vida, en modo juego."
+          />
+          <button class="start-button" id="start-adventure">
+            <span>▶</span> EMPEZAR AVENTURA
+          </button>
+          <button type="button" class="start-world-button" data-account-exit>Volver al acceso</button>
+          <button class="start-world-button" id="create-world">
+            <span>✦</span> CREAR / CONFIGURAR TU MUNDO
+          </button>
+          <small class="start-world-identity">
+            MUNDO · <strong id="start-world-name">MI MUNDO NOK</strong>
+          </small>
+          <img
+            class="start-world-emblem"
+            src="./art/ui/nok-world-pencil-logo.webp"
+            alt="Emblema de NOK: un mundo dibujado con un lápiz"
+          />
+          <small class="start-world-note" data-account-status role="status"></small>
+        </div>
+      </section>
+
+      <header class="hud">
+        <button
+          class="avatar-card pixel-box"
+          id="open-profile"
+          data-open="profile"
+          aria-label="Abrir configuración del perfil"
+        >
+          <span class="avatar-sprite generated-avatar" aria-hidden="true">
+            <span class="avatar-hair"></span>
+            <span class="avatar-face"></span>
+            <span class="avatar-body"></span>
+          </span>
+          <span class="avatar-copy">
+            <strong id="player-name-label">JUGADOR 1</strong>
+            <span id="level-label">NIVEL 1</span>
+            <small class="avatar-date" id="today-label">HOY</small>
+          </span>
+        </button>
+
+        <div class="hud-stats">
+          <div class="window-controls" aria-label="Controles de la ventana">
+            <button
+              class="settings-hud-button pixel-box"
+              id="open-settings"
+              data-open="settings"
+              aria-label="Abrir ajustes"
+              title="Ajustes (F10)"
+            >
+              <span aria-hidden="true">⚙</span>
+            </button>
+            <button
+              class="window-control-button minimize-button"
+              id="minimize-game"
+              aria-label="Minimizar NOK"
+              title="Minimizar"
+            >−</button>
+            <button
+              class="window-control-button close-game-button"
+              id="close-game"
+              aria-label="Cerrar NOK"
+              title="Cerrar"
+            >×</button>
+          </div>
+          <div class="hud-vitals" aria-label="Progreso de la aventura">
+            <button
+              class="stat stat-button pixel-box coin-stat"
+              id="open-coin-rewards"
+              aria-label="Abrir monedas NOK y recompensas"
+              title="Monedas NOK"
+            >
+              <img class="hud-stat-icon" src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
+              <strong id="hud-coin-balance">0</strong>
+            </button>
+            <button
+              class="stat stat-button pixel-box streak-stat"
+              id="open-streak-history"
+              aria-label="Ver tareas cumplidas por día y racha"
+            >
+              <img class="hud-stat-icon" src="./art/ui/hud/streak-fire.webp" alt="" aria-hidden="true" />
+              <strong id="streak-label">0</strong>
+            </button>
+            <button
+              class="stat stat-button pixel-box today-stat"
+              id="open-today-history"
+              aria-label="Ver tareas cumplidas hoy"
+            >
+              <img class="hud-stat-icon" src="./art/ui/hud/today-check.webp" alt="" aria-hidden="true" />
+              <strong id="today-done-label">0</strong>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="persistent-reminder-stack hidden" id="persistent-reminder" aria-label="Próximas fechas importantes">
+        <button class="date-reminder-card event-reminder-card hidden" id="event-reminder" data-open="agenda" type="button">
+          <span class="date-reminder-emblem" aria-hidden="true">
+            <b id="event-reminder-days">0</b><small id="event-reminder-unit">DÍAS</small>
+          </span>
+          <span class="date-reminder-copy">
+            <small>PRÓXIMO EVENTO</small>
+            <strong id="event-reminder-title">Sin eventos próximos</strong>
+            <em>ABRIR ARCHIVO</em>
+          </span>
+        </button>
+        <button class="date-reminder-card birthday-reminder-card hidden" id="birthday-reminder" data-open="agenda" type="button">
+          <span class="date-reminder-emblem" aria-hidden="true">
+            <b id="birthday-reminder-days">0</b><small id="birthday-reminder-unit">DÍAS</small>
+          </span>
+          <span class="date-reminder-copy">
+            <small>PRÓXIMO CUMPLEAÑOS</small>
+            <strong id="birthday-reminder-title">Sin cumpleaños próximos</strong>
+            <em>ABRIR ARCHIVO</em>
+          </span>
+        </button>
+      </aside>
+
+      <main class="world" id="world" aria-label="Campamento NOK">
+        <div class="world-art"></div>
+        <div class="world-vignette"></div>
+        <div class="collision-layer" id="collision-layer" aria-hidden="true"></div>
+        <div class="world-grid" id="world-grid" aria-hidden="true"></div>
+        <div class="world-module-layer" id="world-module-layer"></div>
+        <section class="underground-world-scene hidden" id="underground-world-scene" aria-label="Caverna del archivo">
+          <button class="underground-ladder-access" id="underground-ladder-access" type="button" aria-label="Subir la escalera y volver al campamento" title="Volver al campamento">
+            <span aria-hidden="true"></span>
+          </button>
+        </section>
+        <button
+          class="world-hatch-access"
+          id="underground-hatch"
+          data-build-prop="hatch"
+          type="button"
+          aria-label="Bajar por la escotilla al sótano"
+          title="Sótano"
+        >
+          <span aria-hidden="true"></span><small>SÓTANO</small>
+        </button>
+        <button class="world-hotspot board-hotspot" data-open="board">
+          <span>!</span><small>TABLÓN</small>
+        </button>
+        <button class="world-build-toggle" id="world-build-toggle" type="button" aria-pressed="false">
+          <span class="world-build-shovel" aria-hidden="true"></span><small>CONSTRUIR</small>
+        </button>
+        <button
+          class="music-ocarina"
+          id="music-ocarina"
+          data-build-prop="ocarina"
+          aria-label="Reproducir música de concentración"
+          aria-pressed="false"
+          title="El claro de NOK · música original de concentración"
+        >
+          <span class="music-notes" aria-hidden="true">
+            <i>♪</i><i>♫</i>
+          </span>
+          <span class="ocarina-art" aria-hidden="true"></span>
+          <small id="music-label">MÚSICA</small>
+        </button>
+        <div
+          class="world-house"
+          id="world-house"
+          data-build-prop="house"
+          role="img"
+          aria-label="Casa del personaje"
+          title="Casa del personaje"
+        >
+          <span aria-hidden="true"></span><small>HOGAR</small>
+        </div>
+          <div id="pet-npc-layer"></div>
+        <div
+          class="world-npc spouse-npc hidden"
+          id="spouse-npc"
+          data-build-prop="spouse"
+          aria-label="María disfrutando del picnic y leyendo"
+        >
+          <i class="spouse-npc-sprite" aria-hidden="true"></i>
+          <span id="spouse-npc-name">MARÍA</span>
+        </div>
+        <div
+          class="movable-player"
+          id="movable-player"
+          style="left:52.2%;top:59.5%"
+          aria-label="Jugador en el mapa"
+        >
+          <i
+            id="player-sprite-image"
+            class="player-sprite-sheet"
+            aria-hidden="true"
+          ></i>
+          <span id="map-player-name">JUGADOR 1</span>
+        </div>
+      </main>
+
+      <aside class="world-builder-panel hidden" id="world-builder-panel" aria-label="Constructor del mundo">
+        <header class="world-builder-heading">
+          <div>
+            <small>MODO CONSTRUCCIÓN</small>
+            <h2>Armá tu campamento</h2>
+          </div>
+          <span class="world-module-count" id="world-module-count">8 / 9</span>
+        </header>
+        <div class="world-module-inventory" id="world-module-inventory"></div>
+      </aside>
+
+      <div class="world-module-detail-backdrop hidden" id="world-module-detail-backdrop">
+        <section class="world-module-detail-card" role="dialog" aria-modal="true" aria-labelledby="selected-world-module-name">
+          <button class="world-module-detail-close" id="world-module-detail-close" type="button" aria-label="Cerrar detalles">×</button>
+          <span class="world-module-detail-icon" id="world-module-detail-icon" aria-hidden="true"></span>
+          <div class="world-module-detail-copy">
+            <small>FICHA DEL PORTAL</small>
+            <h2 id="selected-world-module-name">Elegí un módulo</h2>
+            <p id="world-module-description"></p>
+          </div>
+          <div class="world-module-usage">
+            <strong id="world-module-open-count">0</strong>
+            <span id="world-module-open-label">VECES ABIERTO</span>
+          </div>
+          <label class="world-module-title-field" for="world-module-title">
+            NOMBRE DEL CARTEL
+            <input id="world-module-title" type="text" maxlength="12" autocomplete="off" />
+          </label>
+          <div class="world-module-detail-actions">
+            <button id="world-module-detail-move" type="button">✥ MOVER EN EL MAPA</button>
+            <button class="world-module-remove" id="world-module-remove" type="button">QUITAR DEL MAPA</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="mobile-joystick" id="mobile-joystick" aria-label="Control táctil de movimiento">
+        <div class="mobile-joystick-base" id="mobile-joystick-base">
+          <span class="mobile-joystick-knob" id="mobile-joystick-knob" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <nav class="quickbar pixel-box" id="quickbar" aria-label="Accesos rápidos"></nav>
+
+      <div class="panel-backdrop hidden" id="panel-backdrop">
+        <section class="side-panel pixel-box" id="side-panel">
+          <div class="panel-header" id="panel-header">
+            <div>
+              <span class="eyebrow" id="panel-eyebrow">MISIONES DEL PROYECTO</span>
+              <h1 id="panel-title">Tareas</h1>
+            </div>
+            <button class="close-button" id="close-panel" aria-label="Cerrar">×</button>
+          </div>
+
+          <div id="profile-view" class="panel-view hidden">
+            <div class="profile-content passport-page-player" id="profile-content">
+              <div class="passport-title-ribbon">PASAPORTE DEL AVENTURERO</div>
+              <nav class="passport-mobile-tabs" aria-label="Hojas del pasaporte">
+                <button type="button" class="active" data-passport-page="player"><span>♟</span><strong>1 · PERFIL</strong></button>
+                <button type="button" data-passport-page="partner"><span>♥</span><strong>2 · PAREJA</strong></button>
+                <button type="button" data-passport-page="pets"><span>♣</span><strong>3 · MASCOTAS</strong></button>
+                <button type="button" data-passport-page="home"><span>⌂</span><strong>4 · HOGAR</strong></button>
+                <button type="button" data-passport-page="work"><span>▣</span><strong>5 · TRABAJO</strong></button>
+              </nav>
+              <div class="profile-autosave-state" id="profile-autosave-status"><span>◆</span> GUARDADO AUTOMÁTICO</div>
+              <section class="profile-hero-card profile-page-section profile-page-player">
+                <span class="profile-avatar-large" aria-hidden="true"><span class="avatar-sprite generated-avatar"><span class="avatar-hair"></span><span class="avatar-face"></span><span class="avatar-body"></span></span></span>
+                <div><span>PERFIL PERSONAL</span><h2 id="profile-hero-name">JUGADOR 1</h2><p id="profile-age-copy">Completá tu fecha de nacimiento para sincronizar tu nivel.</p><div class="profile-xp-progress" aria-label="Experiencia del jugador"><strong id="xp-label">XP 0/120</strong><span class="xp-track"><span id="xp-fill"></span></span></div></div>
+                <span class="profile-level-seal"><small>NIVEL</small><strong id="profile-level-value">1</strong></span>
+              </section>
+              <form class="profile-form" id="profile-form">
+                <div class="profile-field-grid profile-page-section profile-page-player">
+                  <label class="profile-field-card"><span class="profile-field-icon">♟</span><span><small>NOMBRE DEL JUGADOR</small><input id="profile-name" maxlength="80" placeholder="Tu nombre" /></span></label>
+                  <label class="profile-field-card birth-field"><span class="profile-field-icon">✦</span><span><small>FECHA DE NACIMIENTO</small><input id="profile-birth-date" type="date" /><em>Tu edad define siempre el nivel del jugador.</em></span></label>
+                  <label class="profile-field-card"><span class="profile-field-icon">▤</span><span><small>DOCUMENTO</small><input id="profile-document" maxlength="40" placeholder="DNI o documento" /></span></label>
+                  <label class="profile-field-card"><span class="profile-field-icon">@</span><span><small>MAIL</small><input id="profile-email" type="email" maxlength="120" placeholder="tu@email.com" /></span></label>
+                </div>
+                <section class="profile-life-card relationship-card profile-page-section profile-page-partner">
+                  <div class="profile-section-heading"><span class="profile-field-icon">♥</span><div><small>COMPAÑÍA DE VIDA</small><h3>Tu pareja</h3></div></div>
+                  <label class="married-toggle"><input id="profile-married" type="checkbox" /><span id="married-icon">◇</span><strong id="married-label">NO ESTOY CASADO/A</strong></label>
+                  <div class="spouse-profile-fields hidden" id="spouse-field"><button type="button" class="spouse-summary-card" id="change-partner-portrait"><span class="couple-passport-photo"><span class="couple-player-photo"></span><span class="partner-photo partner-dark" id="profile-partner-photo"></span></span><span class="spouse-summary-copy"><small>COMPAÑERA DE AVENTURA</small><strong id="profile-couple-caption">VOS + TU PAREJA</strong><span id="profile-dating-elapsed">FECHA PENDIENTE</span><span id="profile-wedding-elapsed">FECHA PENDIENTE</span><em>TOCÁ PARA ABRIR SU FICHA</em></span></button><div class="spouse-profile-storage hidden" aria-hidden="true"><input id="profile-spouse-name" maxlength="80" tabindex="-1" /><input id="profile-spouse-birth-date" type="date" tabindex="-1" /><input id="profile-dating-start-date" type="date" tabindex="-1" /><input id="profile-wedding-date" type="date" tabindex="-1" /></div></div>
+                </section>
+                <section class="profile-life-card pets-card profile-page-section profile-page-pets"><div class="profile-section-heading"><span class="profile-field-icon">♣</span><div><small>COMPAÑEROS DEL CAMPAMENTO</small><h3>Mascotas</h3></div><button type="button" id="add-pet">+ SUMAR MASCOTA</button></div><div class="pet-list" id="pet-list"></div></section>
+                <section class="profile-life-card home-card profile-page-section profile-page-home">
+                  <div class="profile-section-heading"><span class="profile-field-icon home-icon">⌂</span><div><small>TU LUGAR EN EL MUNDO</small><h3>Hogar</h3></div></div>
+                  <p class="home-profile-intro">Guardá la información importante del lugar donde vivís.</p>
+                  <div class="home-profile-fields">
+                    <label><small>NOMBRE DEL HOGAR</small><input id="profile-home-name" maxlength="80" placeholder="Ej: Casa Donizetti" /></label>
+                    <label><small>TIPO DE VIVIENDA</small><input id="profile-home-type" maxlength="60" placeholder="Casa, departamento…" /></label>
+                    <label class="home-address-field"><small>DIRECCIÓN</small><input id="profile-home-address" maxlength="160" placeholder="Calle, número, piso o unidad" /></label>
+                    <label><small>CIUDAD O LOCALIDAD</small><input id="profile-home-city" maxlength="80" placeholder="Ciudad" /></label>
+                    <label><small>PROVINCIA O ESTADO</small><input id="profile-home-region" maxlength="80" placeholder="Provincia" /></label>
+                    <label><small>PAÍS</small><input id="profile-home-country" maxlength="80" placeholder="País" /></label>
+                    <label><small>CÓDIGO POSTAL</small><input id="profile-home-postal-code" maxlength="20" placeholder="Código postal" /></label>
+                    <label><small>VIVÍS AHÍ DESDE</small><input id="profile-home-since-date" type="date" /></label>
+                    <label class="home-details-field"><small>INFORMACIÓN IMPORTANTE</small><textarea id="profile-home-details" maxlength="1600" placeholder="Administración, servicios, accesos, referencias o cualquier dato que quieras recordar…"></textarea></label>
+                  </div>
+                </section>
+                <section class="profile-life-card work-card profile-page-section profile-page-work">
+                  <div class="profile-section-heading"><span class="profile-field-icon work-icon">▣</span><div><small>RUMBO PROFESIONAL</small><h3>Trabajo y emprendimientos</h3></div></div>
+                  <label class="work-toggle"><input id="profile-work-enabled" type="checkbox" /><span id="profile-work-icon">+</span><strong id="profile-work-label">SUMAR MI TRABAJO AL PASAPORTE</strong></label>
+                  <div class="work-profile-fields hidden" id="profile-work-fields"><label><small>EMPRESA O EMPRENDIMIENTO</small><input id="profile-work-company" maxlength="100" placeholder="Ej: Bani VFX" /></label><label><small>ROL O ACTIVIDAD</small><input id="profile-work-role" maxlength="100" placeholder="Ej: Fundador, productor, artista…" /></label><label><small>CUÁNDO EMPEZASTE</small><input id="profile-work-start-date" type="date" /></label><label class="work-details-field"><small>INFORMACIÓN IMPORTANTE</small><textarea id="profile-work-details" maxlength="1200" placeholder="Qué hacés, objetivos, socios, datos que querés recordar…"></textarea></label></div>
+                  <div class="profile-empty work-empty" id="profile-work-empty"><span>▣</span><h4>Esta hoja está lista para tu próximo proyecto.</h4><p>Activala cuando quieras registrar una empresa, empleo o emprendimiento.</p></div>
+                </section>
+              </form>
+              <footer class="passport-page-turner" aria-label="Cambiar hoja del pasaporte"><button type="button" id="passport-page-previous" aria-label="Hoja anterior">◀</button><span id="passport-page-indicator">HOJA 1 / 5</span><button type="button" id="passport-page-next" aria-label="Hoja siguiente">▶</button></footer>
+            </div>
+          </div>
+          <div id="board-view" class="panel-view hidden">
+            <button class="board-close-button" id="close-board" aria-label="Cerrar tablón">×</button>
+            <div class="notice-board-surface">
+              <div class="board-top-grid">
+                <div class="board-top-main">
+                  <header class="notice-board-heading">
+                    <div>
+                      <span>TABLÓN DEL CAMPAMENTO</span>
+                      <h1 id="board-heading-title">Lo que importa hoy</h1>
+                    </div>
+                  </header>
+                  <div class="board-heading-actions">
+                    <nav class="board-view-switch" aria-label="Vista del tablón">
+                      <button id="board-today-mode" class="active" type="button">HOY</button>
+                      <button id="board-week-mode" type="button">SEMANA</button>
+                    </nav>
+                    <button class="board-date-postit" id="board-today" type="button" data-open="calendar">HOY</button>
+                  </div>
+                  <form class="board-quick-add" id="board-quick-form">
+                    <input
+                      id="board-quick-title"
+                      maxlength="120"
+                      placeholder="Nueva tarea rápida para hoy…"
+                      aria-label="Nueva tarea rápida para hoy"
+                    />
+                    <button>+ A HOY</button>
+                    <button type="button" data-new-task>DETALLADA</button>
+                  </form>
+                </div>
+                <button
+                  type="button"
+                  class="motivation-note board-motivation-feature"
+                  id="motivation-note"
+                  aria-expanded="false"
+                  aria-label="Ver mensaje del día"
+                ></button>
+              </div>
+              <nav class="board-mobile-section-switch" aria-label="Sección del tablón">
+                <button type="button" class="active" data-board-mobile-section="today">MISIONES</button>
+                <button type="button" data-board-mobile-section="backlog">MOCHILA</button>
+                <button type="button" data-board-mobile-section="upcoming">AVISOS</button>
+              </nav>
+              <div class="notice-board-columns today-columns" id="board-today-view">
+                <section class="board-note important-note board-drop-zone mobile-board-section-active" data-board-mobile-panel="today" id="board-today-drop-zone" aria-label="Misiones del día, zona para soltar misiones">
+                  <h2>★ MISIONES DEL DÍA</h2>
+                  <p class="note-intro">Tu plan principal. Arrastrá misiones desde o hacia la mochila.</p>
+                  <div class="board-note-list" id="board-important-list"></div>
+                </section>
+                <section class="board-note loose-note board-drop-zone" data-board-mobile-panel="backlog" id="board-backlog-drop-zone" aria-label="Mochila de Misiones, zona para soltar misiones">
+                  <h2>◇ MOCHILA DE MISIONES</h2>
+                  <p class="note-intro">Todas las misiones abiertas fuera del plan de hoy.</p>
+                  <div class="board-note-list loose-task-list" id="board-loose-list"></div>
+                </section>
+                <section class="board-note alert-note" data-board-mobile-panel="upcoming">
+                  <div class="upcoming-postits">
+                    <section class="upcoming-postit upcoming-events-postit board-archive-link" data-open="agenda">
+                      <h3>PRÓXIMOS EVENTOS</h3>
+                      <div class="board-event-alert" id="board-event-alert"></div>
+                      <div class="board-alert-block debt-alert" id="board-debt-alert"></div>
+                    </section>
+                    <section class="upcoming-postit upcoming-birthdays-postit birthday-block board-archive-link" data-open="agenda">
+                      <h3>PRÓXIMOS CUMPLEAÑOS</h3>
+                      <div class="birthday-list" id="birthday-list"></div>
+                      <form class="birthday-form hidden" id="birthday-form">
+                        <input id="birthday-name" maxlength="80" placeholder="Nombre" required />
+                        <input id="birthday-date" type="date" required />
+                        <button>+</button>
+                      </form>
+                    </section>
+                  </div>
+                </section>
+              </div>
+              <div class="week-board-view hidden" id="board-week-view">
+                <section class="week-backlog" id="week-backlog"></section>
+                <div class="week-days-grid" id="week-days-grid"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="mission-view" class="panel-view hidden">
+            <div class="mission-content" id="mission-content"></div>
+          </div>
+
+          <div id="tasks-view" class="panel-view hidden">
+            <button class="back-projects hidden" id="back-projects">← VOLVER A PROYECTOS</button>
+            <nav class="quest-breadcrumb hidden" id="quest-breadcrumb" aria-label="Ruta de Quest"></nav>
+            <div class="panel-toolbar">
+              <div class="tabs" id="task-tabs">
+                <button data-status="todo" class="active">
+                  PENDIENTES <span id="todo-count">0</span>
+                </button>
+                <button data-status="done">
+                  HECHAS <span id="done-count">0</span>
+                </button>
+              </div>
+            </div>
+            <button class="filter-chip hidden" id="filter-chip"></button>
+            <form class="quick-task-form hidden" id="quick-task-form">
+              <div>
+                <span>＋ TAREA RÁPIDA EN ESTE PROYECTO O QUEST</span>
+                <small id="quick-task-context">Escribí y apretá Enter.</small>
+              </div>
+              <input
+                id="quick-task-title"
+                maxlength="120"
+                placeholder="Ej: pedir presupuesto al salón…"
+              />
+            </form>
+            <div class="task-list" id="task-list"></div>
+          </div>
+
+          <div id="projects-view" class="panel-view hidden">
+            <div class="tabs project-tabs" id="project-tabs">
+              <button data-project-tab="laboral" class="active">
+                MUNDO LABORAL <span id="work-project-count">6</span>
+              </button>
+              <button data-project-tab="personal">
+                VIDA PERSONAL <span id="personal-project-count">8</span>
+              </button>
+            </div>
+            <div class="project-list-heading">
+              <p class="section-intro">
+                Cada proyecto es una zona del mapa. Entrá para ver o sumar sus
+                próximas misiones.
+              </p>
+              <button class="new-project-button" id="toggle-project-form">
+                + NUEVO PROYECTO
+              </button>
+            </div>
+            <form class="new-project-form hidden" id="new-project-form">
+              <header>
+                <span>SUMAR ZONA AL MAPA</span>
+                <strong id="new-project-area-label">Nuevo proyecto laboral</strong>
+              </header>
+              <div class="new-project-fields">
+                <label>
+                  <span>NOMBRE</span>
+                  <input
+                    id="new-project-name"
+                    maxlength="80"
+                    placeholder="Ej: Salud, Casa, Nuevo negocio…"
+                    required
+                  />
+                </label>
+                <label>
+                  <span>SIGLA</span>
+                  <input
+                    id="new-project-code"
+                    maxlength="3"
+                    placeholder="AUTO"
+                  />
+                </label>
+                <label class="project-description-field">
+                  <span>DESCRIPCIÓN</span>
+                  <input
+                    id="new-project-description"
+                    maxlength="180"
+                    placeholder="¿Qué cosas van a vivir dentro de este proyecto?"
+                  />
+                </label>
+              </div>
+              <div class="project-color-row">
+                <span>COLOR DE LA ZONA</span>
+                <div id="project-color-picker">
+                  <button type="button" style="background-color:#ef6f8f" data-project-color="#ef6f8f"></button>
+                  <button type="button" class="active" style="background-color:#6ca6c1" data-project-color="#6ca6c1"></button>
+                  <button type="button" style="background-color:#f4a261" data-project-color="#f4a261"></button>
+                  <button type="button" style="background-color:#62b36f" data-project-color="#62b36f"></button>
+                  <button type="button" style="background-color:#8c7ae6" data-project-color="#8c7ae6"></button>
+                  <button type="button" style="background-color:#d4a72c" data-project-color="#d4a72c"></button>
+                  <button type="button" style="background-color:#55b6b0" data-project-color="#55b6b0"></button>
+                  <button type="button" style="background-color:#e76f51" data-project-color="#e76f51"></button>
+                </div>
+                <button class="save-project-button">CREAR PROYECTO</button>
+              </div>
+            </form>
+            <div class="project-grid" id="project-grid"></div>
+          </div>
+
+          <div id="lists-view" class="panel-view hidden">
+            <div class="quick-lists-content">
+              <header class="quick-lists-border-heading">
+                <span>ESTANTERÍA PERSONAL</span>
+                <h2>Mis listas</h2>
+                <p>Elegí un formato y guardalo para volver cuando quieras.</p>
+              </header>
+              <aside class="quick-lists-library">
+                <div class="quick-list-type-picker" id="quick-list-type-picker" aria-label="Tipo de lista nueva">
+                  <button type="button" class="active" data-quick-list-type="checklist"><img src="./art/ui/lists-type-checklist.webp" alt="" /><span>CHECKLIST</span></button>
+                  <button type="button" data-quick-list-type="ranking"><img src="./art/ui/lists-type-ranking.webp" alt="" /><span>RANKING</span></button>
+                  <button type="button" data-quick-list-type="notes"><img src="./art/ui/lists-type-notes.webp" alt="" /><span>NOTAS</span></button>
+                </div>
+                <form class="quick-list-create" id="quick-list-create-form">
+                  <input
+                    id="quick-list-title"
+                    maxlength="80"
+                    placeholder="Ej: Lista del super"
+                    aria-label="Nombre de la nueva lista"
+                  />
+                  <button>+</button>
+                </form>
+                <div class="quick-list-tabs" id="quick-list-tabs"></div>
+              </aside>
+              <section class="quick-list-sheet" id="quick-list-sheet"></section>
+            </div>
+          </div>
+
+          <div id="drawing-view" class="panel-view hidden">
+            <div class="drawing-studio">
+              <aside class="drawing-library">
+                <header>
+                  <div><span>GALERÍA</span><h2>Mis dibujos</h2></div>
+                  <button type="button" id="drawing-new">+ NUEVO</button>
+                </header>
+                <div class="drawing-thumbnails" id="drawing-thumbnails"></div>
+              </aside>
+              <section class="drawing-workspace">
+                <div class="drawing-titlebar">
+                  <label><span>NOMBRE DE LA IDEA</span><input id="drawing-title" maxlength="80" value="Idea sin nombre" /></label>
+                  <button type="button" class="drawing-save" id="drawing-save">GUARDAR</button>
+                </div>
+                <div class="drawing-toolbar" aria-label="Herramientas de dibujo">
+                  <div class="drawing-tools">
+                    <button type="button" class="active" data-drawing-tool="brush" title="Lápiz">✎</button>
+                    <button type="button" data-drawing-tool="marker" title="Marcador">▰</button>
+                    <button type="button" data-drawing-tool="eraser" title="Goma">◇</button>
+                    <button type="button" id="drawing-undo" title="Deshacer">↶</button>
+                    <button type="button" id="drawing-redo" title="Rehacer">↷</button>
+                  </div>
+                  <div class="drawing-colors" id="drawing-colors">
+                    <button type="button" class="active" data-drawing-color="#173e31" style="background:#173e31"></button>
+                    <button type="button" data-drawing-color="#101820" style="background:#101820"></button>
+                    <button type="button" data-drawing-color="#d84f3f" style="background:#d84f3f"></button>
+                    <button type="button" data-drawing-color="#6b1735" style="background:#6b1735"></button>
+                    <button type="button" data-drawing-color="#e3aa2e" style="background:#e3aa2e"></button>
+                    <button type="button" data-drawing-color="#2570a5" style="background:#2570a5"></button>
+                    <button type="button" data-drawing-color="#4e8b57" style="background:#4e8b57"></button>
+                    <button type="button" data-drawing-color="#7b50a2" style="background:#7b50a2"></button>
+                    <input type="color" id="drawing-color" value="#173e31" aria-label="Elegir otro color" />
+                  </div>
+                  <label class="drawing-size"><span>TRAZO</span><input type="range" id="drawing-size" min="2" max="44" value="12" /></label>
+                  <div class="drawing-file-actions">
+                    <button type="button" id="drawing-clear">LIMPIAR</button>
+                    <button type="button" id="drawing-export">EXPORTAR PNG</button>
+                  </div>
+                </div>
+                <div class="drawing-canvas-shell"><canvas id="drawing-canvas" width="1200" height="800"></canvas></div>
+                <footer class="drawing-footer">
+                  <span>Guardá distintas ideas o exportalas como imagen.</span>
+                  <button type="button" class="drawing-delete hidden" id="drawing-delete">ELIMINAR DIBUJO</button>
+                </footer>
+              </section>
+            </div>
+          </div>
+
+          <div id="agenda-view" class="panel-view hidden">
+            <nav class="archive-tabs" aria-label="Salas del Archivo">
+              <button class="active" data-open="agenda">◷ AGENDA</button>
+              <button data-open="calendar">▦ CALENDARIO</button>
+            </nav>
+
+            <div class="agenda-content">
+              <section class="agenda-hero">
+                <div>
+                  <span>EL ARCHIVO TE AVISA</span>
+                  <h2 id="agenda-next-reminder">No hay fechas próximas registradas</h2>
+                  <p>
+                    Guardá eventos únicos y cumpleaños recurrentes. El aviso
+                    más cercano te acompaña en el campamento.
+                  </p>
+                </div>
+                <div class="agenda-hero-actions" aria-label="Agregar una fecha al Archivo">
+                  <button type="button" class="agenda-add-shortcut event-shortcut" id="open-event-form" aria-label="Agregar evento"><span></span><small>EVENTO</small></button>
+                  <button type="button" class="agenda-add-shortcut birthday-shortcut" id="open-birthday-form" aria-label="Agregar cumpleaños"><span></span><small>CUMPLEAÑOS</small></button>
+                </div>
+              </section>
+
+              <div class="agenda-grid">
+                <section class="agenda-card event-agenda-card">
+                  <div class="agenda-card-heading">
+                    <div>
+                      <span>PRÓXIMAS FECHAS</span>
+                      <h2>Eventos importantes</h2>
+                    </div>
+                    <b id="agenda-event-count">0</b>
+                  </div>
+                  <form class="agenda-form hidden" id="event-form">
+                    <input
+                      id="event-title"
+                      maxlength="120"
+                      placeholder="Nombre del evento"
+                      required
+                    />
+                    <input id="event-date" type="datetime-local" required />
+                    <input
+                      id="event-notes"
+                      maxlength="300"
+                      placeholder="Nota, lugar o preparación…"
+                    />
+                    <section class="event-checklist-editor">
+                      <div class="event-checklist-heading">
+                        <div>
+                          <span>COSAS PARA NO OLVIDAR</span>
+                          <small>Se mostrarán también cuando NOK te avise del evento.</small>
+                        </div>
+                        <b id="event-checklist-count">0</b>
+                      </div>
+                      <div class="event-checklist-add">
+                        <input id="event-checklist-input" maxlength="180" placeholder="Ej: llevar regalo, confirmar dirección…" />
+                        <button id="event-checklist-add" type="button">+ AGREGAR</button>
+                      </div>
+                      <div class="event-checklist-items" id="event-checklist-items"></div>
+                    </section>
+                    <div class="agenda-form-actions">
+                      <button id="event-submit-label">+ GUARDAR EVENTO</button>
+                      <button
+                        type="button"
+                        id="cancel-event-edit"
+                      >
+                        CANCELAR
+                      </button>
+                    </div>
+                  </form>
+                  <div class="agenda-list" id="event-list"></div>
+                  <details class="past-events hidden" id="past-events">
+                    <summary id="past-events-summary">VER HISTORIAL</summary>
+                    <div id="past-event-list"></div>
+                  </details>
+                </section>
+
+                <section class="agenda-card birthday-agenda-card">
+                  <div class="agenda-card-heading">
+                    <div>
+                      <span>REGISTRO PERMANENTE</span>
+                      <h2>Cumpleaños importantes</h2>
+                    </div>
+                    <b id="agenda-birthday-count">0</b>
+                  </div>
+                  <form
+                    class="agenda-form birthday-agenda-form hidden"
+                    id="agenda-birthday-form"
+                  >
+                    <input
+                      id="agenda-birthday-name"
+                      maxlength="80"
+                      placeholder="Nombre de la persona"
+                      required
+                    />
+                    <input id="agenda-birthday-date" type="date" required />
+                    <input
+                      id="agenda-birthday-notes"
+                      maxlength="200"
+                      placeholder="Regalo, relación o nota…"
+                    />
+                    <div class="agenda-form-actions">
+                      <button id="birthday-submit-label">
+                        + GUARDAR CUMPLEAÑOS
+                      </button>
+                      <button
+                        type="button"
+                        id="cancel-birthday-edit"
+                      >
+                        CANCELAR
+                      </button>
+                    </div>
+                  </form>
+                  <div
+                    class="agenda-list birthday-agenda-list"
+                    id="agenda-birthday-list"
+                  ></div>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div id="calendar-view" class="panel-view hidden">
+            <nav class="archive-tabs" aria-label="Vistas del Archivo">
+              <button data-open="agenda">◷ AGENDA</button>
+              <button class="active" data-open="calendar">▦ CALENDARIO</button>
+            </nav>
+
+            <section class="calendar-shell">
+              <header class="calendar-toolbar">
+                <button data-calendar-nav="-1" aria-label="Mes anterior">‹</button>
+                <div>
+                  <span>CALENDARIO DEL ARCHIVO</span>
+                  <h2 id="calendar-title">MES</h2>
+                </div>
+                <button data-calendar-nav="1" aria-label="Mes siguiente">›</button>
+                <button class="calendar-today" data-calendar-nav="today">HOY</button>
+              </header>
+              <div class="calendar-legend">
+                <span><i class="event-dot"></i> EVENTO</span>
+                <span><i class="birthday-dot"></i> CUMPLEAÑOS</span>
+              </div>
+              <div class="calendar-weekdays" aria-hidden="true">
+                <span>LUN</span><span>MAR</span><span>MIÉ</span>
+                <span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
+              </div>
+              <div class="calendar-grid" id="calendar-grid"></div>
+            </section>
+          </div>
+
+          <div id="settings-view" class="panel-view hidden">
+            <div class="settings-content">
+              <section class="settings-hero">
+                <span class="settings-hero-icon" aria-hidden="true">⚙</span>
+                <div>
+                  <span>CONFIGURACIÓN DEL MUNDO</span>
+                  <h2>Tu aventura, a tu manera</h2>
+                  <p>Todos los cambios se guardan automáticamente en esta partida.</p>
+                </div>
+              </section>
+
+              <section class="settings-world-card">
+                <header>
+                  <div>
+                    <small>IDENTIDAD DE TU PARTIDA</small>
+                    <h3>Tu mundo y tu personaje</h3>
+                  </div>
+                  <span aria-hidden="true">✦</span>
+                </header>
+
+                <label class="settings-world-name" for="settings-world-name">
+                  <span>NOMBRE DE TU MUNDO</span>
+                  <input
+                    id="settings-world-name"
+                    maxlength="40"
+                    placeholder="Ej: Isla Nok"
+                    value="Mi mundo NOK"
+                  />
+                </label>
+
+                <div class="world-builder-grid">
+                  <fieldset class="world-theme-picker">
+                    <legend>TIPO DE MUNDO</legend>
+                    <div class="world-choice-grid">
+                      <button
+                        type="button"
+                        class="world-choice active"
+                        data-world-theme="fantasy"
+                        aria-pressed="true"
+                      >
+                        <img src="./art/world-builder-day.webp" alt="" />
+                        <span>
+                          <strong>FANTASÍA</strong>
+                          <small>Portales, bosque y aventura.</small>
+                        </span>
+                        <i aria-hidden="true">✓</i>
+                      </button>
+                      <button
+                        type="button"
+                        class="world-choice"
+                        data-world-theme="earth"
+                        aria-pressed="false"
+                      >
+                        <img src="./art/world-earth-day.webp" alt="" />
+                        <span>
+                          <strong>TERRENAL · PLAYA</strong>
+                          <small>Cabaña, arena y vida real.</small>
+                        </span>
+                        <i aria-hidden="true">✓</i>
+                      </button>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="avatar-style-picker character-settings-picker">
+                    <legend>PERSONAJE</legend>
+                    <div id="character-settings-content"></div>
+                  </fieldset>
+                </div>
+
+                <button class="world-profile-action" type="button" data-open="profile">
+                  CONTINUAR CON LA FICHA DEL PERSONAJE →
+                </button>
+              </section>
+
+              <section class="nok-account-settings">
+                <p data-account-name></p><p data-account-status role="status"></p>
+                <button type="button" data-account-retry>Guardar ahora</button>
+                <button type="button" data-account-exit>Volver al acceso</button>
+              </section>
+              <section class="settings-cloud-card" hidden aria-labelledby="cloud-sync-title">
+                <header>
+                  <span class="settings-cloud-icon" aria-hidden="true">☁</span>
+                  <div>
+                    <small>SINCRONIZACIÓN CIFRADA</small>
+                    <h3 id="cloud-sync-title">Tu mundo en todos tus dispositivos</h3>
+                    <p>La PC y el teléfono pueden compartir la misma partida. NOK cifra todo antes de enviarlo.</p>
+                  </div>
+                  <strong class="cloud-sync-badge" id="cloud-sync-badge">SOLO ESTE DISPOSITIVO</strong>
+                </header>
+
+                <div class="cloud-sync-disconnected" id="cloud-sync-disconnected">
+                  <button class="cloud-primary-button" id="cloud-create-world" type="button">
+                    <span aria-hidden="true">✦</span>
+                    ACTIVAR NUBE PARA ESTE MUNDO
+                  </button>
+                  <span class="cloud-or">O USÁ UN MUNDO QUE YA EXISTE</span>
+                  <label class="cloud-code-input" for="cloud-world-code-input">
+                    <span>CÓDIGO DE VINCULACIÓN</span>
+                    <input id="cloud-world-code-input" type="text" inputmode="text" maxlength="6" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABC123" />
+                  </label>
+                  <button class="cloud-secondary-button" id="cloud-connect-world" type="button">VINCULAR ESTE DISPOSITIVO</button>
+                </div>
+
+                <div class="cloud-sync-connected hidden" id="cloud-sync-connected">
+                  <div class="cloud-status-card">
+                    <span class="cloud-status-light" id="cloud-status-light" aria-hidden="true"></span>
+                    <div>
+                      <strong id="cloud-sync-status">NUBE LISTA</strong>
+                      <small id="cloud-sync-detail">Esperando cambios.</small>
+                    </div>
+                    <small id="cloud-last-sync">TODAVÍA SIN SINCRONIZAR</small>
+                  </div>
+                  <div class="cloud-secret-card cloud-link-card">
+                    <div>
+                      <strong>VINCULAR OTRO DISPOSITIVO</strong>
+                      <small>Generá un código de 6 caracteres. Dura 10 minutos y se usa una sola vez.</small>
+                    </div>
+                    <div class="cloud-secret-field">
+                      <input id="cloud-world-code-output" class="cloud-short-code" type="text" readonly aria-label="Código de vinculación de 6 caracteres" placeholder="------" />
+                      <button id="cloud-toggle-code" type="button">GENERAR</button>
+                      <button id="cloud-copy-code" type="button">COPIAR</button>
+                    </div>
+                  </div>
+                  <div class="cloud-actions">
+                    <button class="cloud-primary-button" id="cloud-sync-now" type="button">↻ SINCRONIZAR AHORA</button>
+                    <button class="cloud-secondary-button" id="cloud-disconnect" type="button">DESCONECTAR ESTE DISPOSITIVO</button>
+                    <button class="cloud-danger-button" id="cloud-delete-copy" type="button">BORRAR COPIA ONLINE</button>
+                  </div>
+                  <div class="cloud-recovery-actions">
+                    <button class="cloud-download-button" id="cloud-download-world" type="button">↓ DESCARGAR PARTIDA DE LA NUBE</button>
+                    <button class="cloud-upload-button" id="cloud-upload-world" type="button">↑ FUSIONAR CAMBIOS DE ESTE DISPOSITIVO</button>
+                  </div>
+                  <small class="cloud-device-summary" id="cloud-device-summary"></small>
+                </div>
+              </section>
+
+              <div class="settings-grid">
+                <section class="settings-card settings-sound-card">
+                  <header>
+                    <span class="settings-card-icon sound-icon" aria-hidden="true">♪</span>
+                    <div>
+                      <small>SONIDO</small>
+                      <h3>Audio del mundo</h3>
+                    </div>
+                  </header>
+                  <label class="settings-range-row" for="settings-volume">
+                    <span>VOLUMEN GENERAL</span>
+                    <output id="settings-volume-value">70%</output>
+                  </label>
+                  <input
+                    class="settings-volume"
+                    id="settings-volume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    value="70"
+                  />
+                  <label class="settings-toggle-row">
+                    <span>
+                      <strong>Permitir música</strong>
+                      <small>La ocarina podrá reproducir la banda sonora.</small>
+                    </span>
+                    <input id="settings-music-enabled" type="checkbox" checked />
+                    <i aria-hidden="true"></i>
+                  </label>
+                  <label class="settings-toggle-row">
+                    <span>
+                      <strong>Efectos de botones</strong>
+                      <small>Cada acción responde con un sonido pixelado.</small>
+                    </span>
+                    <input id="settings-sound-effects-enabled" type="checkbox" checked />
+                    <i aria-hidden="true"></i>
+                  </label>
+                </section>
+
+                <section class="settings-card settings-controls-card">
+                  <header>
+                    <span class="settings-card-icon controls-icon" aria-hidden="true">✥</span>
+                    <div>
+                      <small>CONTROLES</small>
+                      <h3>Movimiento del jugador</h3>
+                    </div>
+                  </header>
+                  <label class="settings-toggle-row">
+                    <span>
+                      <strong>Movimiento con teclado</strong>
+                      <small>Usá WASD o las flechas para recorrer el mapa.</small>
+                    </span>
+                    <input id="settings-keyboard-movement" type="checkbox" checked />
+                    <i aria-hidden="true"></i>
+                  </label>
+                  <label class="settings-toggle-row settings-touch-control-row">
+                    <span>
+                      <strong>Joystick táctil</strong>
+                      <small>Mostrá un control circular sutil para mover al personaje en el celular.</small>
+                    </span>
+                    <input id="settings-touch-joystick" type="checkbox" />
+                    <i aria-hidden="true"></i>
+                  </label>
+                  <div class="settings-joystick-preview" aria-hidden="true">
+                    <span></span>
+                    <small>CONTROL MÓVIL</small>
+                  </div>
+                </section>
+
+                <section class="settings-card settings-shortcuts-card">
+                  <header>
+                    <span class="settings-card-icon shortcuts-icon" aria-hidden="true">⌨</span>
+                    <div>
+                      <small>TECLADO</small>
+                      <h3>Atajos rápidos</h3>
+                    </div>
+                    <label class="settings-toggle-compact" title="Activar atajos">
+                      <input id="settings-shortcuts-enabled" type="checkbox" checked />
+                      <i aria-hidden="true"></i>
+                    </label>
+                  </header>
+                  <div class="shortcut-list" aria-label="Lista de atajos">
+                    <span><kbd>1–5</kbd> ACCESOS ELEGIDOS</span>
+                    <span><kbd>C</kbd> CREATIVIDAD</span>
+                    <span><kbd>WASD</kbd> MOVER</span>
+                    <span><kbd>ESC</kbd> VOLVER</span>
+                    <span><kbd>F10</kbd> AJUSTES</span>
+                  </div>
+                </section>
+
+                <section class="settings-card settings-quick-access-card">
+                  <header>
+                    <span class="settings-card-icon quick-access-settings-icon" aria-hidden="true">◆</span>
+                    <div>
+                      <small>INTERFAZ</small>
+                      <h3>Accesos del mapa</h3>
+                    </div>
+                    <b id="settings-quick-access-count">0 / 5</b>
+                  </header>
+                  <p>Elegí hasta cinco accesos. También podés dejar la barra completamente vacía.</p>
+                  <div class="quick-access-picker" id="settings-quick-access-picker"></div>
+                </section>
+
+                <section class="settings-card settings-visual-card">
+                  <header>
+                    <span class="settings-card-icon visual-icon" aria-hidden="true">✦</span>
+                    <div>
+                      <small>ACCESIBILIDAD</small>
+                      <h3>Movimiento visual</h3>
+                    </div>
+                  </header>
+                  <label class="settings-toggle-row">
+                    <span>
+                      <strong>Reducir animaciones</strong>
+                      <small>Calma portales, botones y efectos decorativos.</small>
+                    </span>
+                    <input id="settings-reduced-motion" type="checkbox" />
+                    <i aria-hidden="true"></i>
+                  </label>
+                  <label class="settings-toggle-row">
+                    <span>
+                      <strong>Próximas fechas en el mapa</strong>
+                      <small>Mostrá el próximo evento y cumpleaños en la pantalla principal.</small>
+                    </span>
+                    <input id="settings-home-reminders" type="checkbox" checked />
+                    <i aria-hidden="true"></i>
+                  </label>
+                  <label class="settings-toggle-row settings-strict-focus-row">
+                    <span>
+                      <strong>Modo enfoque estricto</strong>
+                      <small>Durante cinco minutos NOK queda en modo kiosco, al frente y sin minimizar.</small>
+                    </span>
+                    <input id="settings-strict-focus-mode" type="checkbox" checked />
+                    <i aria-hidden="true"></i>
+                  </label>
+                </section>
+              </div>
+
+              <footer class="settings-footer">
+                <span>✦ AJUSTES GUARDADOS EN ESTA PARTIDA</span>
+                <button id="reset-settings" type="button">RESTAURAR AJUSTES</button>
+              </footer>
+            </div>
+          </div>
+
+          <div id="hub-view" class="panel-view hidden">
+            <div class="hub-content">
+              <nav class="hub-toolkit-nav" aria-label="Herramientas del HUB">
+                <button type="button" class="active" data-hub-tab="home" aria-label="Kit de herramientas">
+                  <span aria-hidden="true">⌂</span><strong>KIT</strong><small>Todo a mano</small>
+                </button>
+                <button type="button" data-hub-tab="alarms" aria-label="Alarmas">
+                  <span aria-hidden="true">!</span><strong>ALARMAS</strong><small id="hub-alarm-nav-count">0 activas</small>
+                </button>
+                <button type="button" data-hub-tab="timer" aria-label="Tiempo">
+                  <span aria-hidden="true">◴</span><strong>TIEMPO</strong><small id="hub-timer-nav-state">Preparado</small>
+                </button>
+                <button type="button" data-hub-tab="calculator" aria-label="Calculadora">
+                  <span aria-hidden="true">#</span><strong>CALCULADORA</strong><small>Cuentas rápidas</small>
+                </button>
+              </nav>
+
+              <div class="hub-workbench">
+                <section class="hub-inventory-home" id="hub-home-view">
+                  <header class="hub-inventory-heading">
+                    <div>
+                      <span>KIT ABIERTO · <b id="hub-current-time">00:00</b></span>
+                      <h2>Elegí una herramienta</h2>
+                      <p>Tres utilidades listas para usar.</p>
+                    </div>
+                    <strong>3</strong>
+                  </header>
+                  <div class="hub-category-grid">
+                    <button type="button" class="hub-category-card category-alarms" data-hub-open="alarms">
+                      <span class="hub-category-icon" aria-hidden="true">!</span><strong>Alarmas</strong><small>Recordatorios con hora</small><em id="hub-alarm-home-count">0 guardadas</em>
+                    </button>
+                    <button type="button" class="hub-category-card category-timer" data-hub-open="timer">
+                      <span class="hub-category-icon" aria-hidden="true">◴</span><strong>Tiempo</strong><small>Temporizador y cronómetro</small><em id="hub-timer-home-time">10:00</em>
+                    </button>
+                    <button type="button" class="hub-category-card category-calculator" data-hub-open="calculator">
+                      <span class="hub-category-icon" aria-hidden="true">#</span><strong>Calculadora</strong><small>Cuentas sin salir del mundo</small><em>LISTA</em>
+                    </button>
+                  </div>
+                </section>
+
+                <section class="hub-tool-card alarm-tool-card hidden" id="hub-alarms-view">
+                  <header>
+                    <span aria-hidden="true">!</span>
+                    <div><small>RECORDATORIOS</small><h3>Alarmas del aventurero</h3></div>
+                  </header>
+                  <form class="hub-alarm-form" id="hub-alarm-form">
+                    <input id="hub-alarm-label" maxlength="80" placeholder="¿Qué no querés olvidar?" aria-label="Nombre de la alarma" />
+                    <input id="hub-alarm-time" type="time" aria-label="Hora de la alarma" required />
+                    <button>+ GUARDAR</button>
+                  </form>
+                  <div class="hub-alarm-list" id="hub-alarm-list"></div>
+                </section>
+
+                <section class="hub-tool-card timer-tool-card hub-time-tool hidden" id="hub-timer-card">
+                  <header>
+                    <span aria-hidden="true">◷</span>
+                    <div><small>CONTROL DEL TIEMPO</small><h3>Tiempo</h3></div>
+                  </header>
+                  <div class="hub-time-mode-tabs" role="tablist" aria-label="Modo de tiempo">
+                    <button type="button" class="active" data-hub-time-mode="timer"><span aria-hidden="true">◴</span><strong>TEMPORIZADOR</strong><small>Cuenta regresiva</small></button>
+                    <button type="button" data-hub-time-mode="stopwatch"><span aria-hidden="true">◷</span><strong>CRONÓMETRO</strong><small>Medí tu avance</small></button>
+                  </div>
+                  <div class="hub-time-face timer-face" id="hub-timer-face">
+                    <div class="hub-time-hero"><span id="hub-timer-status">PREPARADO</span><strong class="hub-timer-display" id="hub-timer-display" aria-live="polite">10:00</strong></div>
+                    <div class="hub-timer-presets">
+                      <button type="button" data-hub-minutes="5">5 MIN</button>
+                      <button type="button" class="active" data-hub-minutes="10">10 MIN</button>
+                      <button type="button" data-hub-minutes="25">25 MIN</button>
+                      <button type="button" data-hub-minutes="50">50 MIN</button>
+                    </div>
+                    <div class="hub-custom-time">
+                      <input id="hub-custom-minutes" inputmode="decimal" placeholder="Duración personalizada en minutos" aria-label="Duración personalizada en minutos" />
+                      <button id="hub-use-custom" type="button">USAR</button>
+                    </div>
+                    <div class="hub-timer-actions">
+                      <button class="hub-timer-start" id="hub-timer-start" type="button">▶ EMPEZAR</button>
+                      <button id="hub-timer-reset" type="button" aria-label="Reiniciar temporizador">↺ REINICIAR</button>
+                    </div>
+                  </div>
+                  <div class="hub-time-face stopwatch-face hidden" id="hub-stopwatch-face">
+                    <div class="hub-time-hero"><span id="hub-stopwatch-status">LISTO PARA MEDIR</span><strong class="hub-timer-display hub-stopwatch-display" id="hub-stopwatch-display" aria-live="polite">00:00.0</strong></div>
+                    <div class="hub-stopwatch-actions">
+                      <button class="hub-timer-start" id="hub-stopwatch-start" type="button">▶ INICIAR</button>
+                      <button id="hub-stopwatch-lap" type="button" disabled>◆ VUELTA</button>
+                      <button id="hub-stopwatch-reset" type="button" disabled>↺ REINICIAR</button>
+                    </div>
+                    <div class="hub-stopwatch-laps" id="hub-stopwatch-laps" aria-label="Vueltas del cronómetro"><p class="hub-empty-copy">Las vueltas que marques van a quedar registradas acá.</p></div>
+                  </div>
+                </section>
+
+                <section class="hub-tool-card calculator-tool-card hidden" id="hub-calculator-view">
+                  <header>
+                    <span aria-hidden="true">#</span>
+                    <div><small>CUENTAS RÁPIDAS</small><h3>Calculadora</h3></div>
+                  </header>
+                  <form id="calculator-form">
+                    <output id="calculator-result">0</output>
+                    <input id="calculator-expression" maxlength="80" placeholder="Ej: (1250 + 800) / 2" aria-label="Operación matemática" />
+                    <div class="calculator-keypad">
+                      <button type="button" data-calculator-key="7">7</button><button type="button" data-calculator-key="8">8</button><button type="button" data-calculator-key="9">9</button><button type="button" data-calculator-key="/">/</button>
+                      <button type="button" data-calculator-key="4">4</button><button type="button" data-calculator-key="5">5</button><button type="button" data-calculator-key="6">6</button><button type="button" data-calculator-key="*">*</button>
+                      <button type="button" data-calculator-key="1">1</button><button type="button" data-calculator-key="2">2</button><button type="button" data-calculator-key="3">3</button><button type="button" data-calculator-key="-">-</button>
+                      <button type="button" data-calculator-key="0">0</button><button type="button" data-calculator-key=".">.</button><button type="button" data-calculator-key="%">%</button><button type="button" data-calculator-key="+">+</button>
+                    </div>
+                    <div class="calculator-actions">
+                      <button id="calculator-clear" type="button">LIMPIAR</button>
+                      <button id="calculator-backspace" class="calculator-backspace" type="button" aria-label="Borrar un carácter">⌫ BORRAR 1</button>
+                      <button class="calculator-equals">= CALCULAR</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div id="puzzle-view" class="panel-view hidden">
+            <div class="learning-content">
+              <section class="learning-academy difficulty-pending" id="learning-academy">
+                <div id="learning-hub">
+                  <header class="learning-heading">
+                    <span>ACADEMIA DEL CAMPAMENTO</span>
+                    <h1>Aprendizaje diario</h1>
+                    <p>Elegí la dificultad y después abrí uno de los cuatro entrenamientos. Cada desafío cambia una vez por día.</p>
+                  </header>
+                  <div class="learning-difficulty" id="learning-difficulty" aria-label="Dificultad de aprendizaje">
+                    <span>1 · ELEGÍ LA DIFICULTAD DE HOY</span>
+                    <p>La elección queda fija hasta mañana.</p>
+                    <div>
+                      <button type="button" data-learning-difficulty="easy"><strong>FÁCIL</strong><small>Para entrar en ritmo</small></button>
+                      <button type="button" data-learning-difficulty="medium"><strong>MEDIO</strong><small>Un desafío equilibrado</small></button>
+                      <button type="button" data-learning-difficulty="hard"><strong>DIFÍCIL</strong><small>Para exigir la cabeza</small></button>
+                    </div>
+                  </div>
+                  <div class="learning-blocks-heading"><span id="learning-blocks-label">DESAFÍOS DE HOY</span><strong id="learning-ready-state">ELEGÍ UNO PARA CONTINUAR</strong></div>
+                  <div class="learning-block-grid" id="learning-block-grid">
+                    <button type="button" class="learning-block-card" data-learning-block="fact" disabled><img src="./art/learning/fact.webp" alt="" /><span>1 POR DÍA</span><strong>DATO RANDOM</strong><small>Una curiosidad nueva</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="riddle" disabled><img src="./art/learning/riddle.webp" alt="" /><span>1 POR DÍA</span><strong>ACERTIJO</strong><small>Cinco minutos para pensar</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="culture" disabled><img src="./art/learning/culture.webp" alt="" /><span>1 POR DÍA</span><strong>CULTURA GENERAL</strong><small>Una pregunta por día</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="memory" disabled><img src="./art/learning/memory.webp" alt="" /><span>1 POR DÍA</span><strong>MEMORIA</strong><small>Recordá la secuencia</small><em>BLOQUEADO</em></button>
+                  </div>
+                </div>
+
+                <div class="learning-session hidden" id="learning-session">
+                  <header class="learning-session-header">
+                    <button type="button" id="learning-back">← VOLVER A APRENDIZAJE</button>
+                    <div><span>DIFICULTAD BLOQUEADA</span><strong id="learning-locked-difficulty"></strong></div>
+                  </header>
+
+                  <section class="learning-daily-card hidden" id="learning-fact-session">
+                    <img src="./art/learning/fact.webp" alt="" />
+                    <span>DATO RANDOM · 1 POR DÍA</span>
+                    <h2 id="daily-random-fact"></h2>
+                    <button type="button" class="learning-complete-button" id="learning-fact-complete">✓ GUARDAR COMO LEÍDO</button>
+                  </section>
+
+                  <section class="learning-daily-card hidden" id="learning-culture-session">
+                    <img src="./art/learning/culture.webp" alt="" />
+                    <span>CULTURA GENERAL · 1 POR DÍA</span>
+                    <h2 id="daily-culture-question"></h2>
+                    <div class="puzzle-answer-row"><input id="culture-answer-input" maxlength="180" placeholder="Escribí tu respuesta..." aria-label="Respuesta de cultura general" /><button type="button" id="culture-check">COMPROBAR</button></div>
+                    <p class="puzzle-feedback hidden" id="culture-feedback"></p>
+                    <p class="learning-reveal hidden" id="daily-culture-answer"></p>
+                    <button type="button" class="learning-secondary-button" id="reveal-daily-culture">VER RESPUESTA</button>
+                  </section>
+
+                  <section class="puzzle-card learning-daily-card hidden" id="learning-riddle-session">
+                    <img src="./art/learning/riddle.webp" alt="" />
+                    <span class="puzzle-kicker">ACERTIJO · 1 POR DÍA</span>
+                    <strong class="puzzle-clock" id="puzzle-clock">05:00</strong>
+                    <h2 id="puzzle-question"></h2>
+                    <p class="puzzle-instruction">Pensalo con calma. La respuesta suele estar en cómo está hecha la pregunta.</p>
+                    <p class="puzzle-hint hidden" id="puzzle-hint"></p>
+                    <div class="puzzle-answer-row"><input id="puzzle-answer" maxlength="160" placeholder="Tu respuesta..." aria-label="Respuesta al acertijo" /><button id="puzzle-check" type="button">COMPROBAR</button></div>
+                    <p class="puzzle-feedback hidden" id="puzzle-feedback"></p>
+                    <div class="puzzle-solution hidden" id="puzzle-solution"><span>SOLUCIÓN</span><p id="puzzle-explanation"></p></div>
+                    <div class="puzzle-actions"><button id="puzzle-show-hint" type="button">VER PISTA</button><button id="puzzle-show-solution" type="button">VER SOLUCIÓN</button></div>
+                  </section>
+
+                  <section class="learning-daily-card memory-challenge hidden" id="learning-memory-session">
+                    <img src="./art/learning/memory.webp" alt="" />
+                    <span>MEMORIA · 1 POR DÍA</span>
+                    <div id="memory-study"><strong class="memory-countdown" id="memory-countdown">00:10</strong><p>Memorizá la secuencia. Al llegar a cero se ocultará automáticamente.</p><h2 class="memory-sequence" id="memory-sequence"></h2></div>
+                    <div class="hidden" id="memory-test"><h2 id="memory-question"></h2><div class="puzzle-answer-row"><input id="memory-answer" maxlength="180" placeholder="Escribí la secuencia..." /><button type="button" id="memory-check">COMPROBAR</button></div><p class="puzzle-feedback hidden" id="memory-feedback"></p></div>
+                  </section>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div id="creativity-view" class="panel-view hidden">
+            <div class="creativity-content">
+              <button
+                type="button"
+                class="creativity-close-button"
+                id="close-creativity"
+                aria-label="Cerrar Creatividad"
+              >×</button>
+
+              <section class="book-left-page">
+                <header class="creativity-book-heading">
+                  <span>ARCHIVO CREATIVO</span>
+                  <h1>Cuaderno de autor</h1>
+                  <p>Ideas largas, escenas y mundos en un solo lugar.</p>
+                </header>
+
+                <section class="focus-timer" id="focus-timer" aria-label="Temporizador de escritura">
+                  <div class="focus-timer-heading">
+                    <span>SESIÓN DE ENFOQUE</span>
+                    <small id="focus-status">PREPARADO</small>
+                  </div>
+                  <strong class="focus-time" id="focus-time" aria-live="polite">10:00</strong>
+                  <div class="focus-presets" aria-label="Duración del temporizador">
+                    <button type="button" class="active" data-focus-minutes="10">10 MIN</button>
+                    <button type="button" data-focus-minutes="30">30 MIN</button>
+                    <button type="button" data-focus-minutes="60">1 HORA</button>
+                    <button type="button" data-focus-minutes="120">2 HORAS</button>
+                  </div>
+                  <div class="focus-controls">
+                    <button type="button" class="focus-start" id="focus-start">▶ EMPEZAR</button>
+                    <button type="button" id="focus-reset">↺ REINICIAR</button>
+                  </div>
+                </section>
+
+                <aside class="writing-library">
+                  <div class="writing-library-heading">
+                    <div>
+                      <small>ESTANTERÍA PERSONAL</small>
+                      <h2>Mis proyectos</h2>
+                    </div>
+                    <span aria-hidden="true">▥</span>
+                  </div>
+
+                  <form class="new-writing-form" id="new-writing-form">
+                    <label for="new-writing-title">NUEVO LIBRO O GUIÓN</label>
+                    <div>
+                      <input
+                        id="new-writing-title"
+                        maxlength="140"
+                        placeholder="Título del proyecto…"
+                        required
+                      />
+                      <button>+</button>
+                    </div>
+                  </form>
+                  <div class="writing-project-list" id="writing-project-list"></div>
+                </aside>
+              </section>
+
+              <section class="book-right-page">
+                <div class="writing-editor hidden" id="writing-editor">
+                  <div class="screenplay-title-row">
+                    <button
+                      type="button"
+                      class="writing-back-library"
+                      id="writing-back-library"
+                      aria-label="Volver a la biblioteca creativa"
+                    ><span aria-hidden="true">←</span> BIBLIOTECA</button>
+                    <input
+                      class="screenplay-title-input"
+                      id="writing-title"
+                      maxlength="140"
+                      aria-label="Título del proyecto"
+                      required
+                    />
+                    <span class="writing-session-mini" id="writing-session-mini" aria-label="Tiempo restante">10:00</span>
+                  </div>
+                  <div class="writing-document-bar">
+                    <span>HOJA A4</span>
+                    <nav aria-label="Navegación entre hojas">
+                      <button type="button" id="writing-prev-page" aria-label="Hoja anterior">◀</button>
+                      <strong>
+                        <span id="writing-page-current">1</span>
+                        /
+                        <span id="writing-page-total">1</span>
+                      </strong>
+                      <button type="button" id="writing-next-page" aria-label="Hoja siguiente">▶</button>
+                    </nav>
+                    <small id="writing-word-count">0 PALABRAS</small>
+                    <button
+                      type="button"
+                      class="copy-writing-button"
+                      id="copy-writing-document"
+                      aria-label="Copiar todo el texto del guion"
+                    ><span aria-hidden="true">▣</span>COPIAR TODO</button>
+                  </div>
+                  <div class="a4-page-shell">
+                    <label class="writing-page screenplay-page a4-paper" aria-label="Hoja actual del documento">
+                      <textarea
+                        id="writing-content"
+                        maxlength="200000"
+                        aria-label="Texto de la hoja actual"
+                        aria-keyshortcuts="Control+Z Control+Y Meta+Z"
+                        placeholder="Empezá a escribir acá…"
+                        spellcheck="true"
+                      ></textarea>
+                    </label>
+                    <div
+                      class="script-context-menu hidden"
+                      id="script-context-menu"
+                      role="menu"
+                      aria-label="Formato de guión"
+                    >
+                      <strong>FORMATO DE GUIÓN</strong>
+                      <small>Aplicar en este punto</small>
+                      <button type="button" role="menuitem" data-screenplay-block="scene"><span>#</span>ESCENA</button>
+                      <button type="button" role="menuitem" data-screenplay-block="action"><span>▶</span>ACCIÓN</button>
+                      <button type="button" role="menuitem" data-screenplay-block="character"><span>●</span>PERSONAJE</button>
+                      <button type="button" role="menuitem" data-screenplay-block="dialogue"><span>“</span>DIÁLOGO</button>
+                      <button type="button" role="menuitem" data-screenplay-block="parenthetical"><span>()</span>ACOTACIÓN</button>
+                      <button type="button" role="menuitem" data-screenplay-block="transition"><span>→</span>TRANSICIÓN</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="empty-writing" id="empty-writing">
+                  <span aria-hidden="true">✎</span>
+                  <h2>Tu primera escena está esperando.</h2>
+                  <p>Creá un proyecto en la página izquierda para empezar a escribir.</p>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div id="underground-view" class="panel-view hidden">
+            <div class="underground-content">
+              <section class="underground-hero">
+                <div>
+                  <span>ARCHIVO SECUNDARIO</span>
+                  <h2>Lo que no usás todos los días, pero tampoco querés perder.</h2>
+                  <p>Notas, referencias, recuerdos y datos sueltos quedan ordenados bajo el campamento.</p>
+                </div>
+                <strong id="underground-count">0</strong>
+              </section>
+              <div class="underground-layout">
+                <form class="underground-form" id="underground-form">
+                  <div class="underground-section-title">
+                    <span id="underground-form-kicker">NUEVO ARCHIVO</span>
+                    <h3 id="underground-form-title">Guardar en la caverna</h3>
+                  </div>
+                  <label>
+                    NOMBRE
+                    <input id="underground-title" maxlength="100" placeholder="Ej: medidas del mueble viejo" required />
+                  </label>
+                  <label>
+                    TIPO DE ARCHIVO
+                    <select id="underground-category">
+                      <option value="note">NOTA</option>
+                      <option value="reference">REFERENCIA</option>
+                      <option value="memory">RECUERDO</option>
+                      <option value="misc">OTROS</option>
+                    </select>
+                  </label>
+                  <label>
+                    DETALLE
+                    <textarea id="underground-details" maxlength="1200" placeholder="Todo lo que quieras conservar sobre esto..."></textarea>
+                  </label>
+                  <div class="underground-form-actions">
+                    <button class="underground-save-button" id="underground-save">GUARDAR EN EL ARCHIVO</button>
+                    <button class="hidden" id="underground-cancel" type="button">CANCELAR</button>
+                  </div>
+                </form>
+                <section class="underground-ledger">
+                  <div class="underground-ledger-heading">
+                    <div class="underground-section-title">
+                      <span>ARCHIVEROS DEL BÚNKER</span>
+                      <h3>Registros guardados</h3>
+                    </div>
+                    <input id="underground-search" type="search" placeholder="Buscar en la caverna..." aria-label="Buscar registros guardados" />
+                  </div>
+                  <div class="underground-item-list" id="underground-list"></div>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div id="finance-view" class="panel-view hidden">
+            <div class="coffer-content">
+              <nav class="coffer-tabs" aria-label="Secciones del cofre">
+                <button type="button" id="coffer-home-tab" class="active">
+                  <span aria-hidden="true">▣</span>
+                  COFRE
+                </button>
+                <button type="button" id="coffer-finance-tab">
+                  <span aria-hidden="true">$</span>
+                  FINANZAS
+                </button>
+                <button type="button" id="coffer-password-tab">
+                  <span aria-hidden="true">⚿</span>
+                  CONTRASEÑAS
+                </button>
+                <button type="button" id="coffer-notes-tab">
+                  <span aria-hidden="true">▤</span>
+                  PERGAMINOS
+                </button>
+              </nav>
+
+              <section class="coffer-inventory-home" id="coffer-inventory-home" aria-label="Inventario del cofre">
+                <header class="coffer-inventory-heading">
+                  <div>
+                    <span class="eyebrow">INVENTARIO PERSONAL</span>
+                    <h2>¿Qué querés abrir?</h2>
+                  </div>
+                  <span class="inventory-capacity" id="coffer-inventory-count">0 OBJETOS</span>
+                </header>
+                <div class="coffer-category-grid">
+                  <button type="button" class="coffer-category-card category-finance" data-coffer-open="finance">
+                    <span class="category-main-icon" aria-hidden="true">$</span>
+                    <span class="category-copy">
+                      <small>MONEDAS, BIENES Y DEUDAS</small>
+                      <strong>FINANZAS</strong>
+                      <em id="coffer-finance-count">0 registros</em>
+                    </span>
+                  </button>
+                  <button type="button" class="coffer-category-card category-passwords" data-coffer-open="passwords">
+                    <span class="category-main-icon" aria-hidden="true">⚿</span>
+                    <span class="category-copy">
+                      <small>LLAVES Y ACCESOS CIFRADOS</small>
+                      <strong>CONTRASEÑAS</strong>
+                      <em>Bóveda segura</em>
+                    </span>
+                  </button>
+                  <button type="button" class="coffer-category-card category-notes" data-coffer-open="notes">
+                    <span class="category-main-icon" aria-hidden="true">▤</span>
+                    <span class="category-copy">
+                      <small>DATOS QUE NO QUERÉS PERDER</small>
+                      <strong>PERGAMINOS</strong>
+                      <em id="coffer-notes-count">0 guardados</em>
+                    </span>
+                  </button>
+                </div>
+                <div class="inventory-hint"><span aria-hidden="true">✦</span> Elegí un objeto para abrir su compartimento.</div>
+              </section>
+
+              <div class="finance-content hidden" id="finance-money-section">
+              <section class="finance-summary">
+                <article>
+                  <span>PLATA DISPONIBLE</span>
+                  <strong id="cash-total">$ 0</strong>
+                </article>
+                <article>
+                  <span>INGRESO FIJO</span>
+                  <strong id="income-total">$ 0</strong>
+                  <small>POR MES</small>
+                </article>
+                <article>
+                  <span>ACTIVOS</span>
+                  <strong id="asset-total">$ 0</strong>
+                </article>
+                <article class="debt-total">
+                  <span>DEUDAS</span>
+                  <strong id="debt-total">$ 0</strong>
+                </article>
+                <article class="net-total">
+                  <span>PATRIMONIO ESTIMADO</span>
+                  <strong id="net-total">$ 0</strong>
+                </article>
+              </section>
+
+              <form class="finance-form" id="finance-form">
+                <div class="finance-form-heading">
+                  <div>
+                    <span class="eyebrow">NUEVO REGISTRO</span>
+                    <h2>Guardar en el cofre</h2>
+                  </div>
+                  <span class="coin-stack">●</span>
+                </div>
+                <div class="finance-fields">
+                  <label>
+                    Tipo
+                    <select id="finance-type">
+                      <option value="cash">Plata disponible</option>
+                      <option value="income">Ingreso fijo mensual</option>
+                      <option value="asset">Activo (casa, auto…)</option>
+                      <option value="debt">Deuda</option>
+                    </select>
+                  </label>
+                  <label>
+                    Nombre
+                    <input id="finance-name" maxlength="100" placeholder="Ej: Casa" required />
+                  </label>
+                  <label>
+                    Monto en ARS
+                    <input id="finance-amount" type="number" min="0" step="0.01" placeholder="0" required />
+                  </label>
+                  <label>
+                    Nota opcional
+                    <input id="finance-notes" maxlength="240" placeholder="Persona, vencimiento o detalle…" />
+                  </label>
+                </div>
+                <button class="primary-action">+ GUARDAR REGISTRO</button>
+              </form>
+
+              <section class="finance-ledger">
+                <div class="ledger-heading">
+                  <div>
+                    <span class="eyebrow">INVENTARIO</span>
+                    <h2>Todo lo que hay en el cofre</h2>
+                  </div>
+                  <span id="finance-count">0 REGISTROS</span>
+                </div>
+                <div class="finance-list" id="finance-list"></div>
+              </section>
+              </div>
+
+              <section class="password-vault-section hidden" id="password-vault-section">
+                <div class="password-vault-gate" id="password-vault-gate">
+                  <div class="vault-gate-icon" aria-hidden="true">▣</div>
+                  <span class="eyebrow">BÓVEDA CIFRADA</span>
+                  <h2 id="vault-gate-title">Crear bóveda de contraseñas</h2>
+                  <p>
+                    Ingresá tu clave maestra para abrir el portal de Finanzas. Se pide
+                    cada vez que entrás. Las contraseñas guardadas permanecen cifradas.
+                  </p>
+                  <form id="vault-master-form">
+                    <label>
+                      Clave maestra
+                      <input
+                        id="vault-master-password"
+                        type="password"
+                        minlength="8"
+                        autocomplete="current-password"
+                        placeholder="Mínimo 8 caracteres"
+                        required
+                      />
+                    </label>
+                    <label id="vault-master-confirm-field">
+                      Repetir clave maestra
+                      <input
+                        id="vault-master-confirm"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        placeholder="Escribila nuevamente"
+                      />
+                    </label>
+                    <strong class="vault-error hidden" id="vault-error"></strong>
+                    <button class="primary-action" id="vault-master-submit">
+                      CREAR BÓVEDA
+                    </button>
+                  </form>
+                  <small>
+                    Si olvidás la clave maestra, las contraseñas no se pueden recuperar.
+                  </small>
+                </div>
+
+                <div class="password-vault-content hidden" id="password-vault-content">
+                  <div class="password-vault-toolbar">
+                    <div>
+                      <span class="eyebrow">BÓVEDA ABIERTA</span>
+                      <h2>Llaves y accesos</h2>
+                    </div>
+                    <div>
+                      <span class="vault-count" id="password-count">0 GUARDADAS</span>
+                      <button type="button" class="password-add-button" id="add-password-entry" aria-label="Agregar contraseña">+</button>
+                      <button type="button" id="lock-password-vault">▣ BLOQUEAR</button>
+                      <button type="button" class="delete-vault" id="delete-password-vault">
+                        BORRAR BÓVEDA
+                      </button>
+                    </div>
+                  </div>
+                  <div class="vault-delete-confirm hidden" id="vault-delete-confirm" role="alert">
+                    <strong>¿BORRAR TODA LA BÓVEDA?</strong>
+                    <span>Las contraseñas guardadas se eliminarán definitivamente.</span>
+                    <button type="button" id="cancel-delete-password-vault">CANCELAR</button>
+                    <button type="button" class="danger-action" id="confirm-delete-password-vault">
+                      SÍ, BORRAR TODO
+                    </button>
+                  </div>
+
+                  <dialog class="password-entry-dialog" id="password-entry-dialog" aria-labelledby="password-form-title">
+                  <button type="button" class="ui-delete-action password-dialog-close" id="close-password-dialog" aria-label="Cerrar nueva contraseña">×</button>
+                  <form class="password-entry-form" id="password-entry-form">
+                    <input type="hidden" id="password-edit-id" />
+                    <div class="password-form-heading">
+                      <span aria-hidden="true">⚿</span>
+                      <div>
+                        <span class="eyebrow" id="password-form-eyebrow">NUEVA LLAVE</span>
+                        <h3 id="password-form-title">Guardar contraseña</h3>
+                      </div>
+                    </div>
+                    <div class="password-fields">
+                      <label>
+                        Servicio
+                        <input
+                          id="password-service"
+                          maxlength="100"
+                          placeholder="Ej: Gmail, Instagram…"
+                          autocomplete="off"
+                          required
+                        />
+                      </label>
+                      <label>
+                        Usuario o mail
+                        <input
+                          id="password-username"
+                          maxlength="160"
+                          placeholder="usuario@mail.com"
+                          autocomplete="username"
+                        />
+                      </label>
+                      <label class="password-input-field">
+                        Contraseña
+                        <span>
+                          <input
+                            id="password-secret"
+                            type="password"
+                            maxlength="500"
+                            placeholder="Tu contraseña"
+                            autocomplete="new-password"
+                            required
+                          />
+                          <button
+                            type="button"
+                            id="toggle-form-password"
+                            aria-label="Mostrar contraseña"
+                          >◎</button>
+                          <button type="button" id="generate-password">GENERAR</button>
+                        </span>
+                      </label>
+                      <label>
+                        Sitio opcional
+                        <input
+                          id="password-url"
+                          maxlength="300"
+                          placeholder="https://…"
+                          inputmode="url"
+                        />
+                      </label>
+                      <label class="password-notes-field">
+                        Nota opcional
+                        <input
+                          id="password-notes"
+                          maxlength="300"
+                          placeholder="Código de recuperación, detalle…"
+                        />
+                      </label>
+                    </div>
+                    <div class="password-form-actions">
+                      <button type="button" id="cancel-password-edit">
+                        CANCELAR
+                      </button>
+                      <button class="primary-action" id="save-password-entry">
+                        + GUARDAR LLAVE
+                      </button>
+                    </div>
+                  </form>
+                  </dialog>
+
+                  <section class="password-ledger">
+                    <div class="ledger-heading">
+                      <div>
+                        <span class="eyebrow">ACCESOS GUARDADOS</span>
+                        <h3>Todo bajo llave</h3>
+                      </div>
+                      <span id="password-ledger-count">0 REGISTROS</span>
+                    </div>
+                    <div class="password-list" id="password-list"></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="coffer-notes-section hidden" id="coffer-notes-section">
+                <form class="coffer-note-form" id="coffer-note-form">
+                  <input type="hidden" id="coffer-note-edit-id" />
+                  <div class="coffer-note-heading">
+                    <span class="scroll-emblem" aria-hidden="true">▤</span>
+                    <div>
+                      <span class="eyebrow" id="coffer-note-eyebrow">NUEVO PERGAMINO</span>
+                      <h2>Guardar información importante</h2>
+                    </div>
+                  </div>
+                  <label>
+                    Título
+                    <input id="coffer-note-title" maxlength="100" placeholder="Ej: datos del seguro, trámite, contacto…" required />
+                  </label>
+                  <label>
+                    Información
+                    <textarea id="coffer-note-content" maxlength="4000" rows="5" placeholder="Escribí acá todo lo que necesites recordar…" required></textarea>
+                  </label>
+                  <div class="coffer-note-actions">
+                    <button type="button" class="hidden" id="cancel-coffer-note-edit">CANCELAR</button>
+                    <button class="primary-action" id="save-coffer-note">+ GUARDAR PERGAMINO</button>
+                  </div>
+                </form>
+                <section class="coffer-note-ledger">
+                  <div class="ledger-heading">
+                    <div>
+                      <span class="eyebrow">ARCHIVO IMPORTANTE</span>
+                      <h2>Mis pergaminos</h2>
+                    </div>
+                    <span id="coffer-note-ledger-count">0 GUARDADOS</span>
+                  </div>
+                  <div class="coffer-note-list" id="coffer-note-list"></div>
+                </section>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="activity-backdrop hidden" id="activity-panel">
+        <section
+          class="activity-card pixel-box"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="activity-title"
+        >
+          <header class="activity-heading">
+            <div>
+              <span class="eyebrow" id="activity-eyebrow">CRÓNICA DEL AVENTURERO</span>
+              <h2 id="activity-title">Salón de logros</h2>
+            </div>
+            <div class="progress-wallet" aria-label="Monedas NOK disponibles">
+              <img src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
+              <strong id="progress-coin-balance">0</strong>
+              <small>MONEDAS NOK</small>
+            </div>
+            <button
+              class="close-button"
+              id="close-activity"
+              aria-label="Cerrar historial"
+            >×</button>
+          </header>
+          <nav class="progress-tabs" aria-label="Secciones de progreso">
+            <button type="button" class="active" data-progress-tab="stats">ESTADÍSTICAS</button>
+            <button type="button" data-progress-tab="streak">RACHAS</button>
+            <button type="button" data-progress-tab="history">HISTORIAL</button>
+            <button type="button" data-progress-tab="achievements">LOGROS</button>
+            <button type="button" data-progress-tab="rewards">RECOMPENSAS</button>
+          </nav>
+          <div id="activity-content"></div>
+        </section>
+      </div>
+
+      <div class="achievement-celebration-backdrop hidden" id="achievement-celebration">
+        <section class="achievement-celebration-card pixel-box" role="dialog" aria-modal="true" aria-labelledby="achievement-celebration-title">
+          <button class="close-button" id="close-achievement-celebration" type="button" aria-label="Cerrar logro">×</button>
+          <div class="achievement-orbit" aria-hidden="true"><span>✦</span><span>◆</span><span>✦</span></div>
+          <span class="eyebrow" id="achievement-celebration-eyebrow">NUEVO LOGRO DESBLOQUEADO</span>
+          <div class="achievement-medal" aria-hidden="true"><img id="achievement-medal" src="./art/ui/achievements/completed-10.webp" alt="" /></div>
+          <h2 id="achievement-celebration-title">¡LOGRO CONSEGUIDO!</h2>
+          <strong id="achievement-celebration-name"></strong>
+          <p id="achievement-celebration-copy"></p>
+          <div class="achievement-coin-reward" id="achievement-coin-reward-box"><img src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" /><b id="achievement-coin-reward">+0 MONEDAS NOK</b></div>
+          <button class="achievement-continue-button" id="achievement-continue" type="button">GUARDAR RECOMPENSA</button>
+        </section>
+      </div>
+
+      <div class="modal-backdrop hidden" id="task-modal">
+        <form class="task-form pixel-box" id="task-form">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow" id="task-modal-eyebrow">NUEVA MISIÓN</span>
+              <h1 id="task-modal-title">Sacala de tu cabeza</h1>
+            </div>
+            <button type="button" class="close-button" id="close-modal">×</button>
+          </div>
+
+          <label>
+            ¿Qué hay que hacer?
+            <input
+              id="task-title"
+              maxlength="120"
+              placeholder="Ej: llamar al salón del casamiento"
+              required
+            />
+          </label>
+          <label>
+            Notas o próximo paso
+            <textarea
+              id="task-details"
+              maxlength="500"
+              rows="3"
+              placeholder="Algo corto que te ayude a arrancar..."
+            ></textarea>
+          </label>
+          <div class="task-detail-created hidden" id="task-detail-created">
+            <span>CREADA</span>
+            <strong id="task-detail-created-value"></strong>
+          </div>
+          <div class="form-row">
+            <label>
+              Ámbito
+              <select id="task-area">
+                <option value="laboral">Laboral</option>
+                <option value="personal">Personal</option>
+              </select>
+            </label>
+            <label>
+              Proyecto
+              <select id="task-project"></select>
+            </label>
+          </div>
+          <fieldset class="priority-binary-field">
+            <legend>Prioridad</legend>
+            <label class="quest-switch priority-binary-switch">
+              <input type="checkbox" id="task-priority-high" />
+              <span class="quest-switch-box">★</span>
+              <span>
+                <strong>PRIORIDAD ALTA</strong>
+                <small>Marcala para que esta misión aparezca arriba. Sin marcar queda con prioridad normal.</small>
+              </span>
+            </label>
+          </fieldset>
+          <label class="quest-switch today-form-switch">
+            <input type="checkbox" id="task-is-today" />
+            <span class="quest-switch-box">★</span>
+            <span>
+              <strong>ESTÁ EN LAS TAREAS DE HOY</strong>
+              <small>Desmarcala si preferís guardarla en un proyecto para después.</small>
+            </span>
+          </label>
+          <label class="quest-switch">
+            <input type="checkbox" id="task-is-quest" />
+            <span class="quest-switch-box">◆</span>
+            <span>
+              <strong>CREAR COMO QUEST</strong>
+              <small>Podrá contener sus propias subtareas.</small>
+            </span>
+          </label>
+          <div class="task-form-footer">
+            <button
+              type="button"
+              class="delete-task task-form-delete hidden"
+              id="task-form-delete"
+            >ELIMINAR TAREA</button>
+            <button class="save-task primary-action" id="task-submit-label">
+              GUARDAR MISIÓN
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-backdrop hidden" id="rename-modal">
+        <form class="rename-form pixel-box" id="rename-form">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">EDITAR</span>
+              <h2 id="rename-title">Cambiar nombre</h2>
+            </div>
+            <button type="button" class="close-button" id="close-rename">×</button>
+          </div>
+          <input id="rename-input" maxlength="120" required aria-label="Nuevo nombre" />
+          <div class="rename-actions">
+            <button type="button" class="danger-action hidden" id="delete-project-from-rename">ELIMINAR PROYECTO</button>
+            <button type="button" id="cancel-rename">CANCELAR</button>
+            <button class="primary-action">GUARDAR NOMBRE</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-backdrop hidden" id="project-delete-confirm">
+        <section
+          class="rename-form project-delete-form pixel-box"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="project-delete-title"
+        >
+          <span class="eyebrow">MAPA DE TU VIDA</span>
+          <h2 id="project-delete-title">¿Eliminar este proyecto?</h2>
+          <strong class="project-delete-name" id="project-delete-name"></strong>
+          <p>El proyecto desaparecerá del mapa. Sus misiones no se borrarán: quedarán guardadas como tareas sin proyecto.</p>
+          <div class="rename-actions">
+            <button type="button" id="cancel-project-delete">CONSERVAR PROYECTO</button>
+            <button type="button" class="danger-action" id="confirm-project-delete">ELIMINAR DEFINITIVAMENTE</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="writing-delete-backdrop hidden" id="writing-delete-confirm">
+        <section
+          class="writing-delete-card pixel-box"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="writing-delete-title"
+        >
+          <span class="writing-delete-icon" aria-hidden="true"><i></i></span>
+          <span class="eyebrow">BIBLIOTECA CREATIVA</span>
+          <h2 id="writing-delete-title">¿Eliminar este proyecto?</h2>
+          <strong id="writing-delete-project-title"></strong>
+          <p>El libro y todas sus hojas desaparecerán de esta partida.</p>
+          <div class="writing-delete-actions">
+            <button id="cancel-writing-delete" type="button">VOLVER A LA BIBLIOTECA</button>
+            <button id="confirm-writing-delete" type="button">ELIMINAR DEFINITIVAMENTE</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="profile-wizard-backdrop hidden" id="partner-wizard">
+        <section class="profile-wizard partner-wizard pixel-box" role="dialog" aria-modal="true" aria-labelledby="partner-wizard-title">
+          <button class="profile-wizard-close" id="close-partner-wizard" type="button" aria-label="Cerrar">×</button>
+          <span class="profile-wizard-kicker">UNA NUEVA HISTORIA COMPARTIDA</span>
+          <h2 id="partner-wizard-title">¡Felicitaciones por esta aventura de a dos!</h2>
+          <p>Completá el recuerdo y elegí cómo querés que tu pareja aparezca en el pasaporte.</p>
+          <div class="partner-wizard-preview">
+            <span class="couple-player-photo" aria-hidden="true"></span>
+            <span class="partner-photo partner-dark" id="partner-wizard-preview" aria-hidden="true"></span>
+            <strong id="partner-wizard-caption">VOS + TU PAREJA</strong>
+          </div>
+          <div class="profile-wizard-fields partner-wizard-fields">
+            <label><span>NOMBRE</span><input id="partner-wizard-name" maxlength="80" placeholder="Nombre de tu pareja" /></label>
+            <label><span>FECHA DE NACIMIENTO</span><input id="partner-wizard-birth" type="date" /></label>
+            <label><span>FECHA DE NOVIOS</span><input id="partner-wizard-dating" type="date" /></label>
+            <label><span>FECHA DE CASAMIENTO</span><input id="partner-wizard-wedding" type="date" /></label>
+          </div>
+          <fieldset class="portrait-option-grid partner-option-grid" id="partner-option-grid">
+            <legend>ELEGÍ SU RETRATO</legend>
+            <button type="button" data-partner-appearance="blonde"><span class="partner-photo partner-blonde"></span><strong>RUBIA</strong></button>
+            <button type="button" data-partner-appearance="dark"><span class="partner-photo partner-dark"></span><strong>MOROCHA</strong></button>
+            <button type="button" data-partner-appearance="redhead"><span class="partner-photo partner-redhead"></span><strong>PELIRROJA</strong></button>
+            <button type="button" data-partner-appearance="chestnut"><span class="partner-photo partner-chestnut"></span><strong>CASTAÑA</strong></button>
+          </fieldset>
+          <button class="profile-wizard-confirm" id="confirm-partner-wizard" type="button">♥ SUMAR A MI AVENTURA</button>
+        </section>
+      </div>
+
+      <div class="profile-wizard-backdrop hidden" id="pet-wizard">
+        <section class="profile-wizard pet-wizard pixel-box" role="dialog" aria-modal="true" aria-labelledby="pet-wizard-title">
+          <button class="profile-wizard-close" id="close-pet-wizard" type="button" aria-label="Cerrar">×</button>
+          <span class="profile-wizard-kicker">NUEVO COMPAÑERO DE CAMPAMENTO</span>
+          <h2 id="pet-wizard-title">¡Una nueva huella llega a tu mundo!</h2>
+          <p>Elegí a tu mascota, su color y guardá su fecha para celebrar cada año.</p>
+          <div class="pet-wizard-top">
+            <span class="pet-photo pet-cat-calico" id="pet-wizard-preview" aria-hidden="true"></span>
+            <div class="profile-wizard-fields">
+              <label><span>NOMBRE</span><input id="pet-wizard-name" maxlength="60" placeholder="¿Cómo se llama?" /></label>
+              <label><span>FECHA DE NACIMIENTO</span><input id="pet-wizard-birth" type="date" /></label>
+            </div>
+          </div>
+          <fieldset class="pet-species-picker" id="pet-species-picker">
+            <legend>¿QUIÉN SE SUMA?</legend>
+            <button type="button" data-pet-species="Perro">PERRO</button>
+            <button type="button" data-pet-species="Gato">GATO</button>
+            <button type="button" data-pet-species="Conejo">CONEJO</button>
+          </fieldset>
+          <fieldset class="portrait-option-grid pet-option-grid" id="pet-option-grid"><legend>ELEGÍ SU COLOR</legend></fieldset>
+          <button class="profile-wizard-confirm" id="confirm-pet-wizard" type="button">✦ SUMAR A MI MUNDO</button>
+        </section>
+      </div>
+
+      <div class="exit-confirm-backdrop hidden" id="exit-confirm">
+        <section
+          class="exit-confirm-card pixel-box"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="exit-confirm-title"
+        >
+          <span class="exit-confirm-icon" aria-hidden="true">✦</span>
+          <span class="eyebrow">GUARDAR PARTIDA</span>
+          <h2 id="exit-confirm-title">¿Continuar la aventura más adelante?</h2>
+          <div class="exit-confirm-actions">
+            <button class="primary-action exit-confirm-yes" id="confirm-exit">SÍ</button>
+            <button class="exit-confirm-no" id="cancel-exit">NO</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="character-setup-backdrop hidden" id="character-setup">
+        <section class="character-setup-card pixel-box" role="dialog" aria-modal="true" aria-labelledby="character-setup-title">
+          <header>
+            <div><small id="character-setup-kicker">CREACIÓN DEL MUNDO · PASO 1 DE 3</small><h1 id="character-setup-title">¿Cómo te llamás?</h1></div>
+            <button class="close-button hidden" id="close-character-setup" type="button" aria-label="Cerrar">×</button>
+          </header>
+          <div class="character-setup-progress" aria-hidden="true"><i class="active"></i><i></i><i></i></div>
+          <div class="character-setup-step name-step" data-character-step="1">
+            <span class="setup-rune" aria-hidden="true">✦</span><p>Este nombre va a acompañarte por todo tu mundo NOK.</p>
+            <label><span>TU NOMBRE</span><input id="character-setup-name" maxlength="48" placeholder="Ej: Guido" /></label>
+            <button class="primary-action" id="character-name-next" type="button">CONTINUAR →</button>
+          </div>
+          <div class="character-setup-step birth-step hidden" data-character-step="2">
+            <span class="setup-character-preview" id="character-birth-preview" aria-hidden="true"></span><p>Tu edad define automáticamente la etapa de tu personaje.</p>
+            <label><span>FECHA DE NACIMIENTO</span><input id="character-setup-birth" type="date" /></label>
+            <div class="setup-age-result hidden" id="character-age-result"><strong></strong><span></span></div>
+            <footer><button type="button" data-character-back="1">← VOLVER</button><button class="primary-action" id="character-birth-next" type="button">ELEGIR PERSONAJE →</button></footer>
+          </div>
+          <div class="character-setup-step identity-step hidden" data-character-step="3">
+            <div class="setup-age-banner"><span>PERSONAJE ASIGNADO POR TU EDAD</span><strong id="character-age-label"></strong><small id="character-age-copy"></small></div>
+            <div class="setup-gender-grid" role="group" aria-label="Elegir personaje">
+              <button type="button" data-character-gender="male"><span class="setup-character-preview" aria-hidden="true"></span><strong>VARÓN</strong></button>
+              <button type="button" data-character-gender="female"><span class="setup-character-preview" aria-hidden="true"></span><strong>MUJER</strong></button>
+            </div>
+            <fieldset class="setup-hair-picker"><legend>COLOR DE PELO</legend>
+              <button type="button" data-character-hair="brown"><span></span>CASTAÑO</button><button type="button" data-character-hair="black"><span></span>NEGRO</button><button type="button" data-character-hair="blonde"><span></span>RUBIO</button><button type="button" data-character-hair="red"><span></span>PELIRROJO</button>
+            </fieldset>
+            <footer><button type="button" data-character-back="2">← VOLVER</button><button class="primary-action" id="finish-character-setup" type="button">✦ CREAR MI PERSONAJE</button></footer>
+            <small class="setup-lock-note">La edad y el tipo de personaje son automáticos. Podés desbloquear IDENTIDAD LIBRE en Recompensas.</small>
+          </div>
+        </section>
+      </div>
+
+      <div class="birthday-alert-backdrop hidden" id="birthday-alert">
+        <section
+          class="birthday-alert-card pixel-box"
+          id="birthday-alert-card"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="birthday-alert-title"
+        >
+          <button
+            class="birthday-alert-close"
+            id="close-birthday-alert"
+            type="button"
+            aria-label="Cerrar recordatorio de cumpleaños"
+          >×</button>
+          <div class="birthday-alert-confetti" aria-hidden="true">
+            <span>✦</span><span>★</span><span>✧</span><span>★</span>
+          </div>
+          <div id="birthday-alert-icon" class="birthday-alert-icon" aria-hidden="true">🎂</div>
+          <span class="birthday-alert-kicker" id="birthday-alert-kicker">
+            CUMPLEAÑOS DE HOY
+          </span>
+          <h2 id="birthday-alert-title"></h2>
+          <p id="birthday-alert-copy"></p>
+          <small class="birthday-alert-note hidden" id="birthday-alert-note"></small>
+          <div class="event-alert-checklist hidden" id="event-alert-checklist"></div>
+          <div class="birthday-alert-actions">
+            <button
+              class="birthday-alert-primary"
+              id="confirm-birthday-alert"
+              type="button"
+            >LO TENGO PRESENTE</button>
+            <button
+              class="birthday-alert-snooze hidden"
+              id="snooze-event-alert"
+              type="button"
+            >RECORDAR EN 1 HORA</button>
+            <button id="open-birthday-archive" type="button">ABRIR ARCHIVO</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="hub-alert-backdrop hidden" id="hub-alert">
+        <section class="hub-alert-card pixel-box" role="alertdialog" aria-modal="true" aria-labelledby="hub-alert-title">
+          <span class="hub-alert-bell" aria-hidden="true">!</span>
+          <span class="eyebrow">AVISO DE TU MESA</span>
+          <h2 id="hub-alert-title">¡ALARMA DEL HUB!</h2>
+          <p id="hub-alert-message"></p>
+          <button id="close-hub-alert" type="button">APAGAR Y CONTINUAR</button>
+        </section>
+      </div>
+
+      <div class="completion-celebration-backdrop hidden" id="completion-celebration">
+        <section
+          class="completion-celebration-card pixel-box"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="completion-celebration-title"
+        >
+          <div class="completion-sparkles" aria-hidden="true">
+            <span>✦</span>
+            <span>✧</span>
+            <span>✦</span>
+            <span>✧</span>
+          </div>
+          <div class="completion-medal" id="completion-medal" aria-hidden="true">✓</div>
+          <span class="completion-kicker" id="completion-kicker">AVENTURA EN PROGRESO</span>
+          <h2 id="completion-celebration-title">¡MISIÓN CUMPLIDA!</h2>
+          <p class="completion-task-title" id="completion-task-title"></p>
+          <div class="completion-reward">
+            <span>✦</span>
+            <strong id="completion-xp-reward">+0 XP</strong>
+          </div>
+          <p class="completion-copy" id="completion-copy">Lo hiciste. Cada misión terminada hace crecer tu mundo.</p>
+          <button class="completion-continue-button" id="close-completion-celebration">
+            CONTINUAR AVENTURA
+          </button>
+        </section>
+      </div>
+
+      <div class="toast pixel-box hidden" id="toast" role="status"></div>
+    </div>
+    <script src="./music-engine.js"></script>
+    <script src="./sound-engine.js"></script>
+    <script type="module" src="./account.js"></script>
+  </body>
+</html>

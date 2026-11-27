@@ -1,0 +1,366 @@
+.avatar-date {
+  display: block;
+  margin-top: 3px;
+  color: #6f532b;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.profile-xp-progress {
+  display: grid;
+  gap: 4px;
+  width: min(250px, 100%);
+  margin-top: 9px;
+}
+
+.profile-xp-progress strong { font-size: 9px; }
+.profile-xp-progress .xp-track { display: block; width: 100%; height: 10px; }
+.board-mobile-section-switch { display: none; }
+
+@media (max-width: 760px), (orientation: portrait) {
+  .mobile-runtime .hud {
+    top: max(4px, env(safe-area-inset-top));
+    right: max(5px, env(safe-area-inset-right));
+    left: max(5px, env(safe-area-inset-left));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    align-items: start;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .mobile-runtime .avatar-card {
+    justify-self: start;
+    width: auto;
+    min-width: 0;
+    max-width: 190px;
+  }
+
+  .mobile-runtime .avatar-date { display: none; }
+
+  .mobile-runtime .hud-stats {
+    display: grid;
+    grid-template-columns: 44px;
+    grid-auto-rows: 44px;
+    gap: 5px;
+    margin: 0;
+    justify-self: end;
+  }
+
+  .mobile-runtime .window-controls { display: contents; }
+
+  .mobile-runtime .settings-hud-button,
+  .mobile-runtime .hud-stats > .stat {
+    display: grid;
+    grid-template: none;
+    place-items: center;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+  }
+
+  .mobile-runtime .settings-hud-button small,
+  .mobile-runtime .hud-stats > .stat strong,
+  .mobile-runtime .hud-stats > .stat small { display: none; }
+
+  .mobile-runtime .settings-hud-button > span,
+  .mobile-runtime .hud-stats > .stat > span {
+    grid-area: auto;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .mobile-runtime .minimize-button,
+  .mobile-runtime .close-game-button { display: none; }
+
+  .mobile-runtime .persistent-reminder-stack {
+    top: max(62px, calc(env(safe-area-inset-top) + 58px));
+    right: 55px;
+    left: 5px;
+  }
+
+  .mobile-runtime .side-panel:not(.notice-board-panel):not(.creativity-panel):not(.finance-panel):not(.hub-panel):not(.lists-panel) {
+    padding-top: max(2px, env(safe-area-inset-top));
+  }
+
+  .mobile-runtime .side-panel:not(.notice-board-panel):not(.creativity-panel):not(.finance-panel):not(.hub-panel):not(.lists-panel) > .panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 62px;
+    margin-top: 0;
+    padding: 6px 54px 6px 7px;
+    background: #fff3c7;
+    box-shadow: 0 5px 0 rgba(40, 55, 38, .18);
+    isolation: isolate;
+  }
+
+  .mobile-runtime .project-task-panel .task-list { gap: 7px; margin-top: 7px; }
+
+  .mobile-runtime .project-task-panel .task-card {
+    grid-template-columns: 27px minmax(0, 1fr);
+    gap: 7px;
+    min-height: 0;
+    padding: 7px;
+    box-shadow: 2px 2px 0 rgba(45, 35, 18, .2);
+  }
+
+  .mobile-runtime .task-title-row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .mobile-runtime .task-title-row h2 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .mobile-runtime .task-card-top-actions { width: auto; flex-wrap: nowrap; gap: 3px; }
+  .mobile-runtime .task-edit-icon { width: 24px; height: 24px; font-size: 12px; }
+
+  .mobile-runtime .task-created-date,
+  .mobile-runtime .priority {
+    padding: 3px 4px;
+    font-size: 7px;
+    white-space: nowrap;
+  }
+
+  .mobile-runtime .quest-check { width: 27px; height: 27px; border-width: 2px; }
+
+  .mobile-runtime .task-copy > p {
+    display: -webkit-box;
+    margin: 4px 0;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 1.25;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mobile-runtime .task-actions { flex-wrap: nowrap; gap: 7px; margin-top: 6px; }
+  .mobile-runtime .task-actions button { min-height: 0; padding: 3px 0; font-size: 10px; }
+  .mobile-runtime .status-stamp { bottom: 25px; font-size: 6px; }
+
+  .mobile-runtime .board-close-button {
+    top: max(7px, env(safe-area-inset-top));
+    right: max(7px, env(safe-area-inset-right));
+    z-index: 30;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+  }
+
+  .mobile-runtime .notice-board-surface,
+  .mobile-runtime .notice-board-surface.week-surface {
+    top: max(2.5%, calc(env(safe-area-inset-top) + 14px));
+    right: 4.2%;
+    bottom: max(1.3%, env(safe-area-inset-bottom));
+    left: 4.2%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .mobile-runtime .board-top-grid {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    margin: 0 1.5% 4px;
+  }
+
+  .mobile-runtime .board-top-main { gap: 4px; }
+
+  .mobile-runtime .notice-board-heading {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 5px;
+    min-height: 68px;
+    padding: 5px 7px;
+  }
+
+  .mobile-runtime .notice-board-heading span { font-size: 7px; }
+
+  .mobile-runtime .notice-board-heading h1 {
+    max-width: 145px;
+    margin: 2px 0 0;
+    font-size: clamp(20px, 6vw, 25px);
+    line-height: 1;
+  }
+
+  .mobile-runtime .board-heading-actions {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .mobile-runtime .board-view-switch button { min-height: 28px; padding: 4px 7px; font-size: 7px; }
+  .mobile-runtime .notice-board-heading small { padding: 5px; font-size: 8px; text-align: center; }
+
+  .mobile-runtime .board-quick-add {
+    grid-template-columns: minmax(0, 1fr) 50px;
+    gap: 4px;
+    margin: 0;
+    padding: 4px;
+  }
+
+  .mobile-runtime .board-quick-add input { height: 34px; padding: 5px; font-size: 12px; }
+  .mobile-runtime .board-quick-add button { min-height: 34px; padding: 3px; font-size: 7px; }
+  .mobile-runtime .board-quick-add button:last-child { display: none; }
+
+  .mobile-runtime .board-motivation-feature {
+    position: absolute;
+    z-index: 12;
+    right: 3px;
+    bottom: 3px;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid #2d190c;
+    color: #173e31;
+    font-size: 0;
+    cursor: pointer;
+  }
+
+  .mobile-runtime .board-motivation-feature::before { content: "✦"; font-size: 18px; }
+  .mobile-runtime .board-motivation-feature > * { display: none; }
+
+  .mobile-runtime .board-motivation-feature.expanded {
+    position: fixed;
+    z-index: 100;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    display: grid;
+    place-content: center;
+    width: min(82vw, 360px);
+    height: auto;
+    min-height: 150px;
+    padding: 24px 18px;
+    overflow: visible;
+    font-size: inherit;
+    transform: translate(-50%, -50%) rotate(-1deg);
+    box-shadow: 8px 10px 0 rgba(0, 0, 0, .32);
+  }
+
+  .mobile-runtime .board-motivation-feature.expanded::before { display: none; }
+  .mobile-runtime .board-motivation-feature.expanded > * { display: block; }
+
+  .mobile-runtime .board-mobile-section-switch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    flex: 0 0 auto;
+    gap: 3px;
+    margin: 0 1.5% 5px;
+    padding: 3px;
+    border: 2px solid #4a2b16;
+    background: #d5ad69;
+  }
+
+  .mobile-runtime .board-mobile-section-switch button {
+    min-width: 0;
+    min-height: 34px;
+    padding: 4px 2px;
+    border: 1px solid #4a2b16;
+    background: #f1d89e;
+    color: #173e31;
+    font-size: 7px;
+    line-height: 1.15;
+  }
+
+  .mobile-runtime .board-mobile-section-switch button.active {
+    background: #ed7141;
+    color: #fff8df;
+  }
+
+  .mobile-runtime .notice-board-surface.week-surface .board-mobile-section-switch,
+  .mobile-runtime .notice-board-surface.week-surface .board-motivation-feature { display: none; }
+
+  .mobile-runtime .notice-board-columns.today-columns {
+    display: block;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0 1.5% 1.5%;
+    overflow: hidden;
+  }
+
+  .mobile-runtime .notice-board-columns.today-columns > .board-note { display: none; }
+
+  .mobile-runtime .notice-board-columns.today-columns > .board-note.mobile-board-section-active {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 10px 8px;
+    transform: none;
+  }
+
+  .mobile-runtime .board-note-list { min-height: 0; overflow-y: auto; }
+  .mobile-runtime .board-note h2 { margin-bottom: 3px; font-size: 12px; }
+  .mobile-runtime .note-intro { min-height: 0; margin: 0 0 5px; font-size: 10px; line-height: 1.25; }
+
+  .mobile-runtime .board-task-row,
+  .mobile-runtime .loose-task-list .board-task-row {
+    grid-template-columns: minmax(0, 1fr) repeat(3, 34px);
+    grid-template-rows: auto;
+    gap: 3px;
+    height: auto;
+    min-height: 62px;
+    padding: 5px;
+    overflow: hidden;
+  }
+
+  .mobile-runtime .board-task-row > div,
+  .mobile-runtime .loose-task-list .board-task-row > div { grid-column: 1; min-width: 0; }
+
+  .mobile-runtime .board-task-row > button,
+  .mobile-runtime .loose-task-list .board-task-row > button {
+    grid-column: auto;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+  }
+
+  .mobile-runtime .board-task-row strong {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.2;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mobile-runtime .board-task-row small { font-size: 8px; }
+}
+@media (max-width: 700px) {
+  .character-setup-backdrop { padding: 8px; align-items: end; }
+  .character-setup-card { width: 100%; max-height: 95dvh; padding: 18px 16px 22px; }
+  .character-setup-card h1 { font-size: 27px; }
+  .setup-hair-picker { grid-template-columns: 1fr 1fr; }
+  .character-setup-step footer { grid-template-columns: 1fr; }
+  .setup-gender-grid .setup-character-preview { width: 92px; height: 108px; }
+  .character-free-controls > div { grid-template-columns: 1fr 1fr; }
+}

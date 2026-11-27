@@ -1,0 +1,254 @@
+/* Shared finishing layer: web, desktop vault and Android. */
+.password-entry-dialog {
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 52px 16px 16px;
+  overflow-y: auto;
+  border: 3px solid #214b3a;
+  background: #fff2c9;
+  color: #173e31;
+  box-shadow: 6px 6px 0 #102b24;
+  overscroll-behavior: contain;
+}
+.password-entry-dialog::backdrop { background: rgb(5 22 19 / 78%); backdrop-filter: blur(4px); }
+.password-entry-dialog .password-entry-form { margin: 0; padding: 0; border: 0; box-shadow: none; background: transparent; }
+.password-dialog-close { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; font-size: 24px; }
+.password-entry-dialog .password-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.password-entry-dialog .password-input-field,
+.password-entry-dialog .password-notes-field { grid-column: 1 / -1; }
+.password-entry-dialog input { width: 100%; min-width: 0; min-height: 44px; font-size: 16px; }
+.password-entry-dialog .password-input-field > span { display: grid; grid-template-columns: minmax(0, 1fr) 44px auto; gap: 6px; }
+.password-entry-dialog button { min-height: 44px; }
+.password-entry-dialog .password-form-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.password-vault-toolbar { gap: 12px; flex-wrap: wrap; }
+.password-vault-toolbar .password-add-button { width: 44px; height: 44px; padding: 0; background: #2b8056; color: #fff6d5; font-size: 28px; }
+.password-vault-content { min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+.password-ledger { min-height: 0; flex: 1; }
+.password-list { display: grid; gap: 10px; max-height: 60dvh; overflow-y: auto; padding: 2px 6px 8px 2px; scrollbar-width: thin; scrollbar-color: #8b7045 #f6e5b4; overscroll-behavior: contain; }
+.password-entry { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 14px; border: 2px solid #35604a; background: #fff8df; box-shadow: 2px 3px 0 #cfb883; }
+.password-entry-main { min-width: 0; overflow-wrap: anywhere; }
+.password-entry-main strong { font-size: 18px; }
+.password-entry-main small { font-size: 13px; }
+.password-entry-main code { display: block; margin-top: 8px; font-size: 16px; }
+.password-entry-actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; }
+.password-entry-actions button { min-height: 40px; padding: 8px 10px; font-size: 12px; }
+.password-vault-gate { width: min(480px, 100%); margin: auto; }
+.password-vault-gate p { font-size: 15px; line-height: 1.5; }
+.password-vault-gate input { min-height: 48px; font-size: 16px; }
+.lists-panel .quick-list-sheet-heading > .quick-list-actions button.quick-list-delete { background: #ae4034 !important; color: #fff7df !important; }
+
+@media (max-width: 760px), (orientation: portrait) {
+  :root { --mobile-touch: 44px; --mobile-bar: 0px; }
+  /* A single type scale. World labels and sprite art keep their own scale. */
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel, .character-setup-modal) h1 { font-size: clamp(24px, 6.6vw, 30px) !important; line-height: 1.12 !important; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) h2 { font-size: 20px !important; line-height: 1.2 !important; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) h3 { font-size: 17px !important; line-height: 1.25 !important; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) p { font-size: 14px !important; line-height: 1.5 !important; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) small { font-size: 12px !important; line-height: 1.4 !important; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) .eyebrow { font-size: 10px !important; letter-spacing: .05em; line-height: 1.35; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) label { font-size: 12px !important; line-height: 1.4; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) :is(input, select, textarea) { min-width: 0; max-width: 100%; font-size: 16px !important; min-height: 44px; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) textarea { line-height: 1.5; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel, .character-setup-card) button { font-size: 12px !important; touch-action: manipulation; }
+  .mobile-runtime .side-panel .close-button { position: fixed !important; top: max(8px, env(safe-area-inset-top)) !important; right: max(8px, env(safe-area-inset-right)) !important; z-index: 1201; font-size: 22px !important; }
+  .mobile-runtime .side-panel > .panel-header { padding-right: 54px; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) :is(nav, .panel-tabs, .project-tabs, .archive-tabs) button { min-height: 44px; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) button:focus-visible,
+  .password-entry-dialog :is(input, button):focus-visible { outline: 3px solid #d79520; outline-offset: 2px; }
+  :is(.side-panel, .notice-board-panel, .task-modal, .activity-panel) button:active { transform: translateY(2px); }
+  :is(.side-panel, .notice-board-panel) :is(.task-list, .quick-list-items, .agenda-entry-list, .writing-project-list, .settings-content, .profile-content) { overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #8b7045 transparent; }
+
+  /* Keep titles readable, and action groups anchored to the row's end. */
+  .mobile-runtime .board-task-row,
+  .mobile-runtime .loose-task-list .board-task-row { display: flex !important; align-items: center; gap: 6px; min-height: 64px; padding: 8px; }
+  .mobile-runtime .board-task-row > :first-child { flex: 1 1 0; min-width: 0; margin-right: auto; }
+  .mobile-runtime .board-task-row strong { font-size: 14px !important; white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
+  .mobile-runtime .board-task-row > button { flex: 0 0 40px; width: 40px !important; min-width: 40px !important; height: 44px !important; min-height: 44px !important; margin: 0; }
+  .mobile-runtime :is(.ui-delete-action, .task-delete-icon, .board-task-row .danger-action, .quick-list-delete-item) { font-size: 22px !important; background-color: #ae4034 !important; color: #fff7df !important; }
+  .mobile-runtime .board-quick-add input { min-height: 44px; }
+  .mobile-runtime .board-mobile-section-switch button { font-size: 11px !important; min-height: 44px; }
+  .mobile-runtime .board-note { min-height: 0; }
+  .mobile-runtime .board-task-list { min-height: 0; }
+  .mobile-runtime .project-task-panel .task-title-row h2 { font-size: 16px !important; }
+  .mobile-runtime .task-card-top-actions { margin-left: auto; justify-content: flex-end; flex-wrap: wrap; }
+  .mobile-runtime .project-task-panel :is(.task-breakdown-icon, .task-today-icon, .task-edit-icon, .task-complete-icon, .task-delete-icon) { width: 42px !important; min-width: 42px !important; height: 44px !important; min-height: 44px !important; }
+  .mobile-runtime .project-copy strong { font-size: 17px !important; white-space: normal; }
+  .mobile-runtime .project-copy small { font-size: 13px !important; }
+  .mobile-runtime .project-copy small { font-family: var(--nok-font-body) !important; }
+  .mobile-runtime .project-copy em { font-size: 12px !important; }
+  .mobile-runtime .quick-task-form > :is(span, small) { font-size: 12px !important; }
+  .mobile-runtime .toast { position: fixed !important; inset: auto 12px max(90px, calc(env(safe-area-inset-bottom) + 80px)) 12px !important; width: auto !important; max-width: none !important; transform: none !important; padding: 12px !important; font-size: 14px !important; line-height: 1.4; z-index: 15000; }
+  .mobile-runtime #task-modal { padding: 0; }
+  .mobile-runtime .task-form { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; padding: max(16px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); overflow-y: auto; }
+  .mobile-runtime .task-form h1 { padding-right: 48px; font-size: 26px !important; }
+  .mobile-runtime .task-form :is(label, legend, .eyebrow) { font-size: 12px !important; }
+  .mobile-runtime .task-form :is(input, select, textarea) { font-size: 16px !important; min-height: 44px; }
+  .mobile-runtime .task-form :is(button, .task-toggle-copy) { font-size: 14px !important; }
+  .mobile-runtime .task-form .quest-switch :is(strong, small) { font-size: 13px !important; line-height: 1.4; }
+  .mobile-runtime .task-form button { min-height: 48px; }
+  .mobile-runtime .task-form .close-button { position: fixed; top: max(8px, env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right)); width: 44px; min-height: 44px; height: 44px; font-size: 22px !important; z-index: 1200; }
+
+  /* Lists: library remains compact; the selected sheet gets remaining height. */
+  .mobile-runtime .side-panel.lists-panel { overflow: hidden !important; padding: 0 !important; }
+  .mobile-runtime .lists-panel > .panel-header { width: 0 !important; height: 0 !important; min-height: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+  .mobile-runtime .lists-panel #lists-view:not(.hidden) { position: absolute; inset: max(68px, calc(env(safe-area-inset-top) + 60px)) 14px max(22px, env(safe-area-inset-bottom)); height: auto !important; }
+  .mobile-runtime .lists-panel .quick-lists-border-heading > span,
+  .mobile-runtime .lists-panel .quick-list-sheet-heading > div:first-child > span { font-size: 10px !important; line-height: 1.35; }
+  .mobile-runtime .lists-panel #lists-view:not(.hidden) { min-height: 0; overflow: hidden; }
+  .mobile-runtime .lists-panel .quick-lists-content { display: flex !important; flex-direction: column !important; height: 100% !important; min-height: 0; }
+  .mobile-runtime .lists-panel .quick-lists-border-heading { flex: 0 0 auto; display: block; padding: 8px 12px; }
+  .mobile-runtime .lists-panel .quick-lists-border-heading p { margin-top: 4px; font-size: 13px !important; }
+  .mobile-runtime .lists-panel .quick-lists-library { flex: 0 0 205px !important; }
+  .mobile-runtime .lists-panel .quick-list-tabs > button { flex: 0 0 188px !important; min-width: 188px !important; min-height: 62px; }
+  .mobile-runtime .lists-panel .quick-list-tabs small { white-space: nowrap; }
+  .mobile-runtime .lists-panel .quick-list-sheet { flex: 1 1 0 !important; min-height: 0; }
+  .mobile-runtime .lists-panel .quick-list-sheet-heading { display: grid !important; grid-template-columns: minmax(0, 1fr) 50px !important; grid-template-areas: "title progress" "actions actions" !important; }
+  .mobile-runtime .lists-panel .quick-list-sheet-heading > div:first-child { grid-area: title; min-width: 0; }
+  .mobile-runtime .lists-panel .quick-list-sheet-heading > .quick-list-actions { grid-area: actions; justify-content: flex-end; }
+  .mobile-runtime .lists-panel .quick-list-progress-seal { grid-area: progress; }
+  .mobile-runtime .quick-list-type-picker span { font-size: 11px !important; }
+  .mobile-runtime .quick-list-create button,
+  .mobile-runtime .quick-list-add button { min-height: 44px !important; font-size: 12px !important; }
+  .mobile-runtime .quick-list-actions button { width: 44px !important; min-width: 44px !important; height: 44px !important; min-height: 44px !important; }
+  .mobile-runtime .quick-list-items article { min-height: 56px; gap: 8px; }
+  .mobile-runtime .lists-panel .quick-list-items article { grid-template-columns: 40px minmax(0, 1fr) 44px; padding: 8px; }
+  .mobile-runtime .lists-panel .quick-list-items article.ranking-item { grid-template-columns: 36px minmax(0, 1fr) 44px !important; grid-template-areas: "rank text delete" "rank moves delete"; gap: 8px; }
+  .mobile-runtime .lists-panel .ranking-order-number { grid-area: rank !important; align-self: start; }
+  .mobile-runtime .lists-panel .ranking-item-text { grid-area: text !important; min-width: 0; }
+  .mobile-runtime .lists-panel .ranking-step-actions { grid-area: moves !important; display: flex; justify-content: flex-start; gap: 8px; }
+  .mobile-runtime .lists-panel .ranking-step-actions button { min-width: 44px; min-height: 44px; }
+  .mobile-runtime .lists-panel .ranking-item .quick-list-item-delete { grid-area: delete !important; align-self: center; }
+  .mobile-runtime .lists-panel .quick-list-actions .quick-list-delete { background: #ae4034 !important; color: #fff7df !important; }
+  .mobile-runtime .lists-panel .ranking-item-text { font-size: 15px !important; white-space: normal; overflow-wrap: anywhere; }
+  .mobile-runtime .lists-panel .quick-list-item-delete { width: 44px !important; min-height: 44px !important; font-size: 22px !important; }
+  .mobile-runtime .quick-list-item-text { font-size: 15px !important; line-height: 1.4; }
+  .mobile-runtime .quick-list-library-items strong,
+  .mobile-runtime .quick-list-tabs strong { font-size: 13px !important; }
+  .mobile-runtime .quick-list-items .ui-delete-action { width: 44px !important; min-width: 44px !important; min-height: 44px !important; }
+
+  /* Cofre: no content is visible before the master key is verified. */
+  .mobile-runtime .finance-panel #finance-view:not(.hidden) { height: 100%; min-height: 0; overflow-y: auto; }
+  .mobile-runtime .password-vault-gate { padding: 20px 14px; margin: 20px auto; }
+  .mobile-runtime .password-vault-gate .vault-gate-icon { width: 54px; height: 54px; font-size: 28px; }
+  .mobile-runtime .password-vault-gate button { min-height: 48px; font-size: 14px; }
+  .mobile-runtime .coffer-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .mobile-runtime .coffer-tabs button { min-height: 48px; font-size: 12px !important; padding: 8px 5px; }
+  .mobile-runtime .coffer-category-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mobile-runtime .coffer-category-card { min-height: 150px; }
+  .mobile-runtime .finance-summary-grid { gap: 10px; }
+  .mobile-runtime :is(.finance-form, .finance-entry-form, .coffer-note-form) { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+  .mobile-runtime .password-vault-toolbar { align-items: start; padding: 12px 0; }
+  .mobile-runtime .password-vault-toolbar > div:last-child { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
+  .mobile-runtime .password-vault-toolbar .password-add-button { margin-left: auto; order: -1; }
+  .mobile-runtime .password-vault-toolbar .vault-count { order: -2; align-self: center; }
+  .mobile-runtime .password-vault-toolbar button { min-height: 44px; font-size: 11px !important; }
+  .mobile-runtime .password-list { max-height: none; padding-bottom: 16px; }
+  .mobile-runtime .password-entry { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; padding: 12px; }
+  .mobile-runtime .password-entry-actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mobile-runtime .password-entry-actions button { min-height: 44px; font-size: 12px !important; }
+  .password-entry-dialog { width: calc(100vw - 20px); max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px); padding: 54px 14px 18px; }
+  .password-entry-dialog .password-fields { grid-template-columns: minmax(0, 1fr); }
+  .password-entry-dialog .password-input-field > span { grid-template-columns: minmax(0, 1fr) 44px; }
+  .password-entry-dialog #generate-password,
+  .password-entry-dialog .password-input-field > span > button:last-child { grid-column: 1 / -1; }
+  .password-entry-dialog .password-form-actions button { flex: 1; }
+  .password-entry-dialog h3 { font-size: 22px; }
+  .password-entry-dialog label { font-size: 13px; }
+
+  /* Agenda, passport and creative tools share readable controls. */
+  .mobile-runtime .agenda-entry { gap: 10px; padding: 12px; }
+  .mobile-runtime .agenda-entry strong { font-size: 15px !important; line-height: 1.35; }
+  .mobile-runtime .agenda-add-shortcut { min-height: 76px; }
+  .mobile-runtime .agenda-add-shortcut strong,
+  .mobile-runtime .agenda-add-shortcut span { font-size: 12px !important; }
+  .mobile-runtime .passport-mobile-tabs button { font-size: 10px !important; min-height: 48px; overflow: hidden; }
+  .mobile-runtime .profile-panel .passport-mobile-tabs strong { font-size: 10px !important; line-height: 1.25; }
+  .mobile-runtime .profile-panel .profile-field-card small { font-size: 12px !important; }
+  .mobile-runtime .profile-panel .profile-hero-card h2 { font-size: 20px !important; }
+  .mobile-runtime .profile-panel .profile-hero-card :is(p, strong) { font-size: 12px !important; }
+  .mobile-runtime .archive-panel .agenda-hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .mobile-runtime .archive-panel .agenda-hero h2 { font-size: 19px !important; }
+  .mobile-runtime .archive-panel .agenda-hero-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .mobile-runtime .archive-panel .agenda-add-shortcut { width: 96px; min-width: 96px; min-height: 64px; }
+  .mobile-runtime .archive-panel .agenda-entry-actions button { min-width: 44px; min-height: 44px; }
+  .mobile-runtime .profile-field-card { padding: 12px; }
+  .mobile-runtime .profile-life-card input,
+  .mobile-runtime .profile-life-card textarea { width: 100%; }
+  .mobile-runtime .settings-accordion-toggle strong { font-size: 15px !important; }
+  .mobile-runtime .settings-accordion-body { padding: 12px; }
+  .mobile-runtime .writing-project-list { max-height: none; flex: 1; min-height: 0; }
+  .mobile-runtime .focus-duration-buttons button { min-height: 44px; font-size: 11px !important; }
+  .mobile-runtime .focus-actions button { min-height: 44px; font-size: 12px !important; }
+  .mobile-runtime .hub-toolkit-nav button { font-size: 12px !important; }
+  .mobile-runtime .hub-timer-presets button { min-height: 44px; font-size: 12px !important; }
+  .mobile-runtime .learning-difficulty > div { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .mobile-runtime .learning-heading { margin-bottom: 18px; }
+  .mobile-runtime .learning-heading > span,
+  .mobile-runtime .learning-heading > h1 { display: none; }
+  .mobile-runtime .learning-difficulty button { min-height: 60px; font-size: 14px !important; }
+  .mobile-runtime .learning-block-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .mobile-runtime .learning-block-grid button { min-width: 0; padding: 12px 8px; }
+  .mobile-runtime .learning-block-grid strong { font-size: 13px !important; }
+  .mobile-runtime .learning-content { padding: 12px; }
+  .mobile-runtime .drawing-toolbar { flex-wrap: wrap; gap: 10px; }
+  .mobile-runtime .drawing-toolbar button { min-width: 44px; min-height: 44px; }
+  .mobile-runtime .character-setup-card { max-height: calc(100dvh - 16px); padding: 18px; overflow-y: auto; }
+  .mobile-runtime .character-setup-card h1 { font-size: 26px !important; line-height: 1.18; }
+  .mobile-runtime .character-setup-card :is(label, .eyebrow) { font-size: 11px !important; }
+  .mobile-runtime .character-setup-card button { min-height: 48px; }
+  .mobile-runtime .start-button,
+  .mobile-runtime .start-secondary-button { min-height: 48px; font-size: 13px !important; }
+  .mobile-runtime .underground-layout { grid-template-columns: 1fr; gap: 12px; }
+  .mobile-runtime .underground-item-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+  @media (max-width: 360px) {
+    .mobile-runtime .board-task-row { flex-wrap: wrap; }
+    .mobile-runtime .board-task-row > :first-child { flex-basis: 100%; }
+    .mobile-runtime .board-task-row > button:first-of-type { margin-left: auto; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .password-entry-dialog,
+  .mobile-runtime .side-panel button { animation: none !important; transition: none !important; }
+}
+
+/* The ID branch raises the shared contract above legacy !important rules.
+ * The class branch also matches React, which has no desktop DOM IDs. */
+@media (max-width: 760px), (orientation: portrait) {
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) h1 { font-size: clamp(24px, 6.6vw, 30px) !important; line-height: 1.12 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) h2 { font-size: 20px !important; line-height: 1.2 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) h3 { font-size: 17px !important; line-height: 1.25 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) p { font-size: 14px !important; line-height: 1.5 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) small { font-size: 12px !important; line-height: 1.4 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(label, legend) { font-size: 12px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) button { font-size: 12px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .eyebrow { font-size: 10px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.close-button, .board-close-button, .creativity-close-button, .ui-delete-action, .task-delete-icon, .task-complete-icon, .quick-list-item-delete, .quick-list-delete) { font-size: 22px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .passport-mobile-tabs strong { font-size: 10px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.board-view-switch button, .board-date-postit) { font-size: 10px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.focus-duration-buttons, .focus-controls) button { min-height: 44px !important; font-size: 11px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .screenplay-title-row { padding-right: 48px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.writing-back-library, .copy-writing-button) { font-size: 0 !important; min-width: 44px; min-height: 44px; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.writing-back-library, .copy-writing-button) > span { font-size: 22px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .settings-hero h2 { font-size: 0 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .hub-category-card { display: grid; grid-template-columns: 64px minmax(0, 1fr) !important; grid-template-areas: "icon title" "icon meta"; gap: 8px 12px; padding: 14px; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .hub-category-icon { grid-area: icon; margin: 0; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .hub-category-card > strong { grid-area: title; font-size: 17px !important; min-width: 0; overflow-wrap: anywhere; padding-right: 8px; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .hub-category-card > em { grid-area: meta; justify-self: start; margin: 0; font-size: 12px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .learning-difficulty button { min-height: 76px; padding: 12px; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .learning-difficulty button strong { font-size: 14px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .learning-difficulty button small { font-family: var(--font-body, Arial, sans-serif); font-size: 13px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-top-main { grid-template-columns: minmax(0, 1fr) 140px !important; gap: 8px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .notice-board-heading { padding: 10px !important; min-height: 0 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .notice-board-heading h1 { font-size: 22px !important; line-height: 1.18 !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .notice-board-heading span { font-size: 9px !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-heading-actions { display: grid !important; grid-template-columns: repeat(3, 44px) !important; gap: 4px !important; align-items: start !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) :is(.board-view-switch button, .board-date-postit) { width: 44px !important; min-width: 44px !important; min-height: 52px !important; padding: 4px 2px !important; border: 2px solid #3e2c1a !important; background: #f7e7ad !important; color: #283e31 !important; box-shadow: 2px 3px 0 #6f4929 !important; font-size: 10px !important; transform: none !important; }
+  .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-view-switch button.active { background: #d55b35 !important; color: #fff8db !important; }
+  @media (max-width: 360px) {
+    .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-top-main { grid-template-columns: minmax(0, 1fr) !important; }
+    .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-heading-actions { grid-column: 1 !important; grid-row: 2 !important; justify-content: end !important; }
+    .mobile-runtime :is(#panel-backdrop, .panel-backdrop) .board-quick-add { grid-column: 1 !important; grid-row: 3 !important; }
+  }
+}

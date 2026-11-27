@@ -1,0 +1,33 @@
+// Emulator-only fixture. Never deploy this file over GB Studio's shared database.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // BEGIN NOK private worlds
+    match /nokPlayers/{uid}/world/{id} {
+      function ownWorld() {
+        return request.auth != null && request.auth.uid == uid
+          && request.auth.token.email_verified == true
+          && request.auth.token.firebase.sign_in_provider == 'google.com';
+      }
+      function validHeader() {
+        let d = request.resource.data;
+        return id == 'state' && d.keys().hasOnly(['version', 'format', 'parts'])
+          && d.version is int && d.version >= 1 && d.format == 1
+          && d.parts is int && d.parts >= 1 && d.parts <= 16;
+      }
+      function part() { return id.matches('part-([0-9]|1[0-5])'); }
+      function validPart() {
+        let d = request.resource.data;
+        return part() && d.keys().hasOnly(['version', 'payload'])
+          && d.version is int && d.version >= 1 && d.payload is bytes
+          && d.payload.size() > 0 && d.payload.size() <= 262144
+          && getAfter(/databases/$(database)/documents/nokPlayers/$(uid)/world/state).data.version == d.version;
+      }
+      allow get: if ownWorld() && (id == 'state' || part());
+      allow create: if ownWorld() && ((validHeader() && request.resource.data.version == 1) || validPart());
+      allow update: if ownWorld() && ((validHeader() && request.resource.data.version == resource.data.version + 1) || validPart());
+      allow delete: if ownWorld() && part();
+    }
+    // END NOK private worlds
+  }
+}
