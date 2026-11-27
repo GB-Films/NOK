@@ -13,7 +13,7 @@
     <title>NOK · Tu vida, en modo juego</title>
     <link rel="icon" type="image/webp" href="./art/previews/favicon.webp" />
     <link rel="preload" as="image" fetchpriority="high" href="./art/nok-logo-transparent.webp" />
-    <link rel="stylesheet" href="./screen.css?v=camp-web-1" />
+    <link rel="stylesheet" href="./screen.css?v=recordar-1" />
   </head>
   <body class="account-locked">
     <main class="start-screen" id="account-gate" aria-labelledby="account-title">
@@ -22,10 +22,11 @@
       <div class="start-content">
         <span class="start-kicker">UNA AVENTURA PERSONAL</span>
         <h1 id="account-title"><img class="start-logo-image" fetchpriority="high" src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego." /></h1>
-        <button type="button" class="start-button" id="account-google">Continuar con Google</button>
-        <button type="button" class="start-world-button" id="account-guest">Explorar sin guardar</button>
+        <button type="button" class="start-button" id="account-google" hidden>Continuar con Google</button>
+        <button type="button" class="start-world-button" id="account-guest" hidden>Explorar sin guardar</button>
+        <button type="button" class="start-world-button" id="account-forget" hidden>Cerrar sesión</button>
         <img class="start-world-emblem" src="./art/previews/camp-emblem.webp" alt="" />
-        <p class="start-world-note" id="account-message" role="status">Sin cuenta, la partida se pierde al salir.</p>
+        <p class="start-world-note" id="account-message" role="status">Comprobando tu sesión…</p>
         <noscript>Activá JavaScript para abrir NOK.</noscript>
       </div>
     </main>
@@ -2071,6 +2072,6 @@
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js?v=camp-web-1"></script>
+    <script type="module" src="./account.js?v=recordar-1"></script>
   </body>
 </html>

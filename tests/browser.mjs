@@ -25,7 +25,7 @@ try {
     page.on("response",r=>{if(r.status()>=400 && r.url().startsWith(target)) errors.push(r.status()+" "+r.url());});
     await page.goto(target);
     assert.equal(await page.locator("#account-gate .start-logo-image").isVisible(),true);
-    assert.equal(await page.getByRole("button",{name:"Continuar con Google"}).isVisible(),true);
+    await page.getByRole("button",{name:"Continuar con Google"}).waitFor();
     assert.equal(await page.locator("#world").isVisible(),false);
     await page.locator("#account-guest").click();
     await page.locator("#character-setup-name").fill("Visitante de prueba");
@@ -89,8 +89,10 @@ try {
       name:"fake-account", setup(esbuild) {
         esbuild.onResolve({filter:/^\.\/firebase\.js$/},()=>({path:"firebase",namespace:"test"}));
         esbuild.onLoad({filter:/.*/,namespace:"test"},()=>({contents:`
-          export const auth={onAuthStateChanged(){}}, logout=async()=>{};
-          export const login=async()=>({uid:"test",email:"test@example.invalid"});
+          let observe;
+          export const auth={currentUser:null,onAuthStateChanged(fn){observe=fn;queueMicrotask(()=>fn(this.currentUser));}};
+          export async function logout(){auth.currentUser=null;observe(null);}
+          export async function login(){auth.currentUser={uid:"test",email:"test@example.invalid",emailVerified:!window.unverified};observe(auth.currentUser);}
           export const cloudWorld=()=>({
             load:async()=>{ if(!window.fixture) throw {code:"permission-denied"}; return window.fixture; },
             save:async()=>{}
@@ -98,7 +100,7 @@ try {
         `}));
       }
     }]});
-    for (const kind of ["returning","new","partial","denied"]) {
+    for (const kind of ["returning","new","partial","denied","unverified"]) {
       const page=await browser.newPage(); const errors=[];
       page.on("pageerror",e=>errors.push(e.message));
       await page.route(/\/account\.js(?:\?.*)?$/,r=>r.fulfill({contentType:"text/javascript",body:testEntry.outputFiles[0].text}));
@@ -111,9 +113,15 @@ try {
         };
         if(kind==="partial") window.fixture={"nok-desktop-profile-v1":JSON.stringify({name:"Sol"})};
         if(kind==="new") window.fixture={};
+        if(kind==="unverified") window.unverified=true;
       },kind);
       await page.getByRole("button",{name:"Continuar con Google"}).click();
-      if(kind==="denied"){
+      if(kind==="unverified"){
+        await page.getByRole("status").filter({hasText:"Google todavía no verificó esta cuenta"}).waitFor();
+        assert.equal(await page.locator("#world").isVisible(),false);
+        await page.getByRole("button",{name:"Cerrar sesión",exact:true}).click();
+        await page.getByRole("button",{name:"Continuar con Google"}).waitFor();
+      }else if(kind==="denied"){
         await page.getByRole("status").filter({hasText:"El guardado privado no está disponible"}).waitFor();
         assert.equal(await page.locator("#world").isVisible(),false);
       }else{
@@ -141,6 +149,10 @@ try {
       }
       assert.deepEqual(errors,[]); await page.close();
     }
-    console.log("Acceso con proveedor de prueba: cuenta nueva, incompleta, configurada y carga denegada.");
+    console.log("Acceso con proveedor de prueba: cuenta nueva, incompleta, configurada, carga denegada y cuenta sin verificar.");
+    if (process.env.FIREBASE_AUTH_EMULATOR_HOST) {
+      const { verifyRememberedSession } = await import("./remembered-session.mjs");
+      await verifyRememberedSession(target);
+    }
   }
 } finally { await browser.close(); server.close(); }

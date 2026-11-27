@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { initializeAuth, inMemoryPersistence, browserPopupRedirectResolver, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { browserPopupRedirectResolver, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { createNokAuth } from "./auth.js";
 import { getFirestore, doc, getDoc, runTransaction, Bytes } from "firebase/firestore/lite";
 import { encode, decode, maxParts } from "./storage.js";
 
@@ -9,14 +10,11 @@ const app = initializeApp({
   authDomain: "gb-studio-260bc.firebaseapp.com", projectId: "gb-studio-260bc",
   appId: "1:475470109485:web:c4400a214f973223aa91a4"
 }, "nok-web");
-// No IndexedDB/localStorage Firestore cache or persistent auth, including on a shared computer.
-export const auth = initializeAuth(app, { persistence: inMemoryPersistence });
+export const auth = createNokAuth(app);
 export async function login() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({prompt:"select_account"});
-  const {user} = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
-  if (!user.emailVerified) { await signOut(auth); throw Error("Google no verificó la cuenta."); }
-  return user;
+  await signInWithPopup(auth, provider, browserPopupRedirectResolver);
 }
 export const logout = () => signOut(auth);
 export function cloudWorld(uid, db = getFirestore(app), currentUid = () => auth.currentUser?.uid) {
