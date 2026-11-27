@@ -11,16 +11,9 @@
       content="default-src 'self'; base-uri 'none'; object-src 'none'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com https://gb-studio-260bc.firebaseapp.com; frame-src https://gb-studio-260bc.firebaseapp.com; img-src 'self' data: blob:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://apis.google.com"
     />
     <title>NOK · Tu vida, en modo juego</title>
-    <link rel="icon" type="image/webp" href="./art/ui/nok-app-icon.webp" />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./mobile-overrides.css" />
-    <link rel="stylesheet" href="./quick-access.css" />
-    <link rel="stylesheet" href="./passport-v4.css" />
-    <link rel="stylesheet" href="./art/world-builder.css" />
-    <link rel="stylesheet" href="./mobile-polish.css" />
-    <link rel="stylesheet" href="./mobile-refresh.css" />
-    <link rel="stylesheet" href="./typography.css" />
-    <link rel="stylesheet" href="./browser.css?v=portada2" />
+    <link rel="icon" type="image/webp" href="./art/previews/favicon.webp" />
+    <link rel="preload" as="image" fetchpriority="high" href="./art/nok-logo-transparent.webp" />
+    <link rel="stylesheet" href="./screen.css?v=camp-web-1" />
   </head>
   <body class="account-locked">
     <main class="start-screen" id="account-gate" aria-labelledby="account-title">
@@ -28,10 +21,10 @@
       <div class="start-shade" aria-hidden="true"></div>
       <div class="start-content">
         <span class="start-kicker">UNA AVENTURA PERSONAL</span>
-        <h1 id="account-title"><img class="start-logo-image" src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego." /></h1>
+        <h1 id="account-title"><img class="start-logo-image" fetchpriority="high" src="./art/nok-logo-transparent.webp" alt="NOK · Tu vida, en modo juego." /></h1>
         <button type="button" class="start-button" id="account-google">Continuar con Google</button>
         <button type="button" class="start-world-button" id="account-guest">Explorar sin guardar</button>
-        <img class="start-world-emblem" src="./art/ui/nok-world-pencil-logo.webp" alt="" />
+        <img class="start-world-emblem" src="./art/previews/camp-emblem.webp" alt="" />
         <p class="start-world-note" id="account-message" role="status">Sin cuenta, la partida se pierde al salir.</p>
         <noscript>Activá JavaScript para abrir NOK.</noscript>
       </div>
@@ -88,7 +81,7 @@
               aria-label="Abrir monedas NOK y recompensas"
               title="Monedas NOK"
             >
-              <img class="hud-stat-icon" src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
+              <img loading="lazy" decoding="async" class="hud-stat-icon" src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
               <strong id="hud-coin-balance">0</strong>
             </button>
             <button
@@ -96,7 +89,7 @@
               id="open-streak-history"
               aria-label="Ver tareas cumplidas por día y racha"
             >
-              <img class="hud-stat-icon" src="./art/ui/hud/streak-fire.webp" alt="" aria-hidden="true" />
+              <img loading="lazy" decoding="async" class="hud-stat-icon" src="./art/ui/hud/streak-fire.webp" alt="" aria-hidden="true" />
               <strong id="streak-label">0</strong>
             </button>
             <button
@@ -104,7 +97,7 @@
               id="open-today-history"
               aria-label="Ver tareas cumplidas hoy"
             >
-              <img class="hud-stat-icon" src="./art/ui/hud/today-check.webp" alt="" aria-hidden="true" />
+              <img loading="lazy" decoding="async" class="hud-stat-icon" src="./art/ui/hud/today-check.webp" alt="" aria-hidden="true" />
               <strong id="today-done-label">0</strong>
             </button>
           </div>
@@ -175,17 +168,7 @@
           <span class="ocarina-art" aria-hidden="true"></span>
           <small id="music-label">MÚSICA</small>
         </button>
-        <div
-          class="world-house"
-          id="world-house"
-          data-build-prop="house"
-          role="img"
-          aria-label="Casa del personaje"
-          title="Casa del personaje"
-        >
-          <span aria-hidden="true"></span><small>HOGAR</small>
-        </div>
-          <div id="pet-npc-layer"></div>
+        <div id="pet-npc-layer"></div>
         <div
           class="world-npc spouse-npc hidden"
           id="spouse-npc"
@@ -505,9 +488,9 @@
               </header>
               <aside class="quick-lists-library">
                 <div class="quick-list-type-picker" id="quick-list-type-picker" aria-label="Tipo de lista nueva">
-                  <button type="button" class="active" data-quick-list-type="checklist"><img src="./art/ui/lists-type-checklist.webp" alt="" /><span>CHECKLIST</span></button>
-                  <button type="button" data-quick-list-type="ranking"><img src="./art/ui/lists-type-ranking.webp" alt="" /><span>RANKING</span></button>
-                  <button type="button" data-quick-list-type="notes"><img src="./art/ui/lists-type-notes.webp" alt="" /><span>NOTAS</span></button>
+                  <button type="button" class="active" data-quick-list-type="checklist"><img loading="lazy" decoding="async" src="./art/ui/lists-type-checklist.webp" alt="" /><span>CHECKLIST</span></button>
+                  <button type="button" data-quick-list-type="ranking"><img loading="lazy" decoding="async" src="./art/ui/lists-type-ranking.webp" alt="" /><span>RANKING</span></button>
+                  <button type="button" data-quick-list-type="notes"><img loading="lazy" decoding="async" src="./art/ui/lists-type-notes.webp" alt="" /><span>NOTAS</span></button>
                 </div>
                 <form class="quick-list-create" id="quick-list-create-form">
                   <input
@@ -721,6 +704,18 @@
           </div>
 
           <div id="settings-view" class="panel-view hidden">
+            <svg width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none">
+              <defs>
+                <symbol id="cfg-world" viewBox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></symbol>
+                <symbol id="cfg-cloud" viewBox="0 0 24 24"><path d="M6 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1 0 11z"/></symbol>
+                <symbol id="cfg-audio" viewBox="0 0 24 24"><path d="M9 5 21 2v15c0 5-8 5-8 1 0-2 2-4 5-3V7l-6 2v11c0 5-8 5-8 1 0-3 2-4 5-3z"/></symbol>
+                <symbol id="cfg-controls" viewBox="0 0 24 24"><path d="m12 1 4 5h-3v5h5V8l5 4-5 4v-3h-5v5h3l-4 5-4-5h3v-5H6v3l-5-4 5-4v3h5V6H8z"/></symbol>
+                <symbol id="cfg-keys" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 8h3v3H5zm5 0h3v3h-3zm5 0h3v3h-3zM7 14h10v2H7z"/></symbol>
+                <symbol id="cfg-quick" viewBox="0 0 24 24"><path d="m12 1 10 11-10 11L2 12z"/></symbol>
+                <symbol id="cfg-visual" viewBox="0 0 24 24"><path fill-rule="evenodd" d="m12 1 11 11-11 11L1 12zm0 5-6 6 6 6 6-6z"/></symbol>
+                <symbol id="cfg-lock" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6 10V7a6 6 0 1 1 12 0v3h2v12H4V10zm3 0h6V7a3 3 0 0 0-6 0z"/></symbol>
+              </defs>
+            </svg>
             <div class="settings-content">
               <section class="settings-hero">
                 <span class="settings-hero-icon" aria-hidden="true">⚙</span>
@@ -760,7 +755,7 @@
                         data-world-theme="fantasy"
                         aria-pressed="true"
                       >
-                        <img src="./art/world-builder-day.webp" alt="" />
+                        <img loading="lazy" decoding="async" src="./art/previews/fantasy.webp" alt="" />
                         <span>
                           <strong>FANTASÍA</strong>
                           <small>Portales, bosque y aventura.</small>
@@ -773,7 +768,7 @@
                         data-world-theme="earth"
                         aria-pressed="false"
                       >
-                        <img src="./art/world-earth-day.webp" alt="" />
+                        <img loading="lazy" decoding="async" src="./art/previews/coast.webp" alt="" />
                         <span>
                           <strong>TERRENAL · PLAYA</strong>
                           <small>Cabaña, arena y vida real.</small>
@@ -1138,10 +1133,10 @@
                   </div>
                   <div class="learning-blocks-heading"><span id="learning-blocks-label">DESAFÍOS DE HOY</span><strong id="learning-ready-state">ELEGÍ UNO PARA CONTINUAR</strong></div>
                   <div class="learning-block-grid" id="learning-block-grid">
-                    <button type="button" class="learning-block-card" data-learning-block="fact" disabled><img src="./art/learning/fact.webp" alt="" /><span>1 POR DÍA</span><strong>DATO RANDOM</strong><small>Una curiosidad nueva</small><em>BLOQUEADO</em></button>
-                    <button type="button" class="learning-block-card" data-learning-block="riddle" disabled><img src="./art/learning/riddle.webp" alt="" /><span>1 POR DÍA</span><strong>ACERTIJO</strong><small>Cinco minutos para pensar</small><em>BLOQUEADO</em></button>
-                    <button type="button" class="learning-block-card" data-learning-block="culture" disabled><img src="./art/learning/culture.webp" alt="" /><span>1 POR DÍA</span><strong>CULTURA GENERAL</strong><small>Una pregunta por día</small><em>BLOQUEADO</em></button>
-                    <button type="button" class="learning-block-card" data-learning-block="memory" disabled><img src="./art/learning/memory.webp" alt="" /><span>1 POR DÍA</span><strong>MEMORIA</strong><small>Recordá la secuencia</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="fact" disabled><img loading="lazy" decoding="async" src="./art/learning/fact.webp" alt="" /><span>1 POR DÍA</span><strong>DATO RANDOM</strong><small>Una curiosidad nueva</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="riddle" disabled><img loading="lazy" decoding="async" src="./art/learning/riddle.webp" alt="" /><span>1 POR DÍA</span><strong>ACERTIJO</strong><small>Cinco minutos para pensar</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="culture" disabled><img loading="lazy" decoding="async" src="./art/learning/culture.webp" alt="" /><span>1 POR DÍA</span><strong>CULTURA GENERAL</strong><small>Una pregunta por día</small><em>BLOQUEADO</em></button>
+                    <button type="button" class="learning-block-card" data-learning-block="memory" disabled><img loading="lazy" decoding="async" src="./art/learning/memory.webp" alt="" /><span>1 POR DÍA</span><strong>MEMORIA</strong><small>Recordá la secuencia</small><em>BLOQUEADO</em></button>
                   </div>
                 </div>
 
@@ -1152,14 +1147,14 @@
                   </header>
 
                   <section class="learning-daily-card hidden" id="learning-fact-session">
-                    <img src="./art/learning/fact.webp" alt="" />
+                    <img loading="lazy" decoding="async" src="./art/learning/fact.webp" alt="" />
                     <span>DATO RANDOM · 1 POR DÍA</span>
                     <h2 id="daily-random-fact"></h2>
                     <button type="button" class="learning-complete-button" id="learning-fact-complete">✓ GUARDAR COMO LEÍDO</button>
                   </section>
 
                   <section class="learning-daily-card hidden" id="learning-culture-session">
-                    <img src="./art/learning/culture.webp" alt="" />
+                    <img loading="lazy" decoding="async" src="./art/learning/culture.webp" alt="" />
                     <span>CULTURA GENERAL · 1 POR DÍA</span>
                     <h2 id="daily-culture-question"></h2>
                     <div class="puzzle-answer-row"><input id="culture-answer-input" maxlength="180" placeholder="Escribí tu respuesta..." aria-label="Respuesta de cultura general" /><button type="button" id="culture-check">COMPROBAR</button></div>
@@ -1169,7 +1164,7 @@
                   </section>
 
                   <section class="puzzle-card learning-daily-card hidden" id="learning-riddle-session">
-                    <img src="./art/learning/riddle.webp" alt="" />
+                    <img loading="lazy" decoding="async" src="./art/learning/riddle.webp" alt="" />
                     <span class="puzzle-kicker">ACERTIJO · 1 POR DÍA</span>
                     <strong class="puzzle-clock" id="puzzle-clock">05:00</strong>
                     <h2 id="puzzle-question"></h2>
@@ -1182,7 +1177,7 @@
                   </section>
 
                   <section class="learning-daily-card memory-challenge hidden" id="learning-memory-session">
-                    <img src="./art/learning/memory.webp" alt="" />
+                    <img loading="lazy" decoding="async" src="./art/learning/memory.webp" alt="" />
                     <span>MEMORIA · 1 POR DÍA</span>
                     <div id="memory-study"><strong class="memory-countdown" id="memory-countdown">00:10</strong><p>Memorizá la secuencia. Al llegar a cero se ocultará automáticamente.</p><h2 class="memory-sequence" id="memory-sequence"></h2></div>
                     <div class="hidden" id="memory-test"><h2 id="memory-question"></h2><div class="puzzle-answer-row"><input id="memory-answer" maxlength="180" placeholder="Escribí la secuencia..." /><button type="button" id="memory-check">COMPROBAR</button></div><p class="puzzle-feedback hidden" id="memory-feedback"></p></div>
@@ -1716,7 +1711,7 @@
               <h2 id="activity-title">Salón de logros</h2>
             </div>
             <div class="progress-wallet" aria-label="Monedas NOK disponibles">
-              <img src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
+              <img loading="lazy" decoding="async" src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" />
               <strong id="progress-coin-balance">0</strong>
               <small>MONEDAS NOK</small>
             </div>
@@ -1742,11 +1737,11 @@
           <button class="close-button" id="close-achievement-celebration" type="button" aria-label="Cerrar logro">×</button>
           <div class="achievement-orbit" aria-hidden="true"><span>✦</span><span>◆</span><span>✦</span></div>
           <span class="eyebrow" id="achievement-celebration-eyebrow">NUEVO LOGRO DESBLOQUEADO</span>
-          <div class="achievement-medal" aria-hidden="true"><img id="achievement-medal" src="./art/ui/achievements/completed-10.webp" alt="" /></div>
+          <div class="achievement-medal" aria-hidden="true"><img loading="lazy" decoding="async" id="achievement-medal" src="./art/ui/achievements/completed-10.webp" alt="" /></div>
           <h2 id="achievement-celebration-title">¡LOGRO CONSEGUIDO!</h2>
           <strong id="achievement-celebration-name"></strong>
           <p id="achievement-celebration-copy"></p>
-          <div class="achievement-coin-reward" id="achievement-coin-reward-box"><img src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" /><b id="achievement-coin-reward">+0 MONEDAS NOK</b></div>
+          <div class="achievement-coin-reward" id="achievement-coin-reward-box"><img loading="lazy" decoding="async" src="./art/ui/hud/nok-coin.webp" alt="" aria-hidden="true" /><b id="achievement-coin-reward">+0 MONEDAS NOK</b></div>
           <button class="achievement-continue-button" id="achievement-continue" type="button">GUARDAR RECOMPENSA</button>
         </section>
       </div>
@@ -2076,6 +2071,6 @@
     </div>
     <script src="./music-engine.js"></script>
     <script src="./sound-engine.js"></script>
-    <script type="module" src="./account.js?v=portada2"></script>
+    <script type="module" src="./account.js?v=camp-web-1"></script>
   </body>
 </html>

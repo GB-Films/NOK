@@ -1,4 +1,5 @@
 import { worldStorage } from "./storage.js";
+import { preloadSavedTerrain } from "./terrain.js";
 import { auth, cloudWorld, login, logout } from "./firebase.js";
 const q = s => document.querySelector(s);
 const each = (s,fn) => document.querySelectorAll(s).forEach(fn);
@@ -42,6 +43,7 @@ async function enter(user) {
   const initial = store ? await store.load() : {};
   world = worldStorage(initial, changed); remote = store;
   window.nokGameStorage = world.storage;
+  preloadSavedTerrain(world.storage);
   document.documentElement.classList.toggle("mobile-runtime",matchMedia("(max-width:760px),(pointer:coarse) and (max-width:1024px)").matches);
   each("[data-account-name]", el => el.textContent = user?.email || "Exploración sin cuenta");
   each("[data-account-exit]", el => el.textContent = user ? "Guardar y cerrar sesión" : "Salir de la exploración");

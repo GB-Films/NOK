@@ -1,3 +1,4 @@
+import { applyWorldLight } from "../account/terrain.js";
 // One in-memory storage instance for this signed-in world (or this guest visit).
 (function (localStorage) {
 const TASKS_KEY = "nok-desktop-tasks-v1";
@@ -221,20 +222,11 @@ function normalizeWorldPropPositions(value) {
   const fallback = DEFAULT_SETTINGS.worldPropPositions;
   return Object.fromEntries(Object.keys(fallback).map((id) => {
     const position = source[id] && typeof source[id] === "object" ? source[id] : {};
-    const isLegacyHousePosition = id === "house"
-      && (
-        (Math.abs(Number(position.x) - 13.5) < 0.01
-          && Math.abs(Number(position.y) - 29) < 0.01)
-        || (Math.abs(Number(position.x) - 18) < 0.01
-          && Math.abs(Number(position.y) - 63) < 0.01)
-      );
+    // The house is no longer displayed on the web. Keep its stored coordinates.
+    if (id === "house") return [id, source[id] ?? fallback[id]];
     return [id, {
-      x: isLegacyHousePosition
-        ? fallback[id].x
-        : Math.min(97, Math.max(3, Number(position.x ?? fallback[id].x) || fallback[id].x)),
-      y: isLegacyHousePosition
-        ? fallback[id].y
-        : Math.min(94, Math.max(8, Number(position.y ?? fallback[id].y) || fallback[id].y)),
+      x: Math.min(97, Math.max(3, Number(position.x ?? fallback[id].x) || fallback[id].x)),
+      y: Math.min(94, Math.max(8, Number(position.y ?? fallback[id].y) || fallback[id].y)),
     }];
   }));
 }
@@ -519,6 +511,7 @@ let customProjects = readJson(PROJECTS_KEY, []).filter(
 );
 let projectRenames = readJson(PROJECT_RENAMES_KEY, {});
 const storedWorldTheme = readJson(SETTINGS_KEY, {}).worldTheme === "earth" ? "earth" : "fantasy";
+let cachedCollisionScene = null;
 let worldLayout = normalizeWorldLayout(
   readJson(WORLD_LAYOUT_KEY, null),
   true,
@@ -582,6 +575,7 @@ let editingTaskId = null;
 let editingTaskFormId = null;
 let boardMode = "today";
 let boardMobileSection = "today";
+const singleBoardColumn = window.matchMedia("(max-width:760px), (orientation:portrait)");
 let boardMotivationExpanded = false;
 let passwordVaultEntries = [];
 let passwordVaultMaster = "";
@@ -693,6 +687,8 @@ let playerWalkAnimationMs = 0;
 let petNpcAnimationFrame = null;
 let petNpcLastFrameTime = performance.now();
 let petNpcStates = null;
+let petActors = [];
+let worldWidth = 0, worldHeight = 0;
 const pressedMovementKeys = new Set();
 const isMobileRuntime = document.documentElement.classList.contains(
   "mobile-runtime",
@@ -790,7 +786,6 @@ const elements = {
   petNpcLayer: document.querySelector("#pet-npc-layer"),
   spouseNpc: document.querySelector("#spouse-npc"),
   spouseNpcName: document.querySelector("#spouse-npc-name"),
-  worldHouse: document.querySelector("#world-house"),
   collisionLayer: document.querySelector("#collision-layer"),
   worldGrid: document.querySelector("#world-grid"),
   worldModuleLayer: document.querySelector("#world-module-layer"),
@@ -2158,6 +2153,7 @@ function worldModuleUnlocked(id) {
 }
 
 function enforceRewardEntitlements() {
+  cachedCollisionScene = null;
   for (const portalModule of worldLayout.modules) {
     if (!worldModuleUnlocked(portalModule.id)) portalModule.placed = false;
   }
@@ -2363,7 +2359,7 @@ function sanitizeWorldLayout(layout, theme = "fantasy") {
   return { version: 3, modules: resolved };
 }
 
-function worldModuleCollisionShapes() {
+function moduleBlockers() {
   return worldLayout.modules
     .filter((module) => module.placed && worldModuleUnlocked(module.id))
     .map((module) => {
@@ -2382,6 +2378,16 @@ function worldModuleCollisionShapes() {
     });
 }
 
+function collisionScene(theme) {
+  // Routes test many neighbouring cells; scenery is shared until portals or terrain change.
+  if (cachedCollisionScene?.layout !== worldLayout || cachedCollisionScene.theme !== theme) {
+    const player = [...WORLD_COLLISIONS[theme], ...moduleBlockers()];
+    cachedCollisionScene = { layout: worldLayout, theme, player,
+      pet: [...player, ...PET_SCENERY_BLOCKERS[theme].map(shape => ({type:"rect", ...shape}))] };
+  }
+  return cachedCollisionScene;
+}
+
 function occupiedWorldPlot(plot, ignoredModuleId = null) {
   return worldPlotOverlapsModules(plot, worldLayout.modules, ignoredModuleId);
 }
@@ -2395,6 +2401,7 @@ function firstFreeWorldPlot(moduleId = null) {
 }
 
 function saveWorldLayout() {
+  cachedCollisionScene = null;
   localStorage.setItem(WORLD_LAYOUT_KEY, JSON.stringify(worldLayout));
   markCloudChange();
   renderCollisionLayer();
@@ -2404,6 +2411,10 @@ function saveWorldLayout() {
 
 function renderWorldGrid() {
   if (!elements.worldGrid) return;
+  if (!worldBuildMode) {
+    if (elements.worldGrid.firstChild) elements.worldGrid.replaceChildren();
+    return;
+  }
   elements.worldGrid.innerHTML = WORLD_BUILD_PLOTS
     .filter((plot) => isWorldPlotClearOfScenery(plot, settings.worldTheme))
     .map((plot) => {
@@ -2601,9 +2612,6 @@ function moveWorldPropDrag(event) {
   worldPropDragState.y = Math.min(94, Math.max(8, ((anchorY - bounds.top) / bounds.height) * 100));
   worldPropDragState.element.style.left = `${worldPropDragState.x}%`;
   worldPropDragState.element.style.top = `${worldPropDragState.y}%`;
-  if (worldPropDragState.id === "house") {
-    worldPropDragState.element.style.zIndex = String(worldDepthIndex(worldPropDragState.y));
-  }
 }
 
 function finishWorldPropDrag(event) {
@@ -2647,7 +2655,7 @@ function isPlayerPositionBlocked(x, y, theme = settings.worldTheme) {
   ) {
     return true;
   }
-  return [...WORLD_COLLISIONS[theme], ...worldModuleCollisionShapes()].some((shape) => {
+  return collisionScene(theme).player.some((shape) => {
     if (shape.type === "rect") {
       return (
         x >= shape.x - PLAYER_COLLISION_X &&
@@ -2733,15 +2741,7 @@ function isPetPositionBlocked(x, y, theme = settings.worldTheme) {
   if (x < bounds.minX || x > bounds.maxX || y < bounds.minY || y > bounds.maxY) {
     return true;
   }
-  const scenery = PET_SCENERY_BLOCKERS[theme].map((shape) => ({
-    type: "rect",
-    ...shape,
-  }));
-  return [
-    ...WORLD_COLLISIONS[theme],
-    ...worldModuleCollisionShapes(),
-    ...scenery,
-  ].some((shape) => {
+  return collisionScene(theme).pet.some((shape) => {
     if (shape.type === "rect") {
       return (
         x >= shape.x - PET_COLLISION_X &&
@@ -3039,12 +3039,14 @@ function advancePetNpc(npc, time, deltaSeconds, theme = settings.worldTheme) {
   return { row, frame: Math.floor(time / PET_FRAME_DURATION_MS[npc.kind]) % 4 };
 }
 
-function renderPetNpc(element, npc, visual) {
-  element.style.left = `${npc.position.x}%`;
-  element.style.top = `${npc.position.y}%`;
+function positionActor(element, position) {
+  element.style.translate = `${worldWidth * position.x / 100}px ${worldHeight * position.y / 100}px`;
+}
+
+function renderPetNpc(element, sprite, npc, visual) {
+  positionActor(element, npc.position);
   setWorldActorDepth(element, npc.position.y);
-  element.dataset.mode = npc.mode;
-  const sprite = element.querySelector(".pet-npc-sprite");
+  if (element.dataset.mode !== npc.mode) element.dataset.mode = npc.mode;
   sprite.style.backgroundPosition = `${(visual.frame * 100) / 3}% ${(visual.row * 100) / 3}%`;
   sprite.style.transform = `scaleX(${npc.facingLeft ? -1 : 1})`;
 }
@@ -3052,26 +3054,16 @@ function renderPetNpc(element, npc, visual) {
 function runPetNpcMovementFrame(time) {
   const deltaSeconds = Math.min((time - petNpcLastFrameTime) / 1000, 0.05);
   petNpcLastFrameTime = time;
-  const states = ensurePetNpcStates();
-  const npcElements = new Map(
-    [...elements.petNpcLayer.querySelectorAll("[data-pet-npc-key]")].map((element) => [
-      element.dataset.petNpcKey,
-      element,
-    ]),
-  );
-  Object.entries(states).forEach(([key, npc]) => {
-    const element = npcElements.get(key);
-    if (!element) return;
-    renderPetNpc(element, npc, advancePetNpc(npc, time, deltaSeconds));
-  });
+  if (!undergroundWorldOpen && elements.panelBackdrop.classList.contains("hidden")) {
+    for (const {element,sprite,npc} of petActors) {
+      renderPetNpc(element, sprite, npc, advancePetNpc(npc, time, deltaSeconds));
+    }
+  }
   petNpcAnimationFrame = window.requestAnimationFrame(runPetNpcMovementFrame);
 }
 
 function renderCollisionLayer() {
-  elements.collisionLayer.innerHTML = [
-    ...WORLD_COLLISIONS[settings.worldTheme],
-    ...worldModuleCollisionShapes(),
-  ]
+  elements.collisionLayer.innerHTML = collisionScene(settings.worldTheme).player
     .map((shape) => {
       if (shape.type === "rect") {
         return `<i class="collision-shape collision-rect" style="left:${shape.x}%;top:${shape.y}%;width:${shape.width}%;height:${shape.height}%"></i>`;
@@ -3082,8 +3074,7 @@ function renderCollisionLayer() {
 }
 
 function renderPlayer() {
-  elements.movablePlayer.style.left = `${playerPosition.x}%`;
-  elements.movablePlayer.style.top = `${playerPosition.y}%`;
+  positionActor(elements.movablePlayer, playerPosition);
   elements.movablePlayer.style.zIndex = String(
     undergroundWorldOpen
       ? WORLD_UNDERGROUND_DEPTH
@@ -3102,22 +3093,23 @@ function isPortraitMobileMap() {
 
 function mobileWorldPanLimit() {
   if (!isPortraitMobileMap()) return 0;
-  return Math.max(0, (elements.world.offsetWidth - window.innerWidth) / 2);
+  return Math.max(0, (worldWidth - window.innerWidth) / 2);
 }
 
 function setMobileWorldPan(value) {
   const limit = mobileWorldPanLimit();
-  mobileWorldPanX = Math.max(-limit, Math.min(limit, Number(value) || 0));
-  elements.world.style.setProperty(
-    "--mobile-world-pan-x",
-    `${mobileWorldPanX}px`,
-  );
+  const next = Math.max(-limit, Math.min(limit, Number(value) || 0));
+  if (next === mobileWorldPanX) return;
+  mobileWorldPanX = next;
+  // Pan the map's layer, not an inherited style on every actor and portal.
+  elements.world.style.translate = next ? `${next}px 0` : "";
 }
 
 function keepPlayerInMobileCamera() {
   if (!isPortraitMobileMap() || mobileWorldPointerId !== null) return;
-  const worldRect = elements.world.getBoundingClientRect();
-  const playerScreenX = worldRect.left + (worldRect.width * playerPosition.x) / 100;
+  if (!worldWidth) return;
+  // The portrait map is centered at 50vw and translated by panX.
+  const playerScreenX = (window.innerWidth - worldWidth) / 2 + mobileWorldPanX + worldWidth * playerPosition.x / 100;
   const safeLeft = window.innerWidth * 0.24;
   const safeRight = window.innerWidth * 0.76;
   if (playerScreenX < safeLeft) {
@@ -3679,37 +3671,8 @@ function normalizeImportantEvent(event) {
   };
 }
 
-function usesSouthernHemisphereSeasons() {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-  return /Buenos_Aires|Argentina|Montevideo|Santiago|Asuncion|Sao_Paulo|Australia|Auckland|Africa\/(Johannesburg|Windhoek)|Antarctica/i.test(timeZone);
-}
-
-function currentWorldSeason(date = new Date()) {
-  const month = date.getMonth() + 1;
-  const northern = month <= 2 || month === 12
-    ? "winter"
-    : month <= 5
-      ? "spring"
-      : month <= 8
-        ? "summer"
-        : "autumn";
-  if (!usesSouthernHemisphereSeasons()) return northern;
-  return {
-    winter: "summer",
-    spring: "autumn",
-    summer: "winter",
-    autumn: "spring",
-  }[northern];
-}
-
 function applyTimeOfDay() {
-  const hour = new Date().getHours();
-  const isNight = hour >= 19 || hour < 7;
-  const seasonsUnlocked = progressState.unlockedRewards.includes("season-cycle");
-  elements.world.dataset.season = seasonsUnlocked ? currentWorldSeason() : "base";
-  elements.world.dataset.hemisphere = usesSouthernHemisphereSeasons() ? "south" : "north";
-  elements.world.classList.toggle("night-mode", isNight);
-  elements.world.classList.toggle("day-mode", hour >= 7 && hour < 19);
+  applyWorldLight(elements.world, progressState.unlockedRewards);
 }
 
 function setMusicPlayingState(playing) {
@@ -3762,20 +3725,20 @@ function renderCharacterSettings() {
         <div>${["male", "female"].map((gender) => `<button type="button" data-settings-character-gender="${gender}" class="${settings.characterGender === gender ? "active" : ""}">${gender === "male" ? "VARÓN" : "MUJER"}</button>`).join("")}</div>
         <div>${CHARACTER_AGE_OPTIONS.map((age) => `<button type="button" data-settings-character-age="${age.id}" class="${ageGroup === age.id ? "active" : ""}">${age.label}</button>`).join("")}</div>
         <div>${CHARACTER_HAIR_OPTIONS.map((hair) => `<button type="button" data-settings-character-hair="${hair.id}" class="${settings.characterHair === hair.id ? "active" : ""}">${hair.label}</button>`).join("")}</div>
-      </div>` : '<button class="character-reward-lock" type="button" data-open-character-rewards>🔒 DESBLOQUEAR IDENTIDAD LIBRE EN RECOMPENSAS</button>'}
+      </div>` : '<button class="character-reward-lock" type="button" data-open-character-rewards><svg class="cfg-icon" aria-hidden="true"><use href="#cfg-lock"/></svg> DESBLOQUEAR IDENTIDAD LIBRE EN RECOMPENSAS</button>'}
   `;
   applyCharacterPreview(elements.characterSettingsContent.querySelector("[data-character-current-preview]"));
 }
 
 function initializeSettingsAccordions() {
   const definitions = [
-    [".settings-world-card", "✦", "Mundo y personaje", true],
-    [".nok-account-settings", "☁", "Mi cuenta y guardado", false],
-    [".settings-sound-card", "♪", "Audio", false],
-    [".settings-controls-card", "✥", "Controles", false],
-    [".settings-shortcuts-card", "⌨", "Atajos de teclado", false],
-    [".settings-quick-access-card", "◆", "Accesos rápidos", false],
-    [".settings-visual-card", "◈", "Interfaz y accesibilidad", false],
+    [".settings-world-card", "world", "Mundo y personaje", true],
+    [".nok-account-settings", "cloud", "Mi cuenta y guardado", false],
+    [".settings-sound-card", "audio", "Audio", false],
+    [".settings-controls-card", "controls", "Controles", false],
+    [".settings-shortcuts-card", "keys", "Atajos de teclado", false],
+    [".settings-quick-access-card", "quick", "Accesos rápidos", false],
+    [".settings-visual-card", "visual", "Interfaz y accesibilidad", false],
   ];
 
   definitions.forEach(([selector, icon, title, startsOpen]) => {
@@ -3791,7 +3754,7 @@ function initializeSettingsAccordions() {
     toggle.className = "settings-accordion-toggle";
     toggle.setAttribute("aria-expanded", String(startsOpen));
     toggle.innerHTML = `
-      <span class="settings-accordion-icon" aria-hidden="true">${icon}</span>
+      <span class="settings-accordion-icon" aria-hidden="true"><svg class="cfg-icon"><use href="#cfg-${icon}"/></svg></span>
       <strong>${title}</strong>
       <span class="settings-accordion-caret" aria-hidden="true"></span>
     `;
@@ -4490,7 +4453,10 @@ function renderWorldCompanions() {
       return `<div class="world-npc pet-npc ${kind}-npc" data-pet-npc-key="${escapeHtml(key)}" data-appearance="${escapeHtml(appearance)}" aria-label="${escapeHtml(pet.name)}, ${normalizedPetSpecies(pet.species).toLowerCase()} recorriendo el mundo"><i class="pet-npc-sprite" aria-hidden="true"></i></div>`;
     })
     .join("");
-  ensurePetNpcStates();
+  const states = ensurePetNpcStates();
+  petActors = [...elements.petNpcLayer.children].map(element => ({
+    element, sprite: element.firstElementChild, npc: states[element.dataset.petNpcKey]
+  }));
   elements.spouseNpc.classList.toggle("hidden", !(profile.married && spouseName));
   setWorldActorDepth(elements.spouseNpc, 31);
   elements.spouseNpc.dataset.appearance = profile.spouseAppearance || "dark";
@@ -4509,16 +4475,12 @@ function renderWorldBuildProps() {
     spouse: elements.spouseNpc,
     ocarina: elements.musicOcarina,
     hatch: elements.undergroundHatch,
-    house: elements.worldHouse,
   };
   for (const [id, element] of Object.entries(targets)) {
     const position = positions[id];
     if (!element || !position) continue;
     element.style.left = `${position.x}%`;
     element.style.top = `${position.y}%`;
-    if (id === "house") {
-      element.style.zIndex = String(worldDepthIndex(position.y));
-    }
   }
 }
 
@@ -5130,10 +5092,13 @@ function renderBoard() {
     );
   });
   const dateKey = todayKey();
+  const oneColumn = isMobileRuntime && singleBoardColumn.matches;
+  const showImportant = boardMode === "today" && (!oneColumn || boardMobileSection === "today");
+  const showBacklog = boardMode === "today" && (!oneColumn || boardMobileSection === "backlog");
   const important = ordered
     .filter((task) => task.isToday || task.scheduledDate === dateKey);
   const importantIds = new Set(important.map((task) => task.id));
-  const loose = ordered
+  const loose = !showBacklog ? [] : ordered
     .filter((task) => !task.isQuest && !importantIds.has(task.id))
     .sort((a, b) => {
       return (
@@ -5169,10 +5134,10 @@ function renderBoard() {
         data-task-id="${task.id}" aria-label="Eliminar ${escapeHtml(task.title)}">×</button>
     </article>
   `;
-  elements.boardImportantList.innerHTML = important.length
+  elements.boardImportantList.innerHTML = !showImportant ? "" : important.length
     ? important.map((task) => card(task)).join("")
     : '<p class="wood-empty">Tu día está libre. Escribí una tarea rápida arriba o elegí “+ A HOY” en cualquier misión.</p>';
-  elements.boardLooseList.innerHTML = loose.length
+  elements.boardLooseList.innerHTML = !showBacklog ? "" : loose.length
     ? loose.map((task) => card(task, true)).join("")
     : '<p class="wood-empty">No hay otras tareas pendientes por ahora.</p>';
 
@@ -5276,7 +5241,7 @@ function renderBoard() {
   elements.boardView
     .querySelector(".notice-board-surface")
     .classList.toggle("week-surface", boardMode === "week");
-  renderWeekBoard(ordered);
+  if (boardMode === "week") renderWeekBoard(ordered);
 }
 
 function weekTaskCard(task) {
@@ -9084,6 +9049,10 @@ elements.boardTodayMode.addEventListener("click", () => {
   renderBoard();
 });
 
+singleBoardColumn.addEventListener("change", () => {
+  if (!elements.panelBackdrop.classList.contains("hidden") && !elements.boardView.classList.contains("hidden")) renderBoard();
+});
+
 elements.boardWeekMode.addEventListener("click", () => {
   boardMode = "week";
   renderBoard();
@@ -10218,11 +10187,17 @@ elements.world.addEventListener(
   true,
 );
 
+new ResizeObserver(([entry]) => {
+  worldWidth = entry.contentRect.width;
+  worldHeight = entry.contentRect.height;
+  positionActor(elements.movablePlayer, playerPosition);
+  for (const {element,npc} of petActors) positionActor(element,npc.position);
+  setMobileWorldPan(mobileWorldPanX);
+  keepPlayerInMobileCamera();
+}).observe(elements.world);
 window.addEventListener("resize", () => {
-  window.requestAnimationFrame(() => {
-    setMobileWorldPan(mobileWorldPanX);
-    keepPlayerInMobileCamera();
-  });
+  setMobileWorldPan(mobileWorldPanX);
+  keepPlayerInMobileCamera();
 });
 
 function setMobileJoystickDirections(nextDirections) {

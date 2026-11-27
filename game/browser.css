@@ -1,4 +1,9 @@
 #minimize-game, #close-game { display: none !important; }
+.cfg-icon { width:1em; height:1em; fill:currentColor; vertical-align:-.12em; }
+.board-task-row { content-visibility:auto; contain-intrinsic-block-size:auto 52px; }
+@media (max-width:760px), (orientation:portrait) {
+  .mobile-runtime .board-task-row { contain-intrinsic-block-size:auto 60px; }
+}
 .settings-cloud-card[hidden], #account-gate[hidden], body.account-locked .app-shell { display:none !important; }
 #account-gate { padding: max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left)); }
 #account-gate .start-content { width:min(100%, 46rem); max-height:100%; min-height:0; overflow-y:auto; padding:clamp(16px,4vh,38px) clamp(14px,4vw,52px); }
